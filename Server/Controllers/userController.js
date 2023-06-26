@@ -9,6 +9,7 @@ var salt = bcrypt.genSaltSync(10);
 export async function userSignup(req, res) {
   try {
     const { email } = req.body;
+    console.log("emaul-",req.body);
     const user = await UserModel.findOne({ email });
     if (user) return res.json({ message: "User already registered!" });
     let otp = Math.ceil(Math.random() * 100000);
@@ -40,6 +41,7 @@ export async function userSignup(req, res) {
 export async function signUpVerify(req, res) {
   try {
     const { name, email, password, phone, otp } = req.body;
+    console.log(req.body);
     const temptoken = req.cookies.tempToken;
     if (!temptoken)
       return res.json({ err: true, message: "OTP Session failed" });
@@ -73,6 +75,7 @@ export async function signUpVerify(req, res) {
       })
       .json({ err: false });
   } catch (error) {
+    console.log(error.message);
     res.json({ error: error, err: true, message: "Something bad happend!" });
   }
 }

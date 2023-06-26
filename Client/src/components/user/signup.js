@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import {
   MDBContainer,
   MDBCol,
@@ -6,56 +6,192 @@ import {
   MDBBtn,
   MDBIcon,
   MDBInput,
-  MDBCheckbox
-}
-from 'mdb-react-ui-kit';
-import '../../assets/css/login.css'
-import loginImg from '../../assets/images/login.jpg'
+  MDBCheckbox,
+} from "mdb-react-ui-kit";
+import "../../assets/css/login.css";
+import loginImg from "../../assets/images/login.jpg";
+import axios from "axios";
+import validatePassword from "../../helpers/passwordValidate";
+import SignUpOtp from "./signupOtp";
 
 export default function SignUp() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
+  const [errMessage, setErrMessage] = useState("");
+  const [showOtpPage, setShowOtpPage] = useState(false);
+  const [otp, setOtp] = useState("");
+
+  const validForm = () => {
+    validatePassword(password);
+    if (
+      name.trim() === "" ||
+      !validatePassword(password).status ||
+      password.trim() === "" ||
+      email.trim() === "" ||
+      password !== confirmPassword
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (password) {
+      !validatePassword(password).status
+        ? setErrMessage(
+            validatePassword(password).message[0].message.replace(
+              "string",
+              "password"
+            )
+          )
+        : setErrMessage("");
+    }
+    if (confirmPassword) {
+      {
+        password !== confirmPassword
+          ? setErrMessage("Password not match")
+          : setErrMessage("");
+      }
+    }
+  }, [password, confirmPassword]);
+
+  const handleOtp = async (e) => {
+    e.preventDefault();
+    let { data } = await axios.post(
+      "http://localhost:5000/user/auth/signup/verify",
+      { otp, name, email, password, phone }
+    );
+    if (data.err) {
+      setErrMessage("Incorrect OTP");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validForm()) {
+      let { data } = await axios.post(
+        "http://localhost:5000/user/auth/signup",
+        { email }
+      );
+      if (data.err) {
+        setErrMessage(data.message);
+      } else {
+        setShowOtpPage(true);
+      }
+    }
+  };
+
   return (
-    <div className='d-flex flex-column justify-content-center' style={{height:"100vh"}}>
+    <div
+      className="d-flex flex-column justify-content-center"
+      style={{ height: "100vh" }}
+    >
+      <MDBContainer className="">
+        <MDBRow>
+          <MDBCol col="12" lg="7">
+            <img src={loginImg} class="img-fluid" alt="Phone image" />
+          </MDBCol>
+          <MDBCol col={0} lg={1}></MDBCol>
+          <MDBCol col="12" lg="4" className="pt-5">
+            <h3 className="w-100 text-center mb-5">
+              {!showOtpPage ? "Sign Up" : "Enter OTP"}
+            </h3>
 
-    <MDBContainer className="">
-
-      <MDBRow>
-
-        <MDBCol col='12' lg='7'>
-          <img src={loginImg} class="img-fluid" alt="Phone image" />
-        </MDBCol>
-        <MDBCol col={0} lg={1}>
-
-        </MDBCol>
-        <MDBCol col='12' lg='4' className='pt-5'>
-          <h3 className='w-100 text-center mb-5'>Sign Up</h3>
-
-          <MDBInput wrapperClass='mb-4' label='Username' id='' type='text' size="lg"/>
-          <MDBInput wrapperClass='mb-4' label='Email address' id='' type='email' size="lg"/>
-          <MDBInput wrapperClass='mb-4' label='Mobile Number' id='' type='number' size="lg"/>
-          <MDBInput wrapperClass='mb-4' label='Password' id='' type='password' size="lg"/>
-          <MDBInput wrapperClass='mb-4' label='Confirm Password' id='' type='password' size="lg"/>
-          <MDBBtn className="mb-4 w-100 bg-dark  "  size="lg">Sign Up</MDBBtn>
-
-          {/* <div className="divider d-flex align-items-center my-4">
-            <p className="text-center fw-bold mx-3 mb-0">OR</p>
-          </div>
-
-          <MDBBtn className="mb-4 w-100" size="lg" style={{backgroundColor: '#3b5998'}}>
-            <MDBIcon fab icon="facebook-f" className="mx-2"/>
-            Continue with facebook
-          </MDBBtn>
-
-          <MDBBtn className="mb-4 w-100" size="lg" style={{backgroundColor: '#55acee'}}>
-            <MDBIcon fab icon="twitter" className="mx-2"/>
-            Continue with twitter
-          </MDBBtn> */}
-
-        </MDBCol>
-
-      </MDBRow>
-
-    </MDBContainer>
+            <form onSubmit={!showOtpPage ? handleSubmit : handleOtp}>
+              {!showOtpPage ? (
+                <>
+                  <MDBInput
+                    wrapperClass="mb-4"
+                    label="Username"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    id=""
+                    type="text"
+                    size="lg"
+                  />
+                  <MDBInput
+                    wrapperClass="mb-4"
+                    label="Email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    id=""
+                    type="email"
+                    size="lg"
+                  />
+                  <MDBInput
+                    wrapperClass="mb-4"
+                    label="Mobile Number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    id=""
+                    type="tel"
+                    size="lg"
+                  />
+                  <MDBInput
+                    wrapperClass="mb-4"
+                    label="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    id=""
+                    type="password"
+                    size="lg"
+                  />
+                  <MDBInput
+                    wrapperClass="mb-4"
+                    label="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setconfirmPassword(e.target.value)}
+                    id=""
+                    type="password"
+                    size="lg"
+                  />
+                  {errMessage && (
+                    <div className="d-flex justify-content-between mb-4">
+                      <p className="text-danger">{errMessage}</p>
+                    </div>
+                  )}
+                  <MDBBtn
+                    type="submit"
+                    disabled={!validForm()}
+                    className="mb-4 w-100 bg-dark"
+                    size="lg"
+                  >
+                    Sign Up
+                  </MDBBtn>
+                </>
+              ) : (
+                <>
+                  <MDBInput
+                    wrapperClass="mb-4"
+                    label="Enter OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    id=""
+                    type="tel"
+                    size="lg"
+                  />
+                  {errMessage && (
+                    <div className="d-flex justify-content-between mb-4">
+                      <p className="text-danger">{errMessage}</p>
+                    </div>
+                  )}
+                  <MDBBtn
+                    type="submit"
+                    disabled={otp.trim() == ""}
+                    className="mb-4 w-100 bg-dark"
+                    size="lg"
+                  >
+                    Continue
+                  </MDBBtn>
+                </>
+              )}
+            </form>
+          </MDBCol>
+        </MDBRow>
+      </MDBContainer>
     </div>
-
   );
 }
