@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   MDBContainer,
   MDBCol,
@@ -12,7 +13,7 @@ import "../../assets/css/login.css";
 import loginImg from "../../assets/images/login.jpg";
 import axios from "axios";
 import validatePassword from "../../helpers/passwordValidate";
-import SignUpOtp from "./signupOtp";
+import { BeatLoader } from "react-spinners";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -23,6 +24,9 @@ export default function SignUp() {
   const [errMessage, setErrMessage] = useState("");
   const [showOtpPage, setShowOtpPage] = useState(false);
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const validForm = () => {
     validatePassword(password);
@@ -66,20 +70,30 @@ export default function SignUp() {
     );
     if (data.err) {
       setErrMessage("Incorrect OTP");
+    } else {
+      dispatch({ type: "refresh" });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validForm()) {
-      let { data } = await axios.post(
-        "http://localhost:5000/user/auth/signup",
-        { email }
-      );
-      if (data.err) {
-        setErrMessage(data.message);
-      } else {
-        setShowOtpPage(true);
+      setLoading(true);
+      try {
+        let { data } = await axios.post(
+          "http://localhost:5000/user/auth/signup",
+          { email }
+        );
+        if (data.err) {
+          setErrMessage(data.message);
+        } else {
+          setErrMessage("");
+          setShowOtpPage(true);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -159,7 +173,15 @@ export default function SignUp() {
                     className="mb-4 w-100 bg-dark"
                     size="lg"
                   >
-                    Sign Up
+                    <div>
+                      {!loading ? (
+                        "Sign Up"
+                      ) : (
+                        <div className="d-flex justify-content-center">
+                          <BeatLoader color="white" />
+                        </div>
+                      )}
+                    </div>
                   </MDBBtn>
                 </>
               ) : (
