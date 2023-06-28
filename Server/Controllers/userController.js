@@ -138,3 +138,36 @@ export async function userLogout(req, res) {
     })
     .json({ message: "logged out", error: false });
 }
+
+export async function forgotOtp(req, res) {
+  try {
+    const { email } = req.body;
+    const user = await UserModel.findOne({ email: email }).lean();
+    if (!user) {
+      return res.json({ error: true, message: "no user found" });
+    }
+    let otp = Math.ceil(Math.random() * 1000000);
+    await sentOTP(email, otp);
+    let otpHash = crypto
+      .createHmac("sha256", process.env.OTP_SECRET)
+      .update(otp.toString())
+      .digest("hex");
+    console.log(otp);
+    const token = jwt.sign(
+      {
+        otp: otpHash,
+      },
+      process.env.JWT_SECRET
+    );
+    return res
+      .cookie("tempToken", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 1000 * 60 * 10,
+        sameSite: "none",
+      })
+      .json({ err: false });
+  } catch (error) {
+    res.json({ err: true, error: error, message: "Something went wrong" });
+  }
+}

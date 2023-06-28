@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+
 import {
   MDBContainer,
   MDBCol,
@@ -10,6 +11,8 @@ import {
 } from "mdb-react-ui-kit";
 import "../../assets/css/login.css";
 import loginImg from "../../assets/images/login.jpg";
+import ForgetOtpModal from "./forgetOtpModal";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
@@ -17,6 +20,9 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [otp, setOtp] = useState("");
+
   const dispatch = useDispatch();
 
   const validForm = () => {
@@ -24,6 +30,17 @@ export default function Login() {
       return false;
     }
     return true;
+  };
+
+  const handleModal = async () => {
+    await axios.post("http://localhost:5000/user/auth/forgot", { email });
+    setShowModal(true);
+  };
+
+  const handleOtp = async () => {};
+
+  const handleclose = () => {
+    setShowModal(false);
   };
 
   const handleSubmit = async (e) => {
@@ -34,8 +51,8 @@ export default function Login() {
     });
     if (data.err) {
       setErrMsg(data.message);
-    }else{
-      dispatch({type:'refresh'})
+    } else {
+      dispatch({ type: "refresh" });
     }
   };
 
@@ -47,11 +64,11 @@ export default function Login() {
       <MDBContainer className="">
         <MDBRow>
           <MDBCol col="12" lg="7">
-            <img src={loginImg} class="img-fluid" alt="Phone image" />
+            <img src={loginImg} className="img-fluid" alt="Phone image" />
           </MDBCol>
           <MDBCol col={0} lg={1}></MDBCol>
-          <form onSubmit={handleSubmit}>
-            <MDBCol col="12" lg="4" className="pt-5">
+          <MDBCol col="12" lg="4" className="pt-5">
+            <form onSubmit={handleSubmit}>
               <h3 className="w-100 text-center mb-5">Login</h3>
 
               <MDBInput
@@ -79,34 +96,29 @@ export default function Login() {
               )}
 
               <div className="d-flex justify-content-between mb-4">
-                <a href="!#">Forgot password?</a>
+                {email && <Link onClick={handleModal}>Forgot password?</Link>}
               </div>
+
               <MDBBtn
                 type="submit"
                 disabled={!validForm()}
-                className="mb-4 w-100 bg-dark  "
+                className="mb-4 w-100 bg-dark"
                 size="lg"
               >
                 Log In
               </MDBBtn>
-
-              {/* <div className="divider d-flex align-items-center my-4">
-            <p className="text-center fw-bold mx-3 mb-0">OR</p>
-            </div>
-            
-            <MDBBtn className="mb-4 w-100" size="lg" style={{backgroundColor: '#3b5998'}}>
-            <MDBIcon fab icon="facebook-f" className="mx-2"/>
-            Continue with facebook
-            </MDBBtn>
-
-          <MDBBtn className="mb-4 w-100" size="lg" style={{backgroundColor: '#55acee'}}>
-          <MDBIcon fab icon="twitter" className="mx-2"/>
-          Continue with twitter
-        </MDBBtn> */}
-            </MDBCol>
-          </form>
+            </form>
+          </MDBCol>
         </MDBRow>
       </MDBContainer>
+      <ForgetOtpModal
+        email={email}
+        showModal={showModal}
+        handleclose={handleclose}
+        otp={otp}
+        setOtp={setOtp}
+        handleOtp={handleOtp}
+      />
     </div>
   );
 }
