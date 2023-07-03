@@ -2,21 +2,68 @@ import AdminModel from "../Models/adminModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-var salt = bcrypt.genSaltSync(10);
-
 export async function adminLogin(req, res) {
   try {
-    const adminData = {
-      name: "Admin",
-      email: process.env.ADMIN_EMAIL,
-      password: process.env.ADMIN_PASSWORD,
-    };
-
-    const newAdmin = new AdminModel(adminData);
-    await newAdmin.save();
-
-    console.log("Admin created successfully");
+    const { email, password } = req.body;
+    const admin = await AdminModel.findOne({ email });
+    if (!admin) {
+      return res.json({
+        err: true,
+        message: "You have No Access To This Page",
+      });
+    }
+    const verifiedAdmin = bcrypt.compareSync(password, admin.password);
+    if (!verifiedAdmin) {
+      return res.json({ err: true, message: "Email Or Password Is Wrong" });
+    }
+    const token = jwt.sign(
+      {
+        admin: true,
+        id: admin._id,
+      },
+      process.env.JWT_SECRET
+    );
+    return res
+      .cookie("adminToken", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        sameSite: "none",
+      })
+      .json({ err: false });
   } catch (error) {
-    console.log(`${error.message}`);
+    res.json({ error: error, message: "Something went wrong" });
+  }
+}
+
+export async function adminCheckLogin(req, res) {
+  try {
+    const token = req.cookies.adminToken;
+    if (!token) {
+      return res.json({ err: true, message: "No Token Found" });
+    }
+    const tokenVerify = jwt.verify(token, process.env.JWT_SECRET);
+    const admin = await AdminModel.findById(tokenVerify.id, { password: 0 });
+    if (!admin) {
+      return res.json({ loggedIn: false });
+    }
+    return res.json({ loggedIn: true });
+  } catch (error) {
+    res.json({ error: error, message: "Something went wrong" });
+  }
+}
+
+export async function adminLogout(req, res) {
+  try {
+    res
+      .cookie("adminToken", "", {
+        httpOnly: true,
+        expires: new Date(0),
+        secure: true,
+        sameSite: "none",
+      })
+      .json({ err: false, message: "Logged Out " });
+  } catch (error) {
+    res.json({ error: error, message: "Something went wrong" });
   }
 }
