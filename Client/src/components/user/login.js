@@ -5,18 +5,19 @@ import {
   MDBCol,
   MDBRow,
   MDBBtn,
-  MDBIcon,
   MDBInput,
-  MDBCheckbox,
 } from "mdb-react-ui-kit";
 import "../../assets/css/login.css";
 import loginImg from "../../assets/images/login.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import ForgetOtpModal from "./forgetOtpModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import logo from '../../assets/images/AutoPro-logos_black.png'
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
+import toast, { Toaster } from "react-hot-toast";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -33,6 +34,7 @@ export default function Login() {
   const [showResetPassPage, setShowResetPassPage] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (NewPasswordData.password) {
@@ -102,13 +104,24 @@ export default function Login() {
     setShowModal(false);
   };
 
-  const handlesave = async () => {
+  const handlesave = async (e) => {
+    e.preventDefault();
     let newPassword = NewPasswordData.password;
-    await axios.post("http://localhost:5000/user/auth/forgot/resetPassword", {
-      otp,
-      email,
-      password: newPassword,
-    });
+    console.log(newPassword);
+    let { data } = await axios.post(
+      "http://localhost:5000/user/auth/forgot/resetPassword",
+      {
+        email,
+        password: newPassword,
+      }
+    );
+    if (data.err) {
+      toast.error(data.message);
+    } else {
+      setShowResetPassPage(false);
+      navigate("/login");
+      toast.success("Password Changed Succesfully");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -129,7 +142,11 @@ export default function Login() {
       className="d-flex flex-column justify-content-center"
       style={{ height: "100vh" }}
     >
-      <MDBContainer className="">
+      <Toaster />
+      <MDBContainer>
+        {/* <MDBRow>
+          <img src={logo} alt="" style={{width:"20%"}} />
+        </MDBRow> */}
         <MDBRow>
           <MDBCol col="12" lg="7">
             <img src={loginImg} className="img-fluid" alt="Phone image" />
@@ -167,7 +184,9 @@ export default function Login() {
 
                   <div className="d-flex justify-content-between mb-4">
                     {email && (
-                      <Link onClick={handleModal}>{loading ? <BeatLoader/> :"Forgot Password"}</Link>
+                      <Link onClick={handleModal}>
+                        {loading ? <BeatLoader /> : "Forgot Password"}
+                      </Link>
                     )}
                   </div>
 
