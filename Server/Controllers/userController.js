@@ -13,6 +13,7 @@ export async function userSignup(req, res) {
     if (user)
       return res.json({ err: true, message: "User already registered!" });
     let otp = Math.ceil(Math.random() * 100000);
+    console.log(otp);
     let otpHash = crypto
       .createHmac("sha256", process.env.OTP_SECRET)
       .update(otp.toString())
@@ -169,5 +170,47 @@ export async function forgotOtp(req, res) {
       .json({ err: false });
   } catch (error) {
     res.json({ err: true, error: error, message: "Something went wrong" });
+  }
+}
+
+export async function verifyForgetOtp(req, res) {
+  try {
+    const { otp } = req.body;
+    const tempToken = req.cookies.tempToken;
+
+    if (!tempToken) {
+      return res.json({ err: true, message: "OTP Session Timed Out" });
+    }
+
+    const verifiedTempToken = jwt.verify(tempToken, process.env.JWT_SECRET);
+    let otpHash = crypto
+      .createHmac("sha256", process.env.OTP_SECRET)
+      .update(otp.toString())
+      .digest("hex");
+    if (otpHash != verifiedTempToken.otp) {
+      return res.json({ err: true, message: "Invalid OTP" });
+    }
+    return res.json({ err: false });
+  } catch (error) {
+    console.log(error);
+    res.json({ error: error, err: true, message: "Something went wrong" });
+  }
+}
+
+export async function userPassReset(req, res) {
+  try {
+    const { email,password } = req.body;
+    let hashedPassword = bcrypt.hashSync(password, salt);
+    await UserModel.updateOne(
+      { email },
+      {
+        $set: {
+          password: hashedPassword,
+        },
+      }
+    );
+    return res.json({ err: false });
+  } catch (error) {
+    res.json({ error: error, err: true, message: "Something went wrong" });
   }
 }

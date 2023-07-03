@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import {
   MDBContainer,
   MDBCol,
@@ -27,6 +28,7 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const validForm = () => {
     validatePassword(password);
@@ -72,6 +74,7 @@ export default function SignUp() {
       setErrMessage("Incorrect OTP");
     } else {
       dispatch({ type: "refresh" });
+      navigate('/login')
     }
   };
 
@@ -183,6 +186,11 @@ export default function SignUp() {
                       )}
                     </div>
                   </MDBBtn>
+                  <div className="d-flex justify-content-between mb-4">
+                    <p>
+                      Already Registered ? <Link to="/login">Log In</Link>
+                    </p>
+                  </div>
                 </>
               ) : (
                 <>

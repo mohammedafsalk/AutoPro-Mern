@@ -8,7 +8,8 @@ export default function ForgetOtpModal({
   handleclose,
   otp,
   setOtp,
-  handleOtp
+  handleOtp,
+  errMsgOtp,
 }) {
   return (
     <Modal show={showModal} onHide={handleclose}>
@@ -20,17 +21,23 @@ export default function ForgetOtpModal({
           Enter OTP sent to <b>{email}</b> to reset your password
         </p>
         <MDBInput
-          wrapperClass="mb-4"
           label="OTP"
           id=""
           value={otp}
-          onChange={(e)=>setOtp(e.target.value)}
+          onChange={(e) => setOtp(e.target.value)}
           type="number"
           size="lg"
         />
       </Modal.Body>
+      <div className="ms-4">
+        {errMsgOtp && <p className="text-danger ">{errMsgOtp}</p>}
+      </div>
       <Modal.Footer>
-        {otp && <Button  onClick={handleOtp} variant="secondary">Continue</Button>}
+        {otp && (
+          <Button onClick={handleOtp} variant="secondary">
+            Continue
+          </Button>
+        )}
       </Modal.Footer>
     </Modal>
   );
