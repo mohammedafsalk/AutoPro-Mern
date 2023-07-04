@@ -1,0 +1,34 @@
+import mongoose from "mongoose";
+const ServiceCenterSchema = new mongoose.Schema({
+  name: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
+  location: {
+    type: String,
+  },
+  district: {
+    type: String,
+  },
+  proof: {
+    type: Object,
+    required: true,
+  },
+  logo: {
+    type: Object,
+    required: true,
+  },
+
+  permission: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const ServiceCenterModel = mongoose.model("ServiceCenter", ServiceCenterSchema);
+export default ServiceCenterModel;

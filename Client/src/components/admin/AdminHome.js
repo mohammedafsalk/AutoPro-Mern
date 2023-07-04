@@ -5,6 +5,10 @@ import axios from "axios";
 
 export default function AdminHome() {
   const dispatch = useDispatch();
+  const value = useSelector((state)=>{
+    return state.admin
+  })
+  console.log(value);
   const handleLogout = async () => {
     await axios.get("http://localhost:5000/admin/auth/logout");
     dispatch({ type: "refresh" });

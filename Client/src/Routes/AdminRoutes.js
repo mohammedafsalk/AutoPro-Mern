@@ -17,7 +17,7 @@ export default function AdminRoutes() {
       );
       dispatch({
         type: "admin",
-        payload: { login: adminData.loggedIn, details: adminData.user },
+        payload: { login: adminData.loggedIn },
       });
     })();
   }, [refresh]);
