@@ -1,6 +1,7 @@
 import { createStore } from "redux";
 const initialState = {
   user: { login: null },
+  admin: { login: null },
   refresh: true,
 };
 
@@ -10,6 +11,8 @@ function reducer(state = initialState, action) {
       return { ...state, user: action.payload };
     case "refresh":
       return { ...state, refresh: !state.refresh };
+    case "admin":
+      return { ...state, admin: action.payload };
     default:
       return state;
   }
