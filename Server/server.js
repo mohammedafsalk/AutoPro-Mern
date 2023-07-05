@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import dbConnect from "./config/dbConnect.js";
 import userAuthRouter from "./Routes/userAuthRouter.js";
 import adminAuthRouter from "./Routes/adminAuthRouter.js";
+import serviceCenterAuthRouter from './Routes/serviceCenterAuthRouter.js'
 import path from "path";
 import cors from "cors";
 
@@ -25,7 +26,8 @@ app.use(
 
 app.use("/user/auth/", userAuthRouter);
 app.use("/admin/auth/", adminAuthRouter);
-// app.use('/user',userRouter)
+app.use("/service-center/auth/",serviceCenterAuthRouter);
+
 
 app.listen(5000, () => {
   console.log("Server Up at 5000");
