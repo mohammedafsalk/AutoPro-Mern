@@ -8,6 +8,10 @@ var salt = bcrypt.genSaltSync(10);
 export async function serviceCenterSignup(req, res) {
   try {
     const { name, email, password, location, district } = req.body;
+    const temp = await ServiceCenterModel.findOne({email})
+    if(temp){
+      return res.json({err:true,message:"Center Already Registered"})
+    }
     const proof = await cloudinary.uploader.upload(req.body.proof, {
       folder: "AutoPro",
     });
@@ -19,6 +23,8 @@ export async function serviceCenterSignup(req, res) {
       name,
       email,
       password: hashedPassword,
+      location,
+      district,
       proof,
       logo,
     });
@@ -47,7 +53,7 @@ export async function serviceCenterLogin(req, res) {
     const { email, password } = req.body;
     const center = await ServiceCenterModel.findOne({ email });
     if (!center) {
-      return res.json({ err: true, message: "no servie center found" });
+      return res.json({ err: true, message: "No Service Center Found" });
     }
     if (!center.permission) {
       return res.json({
