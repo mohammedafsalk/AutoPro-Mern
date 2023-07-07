@@ -1,4 +1,5 @@
 import AdminModel from "../Models/adminModel.js";
+import serviceCenterModel from "../Models/serviceCenterModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -65,5 +66,19 @@ export async function adminLogout(req, res) {
       .json({ err: false, message: "Logged Out " });
   } catch (error) {
     res.json({ error: error, message: "Something went wrong" });
+  }
+}
+
+export async function adminDashboard(req, res) {
+  try {
+    const centerRequests = await serviceCenterModel
+      .find({ permission: false })
+      .lean();
+    if (!centerRequests) {
+      return res.json({ message: "No New Requests", err: false });
+    }
+    return res.json({ centerRequests, err: false });
+  } catch (error) {
+    res.json({ error: error, err: true, message: "Something went Wrong" });
   }
 }

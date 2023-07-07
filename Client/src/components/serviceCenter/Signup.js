@@ -144,7 +144,7 @@ export default function Signup() {
     e.preventDefault();
     let { name, email, password, location, district } = formData;
     let { data } = await axios.post(
-      "http://localhost:5000/service-center/auth/signup",
+      "/service-center/auth/signup",
       {
         name,
         email,
