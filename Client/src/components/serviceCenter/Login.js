@@ -12,7 +12,6 @@ import loginImg from "../../assets/images/login.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import ForgetOtpModal from "./forgetOtpModal";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/images/AutoPro-logos_black.png";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
@@ -25,16 +24,15 @@ export default function Login() {
     otp: "",
     showModal: false,
   };
-  const [state, set] = useReducer(forgotReducer, initialState);
+  const [state, setDispatch] = useReducer(forgotReducer, initialState);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showResetPassPage, setShowResetPassPage] = useState(false);
-
-  const [NewPasswordData, setNewPasswordData] = useState({
+  const [formdata, setFormData] = useState({
+    email: "",
     password: "",
-    confirmPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
   });
+  const [showResetPassPage, setShowResetPassPage] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -42,71 +40,77 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (NewPasswordData.password) {
-      !validatePassword(NewPasswordData.password).status
+    if (formdata.newPassword) {
+      !validatePassword(formdata.newPassword).status
         ? setErrMsg(
-            validatePassword(
-              NewPasswordData.password
-            ).message[0].message.replace("string", "password")
+            validatePassword(formdata.newPassword).message[0].message.replace(
+              "string",
+              "password"
+            )
           )
         : setErrMsg("");
     }
-    if (NewPasswordData.confirmPassword) {
+    if (formdata.confirmNewPassword) {
       {
-        NewPasswordData.password !== NewPasswordData.confirmPassword
+        formdata.newPassword !== formdata.confirmNewPassword
           ? setErrMsg("Password not match")
           : setErrMsg("");
       }
     }
-  }, [NewPasswordData]);
+  }, [formdata]);
 
   const validForm = () => {
-    if (password.trim() === "" || email.trim() === "") {
+    if (formdata.email.trim() === "" || formdata.password.trim() === "") {
       return false;
     }
     return true;
   };
 
   const validResetPasswordForm = () => {
-    validatePassword(NewPasswordData.password);
+    validatePassword(formdata.newPassword);
     if (
-      !validatePassword(NewPasswordData.password).status ||
-      NewPasswordData.password.trim() === "" ||
-      NewPasswordData.password !== NewPasswordData.confirmPassword
+      !validatePassword(formdata.newPassword).status ||
+      formdata.newPassword.trim() === "" ||
+      formdata.newPassword !== formdata.confirmNewPassword
     ) {
       return false;
     }
     return true;
   };
 
-  const handlePasswordData = (e) => {
+  const handleFormData = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
-    setNewPasswordData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleModal = async () => {
+    let { email } = formdata;
     setLoading(true);
-    await axios.post("http://localhost:5000/user/auth/forgot", { email });
+    let { data } = await axios.post("service-center/auth/forgot", { email });
+    if (data.error) {
+      toast.error("Enter Registered Email");
+    }
+    setDispatch({ type: "showModal" });
     setLoading(false);
   };
 
   const handleOtp = async () => {
-    let { data } = await axios.post(
-      "http://localhost:5000/user/auth/forgot/verify",
-      { otp }
-    );
+    let flag = 0;
+    let otp = state.otp;
+    console.log(otp);
+    let { data } = await axios.post("service-center/auth/forgot/verifyOtp", {
+      otp,
+    });
+    console.log(data);
     if (data.err) {
-    } else {
+      setDispatch({ type: "err", payload: data.message });
     }
   };
 
-  const handleclose = () => {};
-
   const handlesave = async (e) => {
     e.preventDefault();
-    let newPassword = NewPasswordData.password;
-    console.log(newPassword);
+    let newPassword = formdata.newPassword;
     let { data } = await axios.post(
       "http://localhost:5000/user/auth/forgot/resetPassword",
       {
@@ -156,19 +160,19 @@ export default function Login() {
                   <MDBInput
                     wrapperClass="mb-4"
                     label="Email address"
-                    id="formControlLg"
+                    name="email"
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={formdata.email}
+                    onChange={handleFormData}
                     size="lg"
                   />
                   <MDBInput
                     wrapperClass="mb-4"
                     label="Password"
-                    id="formControlLg"
+                    name="password"
                     type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={formdata.password}
+                    onChange={handleFormData}
                     size="lg"
                   />
                   {errMsg && (
@@ -178,7 +182,7 @@ export default function Login() {
                   )}
 
                   <div className="d-flex justify-content-between mb-4">
-                    {email && (
+                    {formdata.email && (
                       <Link onClick={handleModal}>
                         {loading ? <BeatLoader /> : "Forgot Password"}
                       </Link>
@@ -213,19 +217,19 @@ export default function Login() {
                     wrapperClass="mb-4"
                     label="Enter New Password"
                     id="formControlLg"
-                    name="password"
+                    name="newPassword"
                     type="password"
-                    value={NewPasswordData.password}
-                    onChange={handlePasswordData}
+                    value={formdata.newPassword}
+                    onChange={handleFormData}
                     size="lg"
                   />
                   <MDBInput
                     wrapperClass="mb-4"
                     label="Confirm Password"
                     id="formControlLg"
-                    name="confirmPassword"
+                    name="confirmNewpassword"
                     type="password"
-                    value={NewPasswordData.confirmPassword}
+                    value={formdata.confirmNewPassword}
                     onChange={handlePasswordData}
                     size="lg"
                   />
@@ -250,7 +254,14 @@ export default function Login() {
           )}
         </MDBRow>
       </MDBContainer>
-      <ForgetOtpModal />
+      <ForgetOtpModal
+        show={state.showModal}
+        email={formdata.email}
+        setDispatch={setDispatch}
+        otp={state.otp}
+        handleOtp={handleOtp}
+        err={state.err}
+      />
     </div>
   );
 }

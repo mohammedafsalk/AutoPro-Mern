@@ -1,8 +1,9 @@
 import ServiceCenterModel from "../Models/serviceCenterModel.js";
 import cloudinary from "../config/cloudinary.js";
-import sentOTP from '../helpers/sentOtp.js'
+import sentOTP from "../helpers/sentOtp.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -117,12 +118,12 @@ export async function forgotOtp(req, res) {
       return res.json({ error: true, message: "No Center Found" });
     }
     let otp = Math.ceil(Math.random() * 1000000);
+    console.log(otp);
     await sentOTP(email, otp);
     let otpHash = crypto
       .createHmac("sha256", process.env.OTP_SECRET)
       .update(otp.toString())
       .digest("hex");
-    console.log(otp);
     const token = jwt.sign(
       {
         otp: otpHash,
@@ -161,7 +162,6 @@ export async function verifyForgetOtp(req, res) {
     }
     return res.json({ err: false });
   } catch (error) {
-    console.log(error);
     res.json({ error: error, err: true, message: "Something went wrong" });
   }
 }
@@ -170,7 +170,7 @@ export async function centerPassReset(req, res) {
   try {
     const { email, password } = req.body;
     let hashedPassword = bcrypt.hashSync(password, salt);
-    await UserModel.updateOne(
+    await ServiceCenterModel.updateOne(
       { email },
       {
         $set: {
