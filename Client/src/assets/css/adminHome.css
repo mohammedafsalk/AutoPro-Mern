@@ -1,0 +1,18 @@
+.notification {
+  color: white;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  padding: 5px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+}
+
+

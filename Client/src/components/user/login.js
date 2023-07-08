@@ -12,12 +12,11 @@ import loginImg from "../../assets/images/login.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import ForgetOtpModal from "./forgetOtpModal";
 import { Link, useNavigate } from "react-router-dom";
-import logo from '../../assets/images/AutoPro-logos_black.png'
+import logo from "../../assets/images/AutoPro-logos_black.png";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
-
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -144,9 +143,6 @@ export default function Login() {
     >
       <Toaster />
       <MDBContainer>
-        {/* <MDBRow>
-          <img src={logo} alt="" style={{width:"20%"}} />
-        </MDBRow> */}
         <MDBRow>
           <MDBCol col="12" lg="7">
             <img src={loginImg} className="img-fluid" alt="Phone image" />

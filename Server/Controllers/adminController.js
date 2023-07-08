@@ -74,10 +74,11 @@ export async function adminDashboard(req, res) {
     const centerRequests = await serviceCenterModel
       .find({ permission: false })
       .lean();
+    const count = Object.keys(centerRequests).length;
     if (!centerRequests) {
       return res.json({ message: "No New Requests", err: false });
     }
-    return res.json({ centerRequests, err: false });
+    return res.json({ centerRequests, count, err: false });
   } catch (error) {
     res.json({ error: error, err: true, message: "Something went Wrong" });
   }
