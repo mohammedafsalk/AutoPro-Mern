@@ -14,10 +14,11 @@ export default function sentOTP(email, otp) {
     var mailOptions = {
       from: process.env.EMAIL,
       to: email,
-      subject: "AutoPro Email verification",
+      subject: "AutoPro Request Confirmation",
       html: `
-              <h1>Verify Your Email For AutoPro</h1>
-                <h2>${otp}</h2>
+      <h1>AutoPro</h1>
+      <h2>${message1}</h2>
+      <h3>${message2}</h3>
               `,
     };
 

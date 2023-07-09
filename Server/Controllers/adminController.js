@@ -83,3 +83,18 @@ export async function requests(req, res) {
     res.json({ error: error, err: true, message: "Something went Wrong" });
   }
 }
+
+export async function acceptRequest(req, res) {
+  try {
+    const { email } = req.body;
+    await HospitalModel.updateOne({ email }, { active: true });
+    res.json({ err: false });
+    await sentMail(
+      email,
+      "Doc online has approved your request for registration",
+      "You can proceed to your account"
+    );
+  } catch (err) {
+    res.json({ message: "Something Went Wrong", error: err, err: true });
+  }
+}
