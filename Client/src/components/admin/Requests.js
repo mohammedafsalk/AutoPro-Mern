@@ -21,13 +21,27 @@ export default function Requests() {
   const [requests, setRequests] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [image, setImage] = useState(null);
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     (async function () {
       let { data } = await axios.get("admin/requests");
       setRequests([...data.centerRequests]);
     })();
-  }, []);
+  }, [refresh]);
+
+  const handleAccept = async (email) => {
+    let { data } = await axios.post("admin/requests/accept", { email });
+    if (!data.err) {
+      setRefresh(!refresh);
+    }
+  };
+  const handleReject = async (email) => {
+    let { data } = await axios.post("admin/requests/reject", { email });
+    if (!data.err) {
+      setRefresh(!refresh);
+    }
+  };
 
   const openModal = (img) => {
     setModalOpen(true);
@@ -73,10 +87,20 @@ export default function Requests() {
                     </Button>
                   </div>
                   <div className="d-flex">
-                    <Button size="small" sx={{ fontSize: 15 }} color="success">
+                    <Button
+                      size="small"
+                      sx={{ fontSize: 15 }}
+                      onClick={() => handleAccept(item.email)}
+                      color="success"
+                    >
                       Accept
                     </Button>
-                    <Button size="small" sx={{ fontSize: 15 }} color="error">
+                    <Button
+                      size="small"
+                      sx={{ fontSize: 15 }}
+                      onClick={() => handleReject(item.email)}
+                      color="error"
+                    >
                       Reject
                     </Button>
                   </div>

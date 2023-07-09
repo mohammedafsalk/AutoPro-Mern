@@ -75,11 +75,10 @@ export async function requests(req, res) {
     const centerRequests = await serviceCenterModel
       .find({ permission: false })
       .lean();
-    const count = Object.keys(centerRequests).length;
     if (!centerRequests) {
       return res.json({ message: "No New Requests", err: false });
     }
-    return res.json({ centerRequests, count, err: false });
+    return res.json({ centerRequests, err: false });
   } catch (error) {
     res.json({ error: error, err: true, message: "Something went Wrong" });
   }
@@ -91,6 +90,20 @@ export async function acceptRequest(req, res) {
     await serviceCenterModel.updateOne({ email }, { permission: true });
     res.json({ err: false, message: "Permission Added Successfully" });
     await sentMail(email, "Your Request For Center Registration Has Accepted");
+  } catch (err) {
+    res.json({ message: "Something Went Wrong", error: err, err: true });
+  }
+}
+
+export async function rejectRequest(req, res) {
+  try {
+    const { email } = req.body;
+    await serviceCenterModel.updateOne({ email }, { rejected: true });
+    res.json({ err: false, message: "Rejection Message Sent" });
+    await sentMail(
+      email,
+      "Your Request Is Not Accepted,Please Contact Admin For More Info"
+    );
   } catch (err) {
     res.json({ message: "Something Went Wrong", error: err, err: true });
   }
