@@ -8,7 +8,7 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import "../../assets/css/login.css";
-import loginImg from "../../assets/images/login.jpg";
+import loginImg from "../../assets/images/serviceCenterLogin.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import ForgetOtpModal from "./forgetOtpModal";
 import { Link, useNavigate } from "react-router-dom";
@@ -96,23 +96,24 @@ export default function Login() {
   };
 
   const handleOtp = async () => {
-    let flag = 0;
     let otp = state.otp;
-    console.log(otp);
     let { data } = await axios.post("service-center/auth/forgot/verifyOtp", {
       otp,
     });
     console.log(data);
     if (data.err) {
       setDispatch({ type: "err", payload: data.message });
+    } else {
+      setDispatch({ type: "hideModal" });
+      setShowResetPassPage(true);
     }
   };
 
   const handlesave = async (e) => {
     e.preventDefault();
-    let newPassword = formdata.newPassword;
+    let { newPassword, email } = formdata;
     let { data } = await axios.post(
-      "http://localhost:5000/user/auth/forgot/resetPassword",
+      "service-center/auth/forgot/resetPassword",
       {
         email,
         password: newPassword,
@@ -121,19 +122,21 @@ export default function Login() {
     if (data.err) {
       toast.error(data.message);
     } else {
-      navigate("/login");
+      navigate("/service-center/login");
       toast.success("Password Changed Succesfully");
+      setShowResetPassPage(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let { data } = await axios.post("http://localhost:5000/user/auth/login", {
+    let { email, password } = formdata;
+    let { data } = await axios.post("/service-center/auth/login", {
       email,
       password,
     });
     if (data.err) {
-      setErrMsg(data.message);
+      toast.error(data.message);
     } else {
       dispatch({ type: "refresh" });
     }
@@ -200,7 +203,7 @@ export default function Login() {
                 </form>
                 <div className="d-flex justify-content-between mb-4">
                   <p>
-                    Dont Have An Account ? <Link to="/signup">Register</Link>
+                    Dont Have An Account ? <Link to="/service-center/signup">Register</Link>
                   </p>
                 </div>
               </MDBCol>
@@ -227,10 +230,10 @@ export default function Login() {
                     wrapperClass="mb-4"
                     label="Confirm Password"
                     id="formControlLg"
-                    name="confirmNewpassword"
+                    name="confirmNewPassword"
                     type="password"
                     value={formdata.confirmNewPassword}
-                    onChange={handlePasswordData}
+                    onChange={handleFormData}
                     size="lg"
                   />
                   {errMsg && (

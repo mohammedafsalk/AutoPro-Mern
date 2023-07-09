@@ -12,20 +12,6 @@ export default function ForgetOtpModal({
 }) {
   const [displayError, setDisplayError] = useState(false);
 
-  if (otp) {
-    setDisplayError(true);
-    const timeoutId = setTimeout(() => {
-      setDisplayError(false);
-    }, 5000);
-  }
-
-  const handleContinue = () => {
-    if (otp) {
-      handleOtp();
-    } else {
-      setDisplayError(true);
-    }
-  };
   return (
     <Modal
       show={show}
@@ -51,11 +37,11 @@ export default function ForgetOtpModal({
         />
       </Modal.Body>
       <div className=" text-center ">
-        {displayError && <p className="text-danger ">{err}</p>}
+        {err && <p className="text-danger ">{err}</p>}
       </div>
       <Modal.Footer>
         {otp && (
-          <Button onClick={handleContinue} variant="dark">
+          <Button onClick={handleOtp} variant="dark">
             Continue
           </Button>
         )}

@@ -10,7 +10,7 @@ import {
   MDBInput,
   MDBFile,
 } from "mdb-react-ui-kit";
-import loginImg from "../../assets/images/login.jpg";
+import loginImg from "../../assets/images/serviceCenterLogin.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
