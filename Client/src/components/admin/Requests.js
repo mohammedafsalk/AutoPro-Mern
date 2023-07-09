@@ -8,10 +8,19 @@ import Typography from "@mui/material/Typography";
 import AdminHome from "./AdminHome";
 import "../../assets/css/adminHome.css";
 import axios from "axios";
-import { MDBCol, MDBContainer, MDBRow } from "mdb-react-ui-kit";
+import {
+  MDBCol,
+  MDBContainer,
+  MDBRow,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+} from "mdb-react-ui-kit";
 
 export default function Requests() {
   const [requests, setRequests] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async function () {
@@ -19,6 +28,15 @@ export default function Requests() {
       setRequests([...data.centerRequests]);
     })();
   }, []);
+
+  const openModal = (img) => {
+    setModalOpen(true);
+    setImage(img);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   return (
     <>
@@ -37,13 +55,22 @@ export default function Requests() {
                   image={item.logo.url}
                 />
                 <CardContent>
-                  <Typography variant="h5" sx={{fontWeight:500}} component="div">
+                  <Typography
+                    variant="h5"
+                    sx={{ fontWeight: 500 }}
+                    component="div"
+                  >
                     {item.name}
                   </Typography>
                 </CardContent>
                 <CardActions className="d-flex justify-content-around">
                   <div>
-                    <Button size="medium">View Proof</Button>
+                    <Button
+                      size="medium"
+                      onClick={() => openModal(item.proof.url)}
+                    >
+                      View Proof
+                    </Button>
                   </div>
                   <div className="d-flex">
                     <Button size="small" sx={{ fontSize: 15 }} color="success">
@@ -59,6 +86,13 @@ export default function Requests() {
           ))}
         </MDBRow>
       </MDBContainer>
+      <MDBModal show={modalOpen} onHide={closeModal}>
+        <MDBModalDialog>
+          <MDBModalContent>
+            <img src={image} alt="Logo" style={{ maxWidth: "100%" }} />
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
     </>
   );
 }
