@@ -1,6 +1,7 @@
 import AdminModel from "../Models/adminModel.js";
 import serviceCenterModel from "../Models/serviceCenterModel.js";
 import bcrypt from "bcryptjs";
+import sentMail from "../helpers/sentMail.js";
 import jwt from "jsonwebtoken";
 
 export async function adminLogin(req, res) {
@@ -87,13 +88,9 @@ export async function requests(req, res) {
 export async function acceptRequest(req, res) {
   try {
     const { email } = req.body;
-    await HospitalModel.updateOne({ email }, { active: true });
-    res.json({ err: false });
-    await sentMail(
-      email,
-      "Doc online has approved your request for registration",
-      "You can proceed to your account"
-    );
+    await serviceCenterModel.updateOne({ email }, { permission: true });
+    res.json({ err: false, message: "Permission Added Successfully" });
+    await sentMail(email, "Your Request For Center Registration Has Accepted");
   } catch (err) {
     res.json({ message: "Something Went Wrong", error: err, err: true });
   }

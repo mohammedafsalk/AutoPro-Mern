@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-export default function sentOTP(email, otp) {
+export default function sentMail(email, message) {
   return new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -17,8 +17,7 @@ export default function sentOTP(email, otp) {
       subject: "AutoPro Request Confirmation",
       html: `
       <h1>AutoPro</h1>
-      <h2>${message1}</h2>
-      <h3>${message2}</h3>
+      <h2>${message}</h2>
               `,
     };
 
