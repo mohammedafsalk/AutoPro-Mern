@@ -69,7 +69,7 @@ export async function adminLogout(req, res) {
   }
 }
 
-export async function adminDashboard(req, res) {
+export async function requests(req, res) {
   try {
     const centerRequests = await serviceCenterModel
       .find({ permission: false })

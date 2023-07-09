@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import AdminHome from "../components/admin/AdminHome";
 import Login from "../components/admin/Login";
+import Requests from "../components/admin/Requests";
 
 export default function AdminRoutes() {
   const { admin, refresh } = useSelector((state) => {
@@ -26,6 +27,7 @@ export default function AdminRoutes() {
       {admin.login && (
         <>
           <Route path="/" element={<AdminHome />} />
+          <Route path="/requests" element={<Requests />} />
           <Route path="/login" element={<Navigate to="/admin/" />} />
         </>
       )}

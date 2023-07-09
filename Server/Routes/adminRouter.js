@@ -1,7 +1,7 @@
 import express from "express";
-import { adminDashboard } from "../Controllers/adminController.js";
+import { requests } from "../Controllers/adminController.js";
 const router = express.Router();
 
-router.get('/dashboard',adminDashboard)
+router.get("/requests", requests);
 
 export default router;
