@@ -23,7 +23,10 @@ const ServiceCenterSchema = new mongoose.Schema({
     type: Object,
     required: true,
   },
-
+  rejected: {
+    type: Boolean,
+    default: false,
+  },
   permission: {
     type: Boolean,
     default: false,
