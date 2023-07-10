@@ -106,7 +106,6 @@ export default function Login() {
   const handlesave = async (e) => {
     e.preventDefault();
     let newPassword = NewPasswordData.password;
-    console.log(newPassword);
     let { data } = await axios.post(
       "http://localhost:5000/user/auth/forgot/resetPassword",
       {
@@ -130,7 +129,7 @@ export default function Login() {
       password,
     });
     if (data.err) {
-      setErrMsg(data.message);
+      toast.error(data.message);
     } else {
       dispatch({ type: "refresh" });
     }
@@ -172,11 +171,6 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     size="lg"
                   />
-                  {errMsg && (
-                    <div className="d-flex justify-content-between mb-4">
-                      <p className="text-danger">{errMsg}</p>
-                    </div>
-                  )}
 
                   <div className="d-flex justify-content-between mb-4">
                     {email && (

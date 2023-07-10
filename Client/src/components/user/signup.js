@@ -14,6 +14,8 @@ import "../../assets/css/login.css";
 import loginImg from "../../assets/images/login.jpg";
 import axios from "axios";
 import validatePassword from "../../helpers/passwordValidate";
+import toast, { Toaster } from "react-hot-toast";
+
 import { BeatLoader } from "react-spinners";
 
 export default function SignUp() {
@@ -71,10 +73,10 @@ export default function SignUp() {
       { otp, name, email, password, phone }
     );
     if (data.err) {
-      setErrMessage("Incorrect OTP");
+      toast.error("Incorrect OTP")
     } else {
       dispatch({ type: "refresh" });
-      navigate('/login')
+      navigate("/login");
     }
   };
 
@@ -106,6 +108,7 @@ export default function SignUp() {
       className="d-flex flex-column justify-content-center"
       style={{ height: "100vh" }}
     >
+      <Toaster/>
       <MDBContainer className="">
         <MDBRow>
           <MDBCol col="12" lg="7">
@@ -203,11 +206,6 @@ export default function SignUp() {
                     type="tel"
                     size="lg"
                   />
-                  {errMessage && (
-                    <div className="d-flex justify-content-between mb-4">
-                      <p className="text-danger">{errMessage}</p>
-                    </div>
-                  )}
                   <MDBBtn
                     type="submit"
                     disabled={otp.trim() == ""}

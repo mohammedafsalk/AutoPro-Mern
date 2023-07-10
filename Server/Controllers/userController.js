@@ -148,12 +148,12 @@ export async function forgotOtp(req, res) {
       return res.json({ error: true, message: "no user found" });
     }
     let otp = Math.ceil(Math.random() * 1000000);
+    console.log(otp);
     await sentOTP(email, otp);
     let otpHash = crypto
       .createHmac("sha256", process.env.OTP_SECRET)
       .update(otp.toString())
       .digest("hex");
-    console.log(otp);
     const token = jwt.sign(
       {
         otp: otpHash,
