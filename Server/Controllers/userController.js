@@ -79,6 +79,32 @@ export async function signUpVerify(req, res) {
   }
 }
 
+export async function resendOtp(req, res) {
+  const { email } = req.body;
+  let otp = Math.ceil(Math.random() * 100000);
+  console.log("resend",otp);
+  let newOtpHash = crypto
+    .createHmac("sha256", process.env.OTP_SECRET)
+    .update(otp.toString())
+    .digest("hex");
+  await sentOTP(email, otp);
+  const token = jwt.sign(
+    {
+      otp: newOtpHash,
+    },
+    process.env.JWT_SECRET
+  );
+
+  return res
+    .cookie("tempToken", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 1000 * 60 * 10,
+      sameSite: "none",
+    })
+    .json({ err: false, tempToken: token });
+}
+
 export async function userLogin(req, res) {
   try {
     const { email, password } = req.body;
@@ -199,7 +225,7 @@ export async function verifyForgetOtp(req, res) {
 
 export async function userPassReset(req, res) {
   try {
-    const { email,password } = req.body;
+    const { email, password } = req.body;
     let hashedPassword = bcrypt.hashSync(password, salt);
     await UserModel.updateOne(
       { email },
