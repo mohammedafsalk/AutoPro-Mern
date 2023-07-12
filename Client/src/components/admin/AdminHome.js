@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,12 +15,12 @@ import MenuItem from "@mui/material/MenuItem";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import avatar from '../../assets/images/avatar.png'
+import avatar from "../../assets/images/avatar.png";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Logout"];
@@ -184,9 +185,11 @@ function AdminHome() {
             <ListItem key={"text"} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                <NotificationsIcon sx={{fontSize:"50px"}} />
+                  <NotificationsIcon sx={{ fontSize: "50px" }} />
                 </ListItemIcon>
-                <ListItemText>Requests</ListItemText>
+                <Link to="/admin/requests" >
+                  <ListItemText>Requests</ListItemText>
+                </Link>
               </ListItemButton>
             </ListItem>
           </List>
