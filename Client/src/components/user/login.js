@@ -5,6 +5,7 @@ import {
   MDBCol,
   MDBRow,
   MDBBtn,
+  MDBIcon,
   MDBInput,
 } from "mdb-react-ui-kit";
 import "../../assets/css/login.css";
@@ -34,6 +35,21 @@ export default function Login() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleGoogleLogin = async (e) => {
+    e.preventDefault();
+    let redirectUri =
+      process.env.REACT_APP_CLIENT_URL + "/user/auth/google/callback";
+    let clientId = process.env.REACT_APP_CLIENT_GOOGLE_ID;
+    try {
+      window.open(
+        `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=email%20profile`,
+        "_self"
+      );
+    } catch (error) {
+      console.log("Google login error:", error);
+    }
+  };
 
   useEffect(() => {
     if (NewPasswordData.password) {
@@ -81,9 +97,16 @@ export default function Login() {
 
   const handleModal = async () => {
     setLoading(true);
-    await axios.post("http://localhost:5000/user/auth/forgot", { email });
-    setShowModal(true);
-    setLoading(false);
+    let { data } = await axios.post("http://localhost:5000/user/auth/forgot", {
+      email,
+    });
+    if (data.error) {
+      toast.error(data.message);
+      setLoading(false);
+    } else {
+      setShowModal(true);
+      setLoading(false);
+    }
   };
 
   const handleOtp = async () => {
@@ -187,6 +210,14 @@ export default function Login() {
                     size="lg"
                   >
                     Log In
+                  </MDBBtn>
+                  <MDBBtn
+                    color="danger"
+                    className="d-flex w-100 align-items-center justify-content-center mb-4 "
+                    onClick={handleGoogleLogin}
+                  >
+                    <MDBIcon fab icon="google" size="lg" className="me-2" />
+                    Login with Google
                   </MDBBtn>
                 </form>
                 <div className="d-flex justify-content-between mb-4">

@@ -28,9 +28,37 @@ export default function SignUp() {
   const [showOtpPage, setShowOtpPage] = useState(false);
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(10);
+  const [canResend, setCanResend] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    let interval;
+    if (showOtpPage) {
+      setTimer(10);
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [showOtpPage]);
+
+  React.useEffect(() => {
+    if (timer === 0) {
+      setCanResend(true);
+    }
+  }, [timer]);
+
+  const handleResendOtp = async () => {
+    toast.success(`New OTP Has Been Sent to ${email}`);
+    let { data:resendOtpData } = await axios.post("user/auth/resendOtp", { email });
+    setTimer(10);
+    setCanResend(false);
+  };
 
   const validForm = () => {
     validatePassword(password);
@@ -73,8 +101,10 @@ export default function SignUp() {
       { otp, name, email, password, phone }
     );
     if (data.err) {
-      toast.error("Incorrect OTP")
+      toast.error("Incorrect OTP");
+      console.log("hhhhhhh");
     } else {
+      console.log("kkkkkk");
       dispatch({ type: "refresh" });
       navigate("/login");
     }
@@ -108,7 +138,7 @@ export default function SignUp() {
       className="d-flex flex-column justify-content-center"
       style={{ height: "100vh" }}
     >
-      <Toaster/>
+      <Toaster />
       <MDBContainer className="">
         <MDBRow>
           <MDBCol col="12" lg="7">
@@ -198,7 +228,7 @@ export default function SignUp() {
               ) : (
                 <>
                   <MDBInput
-                    wrapperClass="mb-4"
+                    wrapperClass="mb-2"
                     label="Enter OTP"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
@@ -206,14 +236,30 @@ export default function SignUp() {
                     type="tel"
                     size="lg"
                   />
-                  <MDBBtn
-                    type="submit"
-                    disabled={otp.trim() == ""}
-                    className="mb-4 w-100 bg-dark"
-                    size="lg"
-                  >
-                    Continue
-                  </MDBBtn>
+                  {timer > 0 ? (
+                    <p className="danger">
+                      {`Enter the OTP before ${timer} seconds`}
+                    </p>
+                  ) : (
+                    <MDBBtn
+                      className="mb-2"
+                      onClick={handleResendOtp}
+                      disabled={!canResend}
+                      type="button"
+                    >
+                      Resend OTP
+                    </MDBBtn>
+                  )}
+                  {otp && (
+                    <MDBBtn
+                      type="submit"
+                      disabled={otp.trim() == ""}
+                      className="mb-4 w-100 bg-dark"
+                      size="lg"
+                    >
+                      Continue
+                    </MDBBtn>
+                  )}
                 </>
               )}
             </form>

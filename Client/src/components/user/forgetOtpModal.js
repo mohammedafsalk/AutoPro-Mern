@@ -11,6 +11,32 @@ export default function ForgetOtpModal({
   handleOtp,
   errMsgOtp,
 }) {
+  const [timer, setTimer] = React.useState(10);
+  const [canResend, setCanResend] = React.useState(false);
+
+  React.useEffect(() => {
+    let interval;
+    if (showModal) {
+      setTimer(10);
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [showModal]);
+
+  React.useEffect(() => {
+    if (timer === 0) {
+      setCanResend(true);
+    }
+  }, [timer]);
+
+  const handleResendOtp = () => {
+    setTimer(10);
+    setCanResend(false);
+  };
   return (
     <Modal show={showModal} onHide={handleclose}>
       <Modal.Header closeButton>

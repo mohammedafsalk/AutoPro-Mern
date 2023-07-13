@@ -10,6 +10,7 @@ import serviceCenterAuthRouter from "./Routes/serviceCenterAuthRouter.js";
 import path from "path";
 import cors from "cors";
 
+
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
