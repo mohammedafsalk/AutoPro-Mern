@@ -13,7 +13,6 @@ import {
 } from "mdb-react-ui-kit";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { FaUserCircle } from "react-icons/fa";
 import userimage from "../../assets/images/avatar.png";
 
 export default function UserNav() {

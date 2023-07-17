@@ -161,7 +161,7 @@ export async function verifyGAuth(req, res) {
     if (user.block) {
       return res.json({ loggedIn: false, err: true, message: "user blocked" });
     }
-    // 9747c0de
+
     return res
       .cookie("userToken", token, {
         httpOnly: true,

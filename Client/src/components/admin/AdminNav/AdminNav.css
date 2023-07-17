@@ -1,0 +1,20 @@
+.adminNav {
+  background: whitesmoke;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2 rem;
+}
+
+.nav-menu {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 10px;
+  font-size: 1.2rem;
+  list-style: none;
+  width: 70vw;
+  justify-content: end;
+  margin-right: 2rem;
+}
