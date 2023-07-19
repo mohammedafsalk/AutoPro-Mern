@@ -97,8 +97,11 @@ export async function acceptRequest(req, res) {
 
 export async function rejectRequest(req, res) {
   try {
-    const { email } = req.body;
-    await serviceCenterModel.updateOne({ email }, { rejected: true });
+    const { email, rejectionMsg } = req.body;
+    await serviceCenterModel.findOneAndUpdate(
+      { email },
+      { $set: { rejected: true, rejectMessage: rejectionMsg } }
+    );
     res.json({ err: false, message: "Rejection Message Sent" });
     await sentMail(
       email,

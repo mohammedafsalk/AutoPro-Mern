@@ -3,7 +3,6 @@ const initialState = {
   user: { login: null },
   admin: { login: null },
   serviceCenter: { login: null },
-  serviceCenterResetPassword: { otpErr: "", showResetPage: false, otp: "" },
   refresh: true,
 };
 
@@ -17,15 +16,6 @@ function reducer(state = initialState, action) {
       return { ...state, admin: action.payload };
     case "serviceCenter":
       return { ...state, serviceCenter: action.payload };
-    case "serviceCenterResetPassword":
-      return {
-        ...state,
-        serviceCenterResetPassword: {
-          otpErr: action.payload.otpErr || "",
-          showResetPage: action.payload.showResetPage || false,
-          otp: action.payload.otp || "",
-        },
-      };
     default:
       return state;
   }

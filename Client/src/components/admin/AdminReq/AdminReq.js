@@ -10,25 +10,34 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Grid,
+  styled,
   IconButton,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
 import { CheckCircle, DoDisturb } from "@mui/icons-material";
+import img from "../../../assets/images/noRequests.jpg";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 
+const CenteredContainer = styled(Grid)(({ theme }) => ({
+  minHeight: "100vh",
+  [theme.breakpoints.down("sm")]: {
+    alignItems: "center",
+  },
+}));
+
 export default function AdminReq() {
-  const ref = React.useRef();
-
-
   const [centers, setCenters] = React.useState([]);
   const [viewProof, setViewProof] = React.useState(null);
-  const [mail, setMail] = React.useState("");
+  const [mail, setMail] = React.useState({
+    accept: "",
+    reject: "",
+  });
+  const [rejectMsg, setrejectMsg] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [openCnfrm, setOpenCnfrm] = React.useState(false);
   const [openRjct, setOpenRjct] = React.useState(false);
@@ -48,6 +57,7 @@ export default function AdminReq() {
 
   const handleCloseRjct = () => {
     setOpenRjct(false);
+    setrejectMsg("");
   };
 
   const handleOpen = (url) => {
@@ -69,15 +79,18 @@ export default function AdminReq() {
     })();
   };
 
-  const handleRejection = (e) => {
-    e.preventDefault();
-    console.log("kkkk");
+  const handleRejection = async (mail) => {
+    let { data } = await axios.post("admin/requests/reject", {
+      email: mail,
+      rejectionMsg: rejectMsg,
+    });
+    if (data.err) {
+      toast.error(data.message);
+    } else {
+      toast.success(data.message);
+      setOpenRjct(false);
+    }
   };
-
-  React.useEffect(() => {
-    const element = ref.current;
-    console.log(element); // 👈️ element here
-  }, []);
 
   React.useEffect(() => {
     (async function () {
@@ -89,89 +102,122 @@ export default function AdminReq() {
   return (
     <>
       <AdminNav />
-      <div style={{ width: "80%", margin: "0 auto", marginTop: "20px" }}>
-        <Toaster />
-        <Grid
+      {centers.length === 0 ? (
+        <CenteredContainer
           container
-          direction="row"
-          justifyContent="space-between"
+          direction="column"
+          justifyContent="center"
           alignItems="center"
-          gap={2}
+          spacing={2}
         >
-          {centers &&
-            centers.map((item, i) => (
-              <Grid xs={12} sm={6} md={3}>
-                <Card sx={{ maxWidth: 345, padding: "10px" }} key={i}>
-                  <Typography
-                    variant="h5"
-                    textAlign="center"
-                    fontWeight="500"
-                    color="black"
-                  >
-                    {item.name}
-                  </Typography>
-                  <CardMedia
-                    component="img"
-                    height="194"
-                    image={item.logo.url}
-                    alt="Paella dish"
-                  />
-                  <CardContent
-                    sx={{ display: "flex", flexDirection: "column" }}
-                  >
+          <Grid item>
+            <img src={img} height="400px" width="400px" alt="No Messages" />
+          </Grid>
+          <Grid item>
+            <Typography variant="h6" color="textSecondary">
+              No new Requests
+            </Typography>
+          </Grid>
+        </CenteredContainer>
+      ) : (
+        <div style={{ width: "80%", margin: "0 auto", marginTop: "20px" }}>
+          <Toaster />
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            gap={2}
+          >
+            {centers &&
+              centers.map((item, i) => (
+                <Grid xs={12} sm={6} md={3}>
+                  <Card sx={{ maxWidth: 345, padding: "10px" }} key={i}>
                     <Typography
-                      variant="h7"
-                      color="text.primary"
-                      sx={{ fontWeight: "500" }}
+                      variant="h5"
+                      textAlign="center"
+                      fontWeight="500"
+                      color="black"
                     >
-                      Location:{" "}
-                      <Typography variant="h7" fontWeight={3}>
-                        {item.location}
-                      </Typography>
+                      {item.name}
                     </Typography>
-                    <Typography
-                      variant="h7"
-                      color="text.primary"
-                      sx={{ fontWeight: "500" }}
+                    <CardMedia
+                      component="img"
+                      height="194"
+                      image={item.logo.url}
+                      alt="Paella dish"
+                    />
+                    <CardContent
+                      sx={{ display: "flex", flexDirection: "column" }}
                     >
-                      District:{" "}
-                      <Typography variant="h7" fontWeight={3}>
-                        {item.district}
-                      </Typography>
-                    </Typography>
-                    <Typography
-                      variant="h7"
-                      color="text.primary"
-                      sx={{ fontWeight: "500" }}
-                    >
-                      Contact No:{" "}
-                      <Typography variant="h7" fontWeight={3}>
-                        Some Location
-                      </Typography>
-                    </Typography>
-                  </CardContent>
-                  <Grid container justifyContent="space-around">
-                    <CardActions disableSpacing>
-                      <IconButton
-                        onClick={() =>
-                          handleClickOpenCnfrm(setMail(item.email))
-                        }
+                      <Typography
+                        variant="h7"
+                        color="text.primary"
+                        sx={{ fontWeight: "500" }}
                       >
-                        <CheckCircle color="success" />
-                      </IconButton>
-                      <IconButton onClick={handleClickOpenRjct}>
-                        <DoDisturb color="error" />
-                      </IconButton>
-                    </CardActions>
-                    <Button onClick={() => handleOpen(item.proof.url)}>
-                      View Proof
-                    </Button>
-                  </Grid>
-                </Card>
-              </Grid>
-            ))}
-        </Grid>
-      </div>
+                        Location:{" "}
+                        <Typography variant="h7" fontWeight={3}>
+                          {item.location}
+                        </Typography>
+                      </Typography>
+                      <Typography
+                        variant="h7"
+                        color="text.primary"
+                        sx={{ fontWeight: "500" }}
+                      >
+                        District:{" "}
+                        <Typography variant="h7" fontWeight={3}>
+                          {item.district}
+                        </Typography>
+                      </Typography>
+                      <Typography
+                        variant="h7"
+                        color="text.primary"
+                        sx={{ fontWeight: "500" }}
+                      >
+                        Contact No:{" "}
+                        <Typography variant="h7" fontWeight={3}>
+                          Some Location
+                        </Typography>
+                      </Typography>
+                    </CardContent>
+                    <Grid container justifyContent="space-around">
+                      <CardActions disableSpacing>
+                        <IconButton
+                          onClick={() =>
+                            handleClickOpenCnfrm(
+                              setMail((prev) => ({
+                                ...prev,
+                                accept: item.email,
+                              }))
+                            )
+                          }
+                        >
+                          <CheckCircle color="success" />
+                        </IconButton>
+                        <IconButton
+                          onClick={() =>
+                            handleClickOpenRjct(
+                              setMail((prev) => ({
+                                ...prev,
+                                reject: item.email,
+                              }))
+                            )
+                          }
+                        >
+                          <DoDisturb color="error" />
+                        </IconButton>
+                      </CardActions>
+                      <Button onClick={() => handleOpen(item.proof.url)}>
+                        View Proof
+                      </Button>
+                    </Grid>
+                  </Card>
+                </Grid>
+              ))}
+          </Grid>
+        </div>
+      )}
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
@@ -187,7 +233,7 @@ export default function AdminReq() {
           <img src={viewProof} alt="Modal Image" style={{ width: "100%" }} />
         </Box>
       </Modal>
-      <div>
+      <>
         <Dialog
           open={openCnfrm}
           onClose={handleCloseCnfrm}
@@ -199,19 +245,20 @@ export default function AdminReq() {
           </DialogTitle>
           <DialogActions>
             <Button onClick={handleCloseCnfrm}>Close</Button>
-            <Button onClick={() => handleConfirm(mail)} autoFocus>
+            <Button onClick={() => handleConfirm(mail.accept)} autoFocus>
               Confirm
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
-      <form>
+      </>
+      <>
         <Dialog open={openRjct} onClose={handleCloseRjct}>
           <DialogTitle>Are You Sure To Reject?</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
-              ref={ref}
+              value={rejectMsg}
+              onChange={(e) => setrejectMsg(e.target.value)}
               id="outlined-multiline-static"
               label="Reason For Rejection"
               multiline
@@ -220,12 +267,10 @@ export default function AdminReq() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseRjct}>Cancel</Button>
-            <Button type="submit" onClick={handleRejection}>
-              Reject
-            </Button>
+            <Button onClick={() => handleRejection(mail.reject)}>Reject</Button>
           </DialogActions>
         </Dialog>
-      </form>
+      </>
     </>
   );
 }

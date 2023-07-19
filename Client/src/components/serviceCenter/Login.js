@@ -203,7 +203,8 @@ export default function Login() {
                 </form>
                 <div className="d-flex justify-content-between mb-4">
                   <p>
-                    Dont Have An Account ? <Link to="/service-center/signup">Register</Link>
+                    Dont Have An Account ?{" "}
+                    <Link to="/service-center/signup">Register</Link>
                   </p>
                 </div>
               </MDBCol>

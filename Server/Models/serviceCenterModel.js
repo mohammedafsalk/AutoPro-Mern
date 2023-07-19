@@ -31,6 +31,10 @@ const ServiceCenterSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  rejectMessage: {
+    type: String,
+    default:""
+  },
 });
 
 const ServiceCenterModel = mongoose.model("ServiceCenter", ServiceCenterSchema);

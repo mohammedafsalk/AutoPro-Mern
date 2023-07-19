@@ -57,16 +57,17 @@ export async function serviceCenterLogin(req, res) {
     if (!center) {
       return res.json({ err: true, message: "No Service Center Found" });
     }
-    if (!center.permission) {
-      return res.json({
-        err: true,
-        message: "Your Permission Is Not Approved,Try After Sometime",
-      });
-    }
     const centerValid = bcrypt.compareSync(password, center.password);
     if (!centerValid) {
       return res.json({ err: true, message: "Email Or Password Is Wrong" });
     }
+    // if (!center.permission) {
+    //   return res.json({
+    //     err: true,
+    //     permission:false,
+    //     message: "Your Permission Is Not Approved,Try After Sometime",
+    //   });
+    // }
     const token = jwt.sign(
       {
         id: center._id,
@@ -104,9 +105,10 @@ export async function loginVerify(req, res) {
     if (!serviceCenter) {
       return res.json({ loggedIn: false });
     }
+    console.log(serviceCenter);
     return res.json({ serviceCenter, loggedIn: true });
   } catch (error) {
-    res.json({ error: error, message: "Something went wrong" });
+    res.json({ error: error.message, message: "Something went wrong" });
   }
 }
 
