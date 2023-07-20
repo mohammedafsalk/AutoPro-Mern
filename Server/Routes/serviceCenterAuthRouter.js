@@ -3,6 +3,7 @@ import {
   centerPassReset,
   forgotOtp,
   loginVerify,
+  proofUpdate,
   serviceCenterLogin,
   serviceCenterLogout,
   serviceCenterSignup,
@@ -18,5 +19,7 @@ router.get("/checkLogin", loginVerify);
 router.post("/forgot", forgotOtp);
 router.post("/forgot/verifyOtp", verifyForgetOtp);
 router.post("/forgot/resetPassword", centerPassReset);
+
+router.patch("/reApply", proofUpdate);
 
 export default router;

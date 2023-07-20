@@ -61,13 +61,6 @@ export async function serviceCenterLogin(req, res) {
     if (!centerValid) {
       return res.json({ err: true, message: "Email Or Password Is Wrong" });
     }
-    // if (!center.permission) {
-    //   return res.json({
-    //     err: true,
-    //     permission:false,
-    //     message: "Your Permission Is Not Approved,Try After Sometime",
-    //   });
-    // }
     const token = jwt.sign(
       {
         id: center._id,
@@ -195,4 +188,20 @@ export async function serviceCenterLogout(req, res) {
       sameSite: "none",
     })
     .json({ message: "Logged Out", error: false });
+}
+
+export async function proofUpdate(req, res) {
+  try {
+    const { email, image } = req.body;
+    const data = await cloudinary.uploader.upload(image, {
+      folder: "AutoPro",
+    });
+    await ServiceCenterModel.findOneAndUpdate(
+      { email },
+      { $set: { proof: data } }
+    );
+    res.json({ err: false });
+  } catch (error) {
+    res.json({ err: true, error: error.message });
+  }
 }

@@ -35,7 +35,9 @@ export default function ServiceCenterRoutes() {
           <Route
             path="/"
             element={
-              <PermissionPage rejected={serviceCenter.details.rejectMessage} />
+              <PermissionPage
+                center={serviceCenter.details}
+              />
             }
           />
           <Route
