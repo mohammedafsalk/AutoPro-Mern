@@ -1,11 +1,13 @@
 import React from "react";
 import UserNav from "./UserNav";
-import banner from "../../assets/images/bannerDemo.jpeg";
+import Userbanner from "./Userbanner";
+
 
 export default function Userhome() {
   return (
     <div>
       <UserNav />
+      <Userbanner/>
     </div>
   );
 }
