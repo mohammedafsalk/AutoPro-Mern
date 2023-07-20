@@ -198,7 +198,7 @@ export async function proofUpdate(req, res) {
     });
     await ServiceCenterModel.findOneAndUpdate(
       { email },
-      { $set: { proof: data } }
+      { $set: { proof: data, rejectMessage: "", rejected: false } }
     );
     res.json({ err: false });
   } catch (error) {

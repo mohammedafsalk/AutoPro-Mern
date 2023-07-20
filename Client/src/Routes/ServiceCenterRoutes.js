@@ -35,10 +35,22 @@ export default function ServiceCenterRoutes() {
           <Route
             path="/"
             element={
-              <PermissionPage
-                center={serviceCenter.details}
-              />
+              <PermissionPage center={serviceCenter.details}  />
             }
+          />
+          <Route
+            path="/*"
+            element={
+              <PermissionPage rejected={serviceCenter.details.rejectMessage} />
+            }
+          />
+        </>
+      )}
+      {serviceCenter.login && !serviceCenter.details.permission && (
+        <>
+          <Route
+            path="/"
+            element={<PermissionPage center={serviceCenter.details}  />}
           />
           <Route
             path="/*"

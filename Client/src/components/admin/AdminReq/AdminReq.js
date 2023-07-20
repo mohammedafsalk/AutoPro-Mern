@@ -33,6 +33,7 @@ const CenteredContainer = styled(Grid)(({ theme }) => ({
 export default function AdminReq() {
   const [centers, setCenters] = React.useState([]);
   const [viewProof, setViewProof] = React.useState(null);
+  const [rejectText, setRejectText] = React.useState(null);
   const [mail, setMail] = React.useState({
     accept: "",
     reject: "",
@@ -87,6 +88,7 @@ export default function AdminReq() {
     if (data.err) {
       toast.error(data.message);
     } else {
+      setRefresh((prev) => !prev);
       toast.success(data.message);
       setOpenRjct(false);
     }
@@ -195,18 +197,24 @@ export default function AdminReq() {
                         >
                           <CheckCircle color="success" />
                         </IconButton>
-                        <IconButton
-                          onClick={() =>
-                            handleClickOpenRjct(
-                              setMail((prev) => ({
-                                ...prev,
-                                reject: item.email,
-                              }))
-                            )
-                          }
-                        >
-                          <DoDisturb color="error" />
-                        </IconButton>
+                        {item.rejectMessage.trim() === "" ? (
+                          <IconButton
+                            onClick={() =>
+                              handleClickOpenRjct(
+                                setMail((prev) => ({
+                                  ...prev,
+                                  reject: item.email,
+                                }))
+                              )
+                            }
+                          >
+                            <DoDisturb color="error" />
+                          </IconButton>
+                        ) : (
+                          <Typography variant="body2" color="text.secondary">
+                            Rejected
+                          </Typography>
+                        )}
                       </CardActions>
                       <Button onClick={() => handleOpen(item.proof.url)}>
                         View Proof

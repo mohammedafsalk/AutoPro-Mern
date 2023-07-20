@@ -1,8 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-  Image,
-} from "@mui/icons-material";
+import { Image } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
@@ -16,7 +14,6 @@ import {
   Box,
   Modal,
   TextField,
-  Grid,
 } from "@mui/material";
 import axios from "axios";
 import Permission from "../../../src/assets/images/Permission waiting.jpg";
@@ -41,7 +38,6 @@ export default function PermissionPage({ center }) {
   const [updateProof, setUpdateproof] = React.useState(null);
   const [upload, setUpload] = React.useState(null);
   const [view, setView] = React.useState(false);
-  const [sample, setSample] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const [openLoader, setOpenLoader] = React.useState(false);
 
@@ -107,160 +103,160 @@ export default function PermissionPage({ center }) {
 
   return (
     <>
-    <div>
-      <Toaster />
-      <AppBar position="sticky">
-        <Toolbar
-          sx={{
+      <div>
+        <Toaster />
+        <AppBar position="sticky">
+          <Toolbar
+            sx={{
               backgroundColor: "white",
-            display: "flex",
-            justifyContent: "space-between",
-        }}
-        >
-          <Typography variant="h6" fontWeight={500} color="black">
-            AUTO PRO
-          </Typography>
-          <Avatar onClick={(e) => setShow(true)} />
-          <Menu
-            id="demo-positioned-menu"
-            aria-labelledby="demo-positioned-button"
-            open={show}
-            onClose={(e) => setShow(false)}
-            anchorReference="anchorPosition"
-            anchorPosition={{ top: 50, left: 900 }}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
-      <Container
-        color="primary"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          gap: "10px",
-          alignItems: "center",
-          minHeight: "90vh",
-        }}
-      >
-        {sample ? (
-            <Stack sx={{ maxWidth: "600px", width: "100%", ma }}>
-            <img src={Permission} alt="" />
-            <Typography fontWeight={500} textAlign="center">
-              Your Permission Is Being Processed.You Will Notified Through Your
-              Registered Mail.
+            <Typography variant="h6" fontWeight={500} color="black">
+              AUTO PRO
             </Typography>
-          </Stack>
-        ) : (
-          <>
+            <Avatar onClick={(e) => setShow(true)} />
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              open={show}
+              onClose={(e) => setShow(false)}
+              anchorReference="anchorPosition"
+              anchorPosition={{ top: 50, left: 900 }}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
+        <Container
+          color="primary"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: "10px",
+            alignItems: "center",
+            minHeight: "90vh",
+          }}
+        >
+          {!center.rejected ? (
             <Stack sx={{ maxWidth: "600px", width: "100%" }}>
-              <img src={Rejected} alt="" />
+              <img src={Permission} alt="" />
               <Typography fontWeight={500} textAlign="center">
-                Your Permission Is Rejected Due To Some Issues
+                Your Permission Is Being Processed.You Will Notified Through
+                Your Registered Mail.
               </Typography>
             </Stack>
-            <Button onClick={() => handleOpen("details")} variant="contained">
-              View Details
-            </Button>
-            <Button onClick={() => handleOpen("reApply")} variant="outlined">
-              Re Apply
-            </Button>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              {modalType ? (
-                <Box sx={style}>
-                  <Typography
-                    id="modal-modal-title"
-                    color="black"
-                    variant="h6"
-                    component="h2"
-                  >
-                    Details Of Your Request
-                  </Typography>
-                  {center.rejectMessage}
-                  <Typography
-                    id="modal-modal-description"
-                    sx={{ mt: 2 }}
-                  ></Typography>
-                </Box>
-              ) : (
-                <Box sx={style}>
-                  <Typography
-                    id="modal-modal-title"
-                    color="black"
-                    variant="h6"
-                    component="h2"
+          ) : (
+            <>
+              <Stack sx={{ maxWidth: "600px", width: "100%" }}>
+                <img src={Rejected} alt="" />
+                <Typography fontWeight={500} textAlign="center">
+                  Your Permission Is Rejected Due To Some Issues
+                </Typography>
+              </Stack>
+              <Button onClick={() => handleOpen("details")} variant="contained">
+                View Details
+              </Button>
+              <Button onClick={() => handleOpen("reApply")} variant="outlined">
+                Re Apply
+              </Button>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                {modalType ? (
+                  <Box sx={style}>
+                    <Typography
+                      id="modal-modal-title"
+                      color="black"
+                      variant="h6"
+                      component="h2"
                     >
-                    Change Your Proof
-                  </Typography>
-                  <TextField
-                    type="file"
-                    onChange={handleProofChange}
-                    required
-                    id="outlined-required"
-                    sx={{ marginTop: "10px" }}
-                  />
-                  {view && updateProof && (
+                      Details Of Your Request
+                    </Typography>
+                    {center.rejectMessage}
+                    <Typography
+                      id="modal-modal-description"
+                      sx={{ mt: 2 }}
+                    ></Typography>
+                  </Box>
+                ) : (
+                  <Box sx={style}>
+                    <Typography
+                      id="modal-modal-title"
+                      color="black"
+                      variant="h6"
+                      component="h2"
+                    >
+                      Change Your Proof
+                    </Typography>
+                    <TextField
+                      type="file"
+                      onChange={handleProofChange}
+                      required
+                      id="outlined-required"
+                      sx={{ marginTop: "10px" }}
+                    />
+                    {view && updateProof && (
                       <Box sx={{ width: "100%", marginTop: "10px" }}>
-                      <img
-                        src={updateProof}
-                        width="100%"
-                        height="100%"
-                        alt=""
-                      />
-                    </Box>
-                  )}
-                  <Box
-                    sx={{
+                        <img
+                          src={updateProof}
+                          width="100%"
+                          height="100%"
+                          alt=""
+                        />
+                      </Box>
+                    )}
+                    <Box
+                      sx={{
                         display: "flex",
                         gap: "10px",
                         justifyContent: "space-between",
                         marginTop: "20px",
-                    }}
-                  >
-                    <Box>
-                      <Image
-                        fontSize="large"
-                        color="primary"
-                        onClick={handleView}
-                      />
-                    </Box>
-                    <Box
-                      sx={{
+                      }}
+                    >
+                      <Box>
+                        <Image
+                          fontSize="large"
+                          color="primary"
+                          onClick={handleView}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
                           display: "flex",
                           gap: "10px",
                           justifyContent: "space-between",
                         }}
-                    >
-                      <Button color="success" onClick={handleSubmit}>
-                        Submit
-                      </Button>
-                      <Button color="error" onClick={handleClose}>
-                        Cancel
-                      </Button>
+                      >
+                        <Button color="success" onClick={handleSubmit}>
+                          Submit
+                        </Button>
+                        <Button color="error" onClick={handleClose}>
+                          Cancel
+                        </Button>
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              )}
-            </Modal>
-          </>
-        )}
-      </Container>
-    </div>
-<Backdropspinner  openLoader={openLoader} />
-</>
+                )}
+              </Modal>
+            </>
+          )}
+        </Container>
+      </div>
+      <Backdropspinner openLoader={openLoader} />
+    </>
   );
 }

@@ -33,7 +33,7 @@ const ServiceCenterSchema = new mongoose.Schema({
   },
   rejectMessage: {
     type: String,
-    default:""
+    default: "",
   },
 });
 
