@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {Link as link} from "react-router-dom"
 import {
   AppBar,
   Avatar,
@@ -8,6 +9,7 @@ import {
   Toolbar,
   Menu,
   Typography,
+  Link,
 } from "@mui/material";
 import {} from "@mui/icons-material";
 import { useDispatch } from "react-redux";
@@ -56,26 +58,28 @@ export default function UserNav() {
             />
           </Box>
           <Avatar onClick={(e) => setShow(true)}></Avatar>
-          <Menu
-            id="demo-positioned-menu"
-            aria-labelledby="demo-positioned-button"
-            open={show}
-            onClose={(e) => setShow(false)}
-            anchorReference="anchorPosition"
-            anchorPosition={{ top: 50, left: 900 }}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-          >
-            <MenuItem>Profile</MenuItem>
-            <MenuItem onClick={handleLogout} >Logout</MenuItem>
-          </Menu>
         </Toolbar>
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          open={show}
+          onClose={(e) => setShow(false)}
+          anchorReference="anchorPosition"
+          anchorPosition={{ top: 40, left: 1450 }}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <MenuItem>
+            <Link component={link} to="/profile" >Profile</Link>
+          </MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </Menu>
       </AppBar>
     </Container>
   );

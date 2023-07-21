@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Login from "../components/user/login";
 import UserAuth from "../components/user/UserAuth";
+import UserProfile from "../components/user/UserProfile";
+import ChooseServiceCenter from "../components/user/ChooseServiceCenter";
 
 export default function UserRoutes() {
   const { user, refresh } = useSelector((state) => {
@@ -27,6 +29,11 @@ export default function UserRoutes() {
       {user.login && (
         <>
           <Route path="/" element={<Userhome />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route
+            path="/chooseServiceCenter"
+            element={<ChooseServiceCenter />}
+          />
           <Route path="/login" element={<Navigate to="/" />} />
           <Route path="/signup" element={<Navigate to="/" />} />
           <Route path="/callback" element={<Navigate to="/" />} />
@@ -34,10 +41,15 @@ export default function UserRoutes() {
       )}
       {!user.login && (
         <>
-          <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/callback" element={<UserAuth />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/profile" element={<Navigate to="/login" />} />
+          <Route
+            path="/chooseServiceCenter"
+            element={<Navigate to="/login" />}
+          />
         </>
       )}
     </Routes>

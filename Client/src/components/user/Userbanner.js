@@ -15,12 +15,13 @@ import { VerifiedOutlined } from "@mui/icons-material";
 import bannerImage from "../../assets/images/bannerDemo.jpeg";
 import servicesImage from "../../assets/images/services.jpeg";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Mybtn = styled("Button")(({ theme }) => ({
   background: theme.palette.primary.main,
   color: theme.palette.common.white,
   padding: "10px 20px",
-  border:"none",
+  border: "none",
   borderRadius: "8px",
   cursor: "pointer",
   fontSize: "16px",
@@ -32,7 +33,7 @@ const Mybtn = styled("Button")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     left: "calc(50% - 75px)",
     bottom: "0px",
-    padding:"8px 18px"
+    padding: "8px 18px",
   },
 
   "&:hover": {
@@ -52,7 +53,9 @@ export default function Userbanner() {
     >
       <Box borderRadius={10} position="relative">
         <img src={bannerImage} width="100%" height="100%" alt="" />
-        <Mybtn>Book Now</Mybtn>
+        <Mybtn>
+          <Link style={{color:"white"}} to="/chooseServiceCenter" >Book Now</Link>
+        </Mybtn>
       </Box>
       <Grid container>
         <Grid item md={6}>
