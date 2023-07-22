@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Link as link } from "react-router-dom";
+import { NavLink, Link as link } from "react-router-dom";
 import {
   AppBar,
   Avatar,
-  Box,
   Container,
   MenuItem,
   Toolbar,
@@ -16,7 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { Settings } from "@mui/icons-material";
+import { Settings, Menu as MenuIcon } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import userimage from "../../assets/images/AutoPro-logos_black.png";
@@ -43,7 +42,7 @@ export default function NavBar() {
   };
 
   return (
-    <Container>
+    <>
       <AppBar style={{ backgroundColor: grey[100] }} position="sticky">
         <Toolbar
           sx={{
@@ -53,9 +52,10 @@ export default function NavBar() {
             alignItems: "center",
           }}
         >
+          <MenuIcon onClick={toggleDrawer(true)} color="primary" />
+
           <Typography
             variant="h5"
-            onClick={toggleDrawer}
             noWrap
             sx={{
               fontFamily: "monospace",
@@ -66,13 +66,6 @@ export default function NavBar() {
           >
             AUTO PRO
           </Typography>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={userimage}
-              alt="User"
-              style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-            />
-          </Box>
           <Avatar onClick={(e) => setShow(true)}></Avatar>
         </Toolbar>
         <Menu
@@ -114,22 +107,24 @@ export default function NavBar() {
           }}
         >
           <Typography variant="h5" fontWeight={500}>
-            ADMIN
+            Service Center
           </Typography>
         </Toolbar>
         <List sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           <ListItem>
             <ListItemIcon>
-              <Settings sx={{ fontSize: "30px",}} />
+              <Settings sx={{ fontSize: "30px" }} />
             </ListItemIcon>
             <ListItemText>
-              <Typography variant="h6" fontSize={18}>
-                Requests
-              </Typography>
+              <NavLink to="/service-center/packages" className="packages-link">
+                <Typography variant="h6" fontSize={18}>
+                  Packages
+                </Typography>
+              </NavLink>
             </ListItemText>
           </ListItem>
         </List>
       </Drawer>
-    </Container>
+    </>
   );
 }
