@@ -146,13 +146,8 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setOpenLoader(true);
-    let { name, email, password, location, district } = formData;
     let { data } = await axios.post("/service-center/auth/signup", {
-      name,
-      email,
-      password,
-      location,
-      district,
+      ...formData,
       proof: uploadImg.proofUpload,
       logo: uploadImg.logoUpload,
     });

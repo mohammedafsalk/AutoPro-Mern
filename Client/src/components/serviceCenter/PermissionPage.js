@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Image } from "@mui/icons-material";
 import {
   AppBar,
@@ -40,6 +40,10 @@ export default function PermissionPage({ center }) {
   const [view, setView] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const [openLoader, setOpenLoader] = React.useState(false);
+
+  const { refresh } = useSelector((state) => {
+    return state.refresh;
+  });
 
   const handleView = () => {
     setView((prev) => !prev);
@@ -89,6 +93,7 @@ export default function PermissionPage({ center }) {
     });
     if (!data.err) {
       setOpenLoader(false);
+      dispatch({ type: "refresh" });
       toast.success("Proof Updated Successfully");
     } else {
       handleClose();

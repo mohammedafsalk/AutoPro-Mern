@@ -8,6 +8,7 @@ import {
   CardContent,
   CardMedia,
   Dialog,
+  Container,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -23,17 +24,9 @@ import img from "../../../assets/images/noRequests.jpg";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 
-const CenteredContainer = styled(Grid)(({ theme }) => ({
-  minHeight: "100vh",
-  [theme.breakpoints.down("sm")]: {
-    alignItems: "center",
-  },
-}));
-
 export default function AdminReq() {
   const [centers, setCenters] = React.useState([]);
   const [viewProof, setViewProof] = React.useState(null);
-  const [rejectText, setRejectText] = React.useState(null);
   const [mail, setMail] = React.useState({
     accept: "",
     reject: "",
@@ -105,35 +98,35 @@ export default function AdminReq() {
     <>
       <AdminNav />
       {centers.length === 0 ? (
-        <CenteredContainer
+        <Container
           container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "50dvh",
+          }}
         >
-          <Grid item>
-            <img src={img} height="400px" width="400px" alt="No Messages" />
-          </Grid>
-          <Grid item>
-            <Typography variant="h6" color="textSecondary">
-              No new Requests
-            </Typography>
-          </Grid>
-        </CenteredContainer>
-      ) : (
-        <div style={{ width: "80%", margin: "0 auto", marginTop: "20px" }}>
-          <Toaster />
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            gap={2}
+          <Box
+            width="100%"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              gap: "10px",
+            }}
           >
+            <Box component="img" maxWidth="300px" src={img} />
+            <Typography variant="h5">No Requests</Typography>
+          </Box>
+        </Container>
+      ) : (
+        <Container sx={{ marginTop: "20px" }}>
+          <Toaster />
+          <Grid container direction="row" alignItems="center" gap={5}>
             {centers &&
               centers.map((item, i) => (
-                <Grid xs={12} sm={6} md={3}>
+                <Grid xs={12} md={2}>
                   <Card sx={{ maxWidth: 345, padding: "10px" }} key={i}>
                     <Typography
                       variant="h5"
@@ -179,7 +172,7 @@ export default function AdminReq() {
                       >
                         Contact No:{" "}
                         <Typography variant="h7" fontWeight={3}>
-                          Some Location
+                          {item.mobile}
                         </Typography>
                       </Typography>
                     </CardContent>
@@ -224,7 +217,7 @@ export default function AdminReq() {
                 </Grid>
               ))}
           </Grid>
-        </div>
+        </Container>
       )}
       <Modal open={open} onClose={handleClose}>
         <Box
