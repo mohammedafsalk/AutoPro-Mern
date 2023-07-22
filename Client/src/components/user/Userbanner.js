@@ -15,7 +15,8 @@ import { VerifiedOutlined } from "@mui/icons-material";
 import bannerImage from "../../assets/images/bannerDemo.jpeg";
 import servicesImage from "../../assets/images/services.jpeg";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const Mybtn = styled("Button")(({ theme }) => ({
   background: theme.palette.primary.main,
@@ -42,6 +43,11 @@ const Mybtn = styled("Button")(({ theme }) => ({
 }));
 
 export default function Userbanner() {
+  const navigate = useNavigate();
+  const handleBookNow = () => {
+    navigate("/chooseServiceCenter");
+  };
+
   return (
     <Container
       sx={{
@@ -53,9 +59,7 @@ export default function Userbanner() {
     >
       <Box borderRadius={10} position="relative">
         <img src={bannerImage} width="100%" height="100%" alt="" />
-        <Mybtn>
-          <Link style={{color:"white"}} to="/chooseServiceCenter" >Book Now</Link>
-        </Mybtn>
+        <Mybtn onClick={handleBookNow}>Book Now</Mybtn>
       </Box>
       <Grid container>
         <Grid item md={6}>

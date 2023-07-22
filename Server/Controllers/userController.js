@@ -1,4 +1,5 @@
 import UserModel from "../Models/userModel.js";
+import ServiceCenterModel from "../Models/serviceCenterModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import sentOTP from "../helpers/sentOtp.js";
@@ -309,5 +310,14 @@ export async function userPassReset(req, res) {
     return res.json({ err: false });
   } catch (error) {
     res.json({ error: error, err: true, message: "Something went wrong" });
+  }
+}
+
+export async function chooseServiceCenter(req, res) {
+  try {
+    let center = await ServiceCenterModel.find({ permission: true }).lean();
+    res.json({ center,err:false });
+  } catch (error) {
+    res.json({ err: true, message: error.message });
   }
 }

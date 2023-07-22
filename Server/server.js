@@ -5,11 +5,12 @@ import dbConnect from "./config/dbConnect.js";
 import userAuthRouter from "./Routes/userAuthRouter.js";
 import adminAuthRouter from "./Routes/adminAuthRouter.js";
 import adminRouter from "./Routes/adminRouter.js";
+import userRouter from "./Routes/userRouter.js";
 import { verifyAdminAuth } from "./Middlewares/verifyAdmin.js";
+import { verifyUserAuth } from "./Middlewares/verifyUser.js";
 import serviceCenterAuthRouter from "./Routes/serviceCenterAuthRouter.js";
 import path from "path";
 import cors from "cors";
-
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(
 );
 
 app.use("/user/auth/", userAuthRouter);
+app.use("/user", verifyUserAuth, userRouter);
 app.use("/admin/auth/", adminAuthRouter);
 app.use("/admin", verifyAdminAuth, adminRouter);
 app.use("/service-center/auth/", serviceCenterAuthRouter);

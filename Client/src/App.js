@@ -8,6 +8,7 @@ import ServiceCenterRoutes from "./Routes/ServiceCenterRoutes";
 export default function App() {
   axios.defaults.baseURL = "http://localhost:5000/";
   axios.defaults.withCredentials = true;
+
   return (
     <div className="App">
       <Routes>

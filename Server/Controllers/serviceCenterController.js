@@ -206,3 +206,7 @@ export async function proofUpdate(req, res) {
     res.json({ err: true, error: error.message });
   }
 }
+
+export async function addPackage(req, res) {
+  const {id,type,details} = req.body
+}
