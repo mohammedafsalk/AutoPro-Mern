@@ -9,7 +9,7 @@ var salt = bcrypt.genSaltSync(10);
 
 export async function serviceCenterSignup(req, res) {
   try {
-    const { name, email, password, location, district } = req.body;
+    const { name, email, password, location, district, mobile } = req.body;
     const temp = await ServiceCenterModel.findOne({ email });
     if (temp) {
       return res.json({ err: true, message: "Center Already Registered" });
@@ -27,6 +27,7 @@ export async function serviceCenterSignup(req, res) {
       password: hashedPassword,
       location,
       district,
+      mobile,
       proof,
       logo,
     });

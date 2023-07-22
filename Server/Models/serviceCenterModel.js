@@ -15,6 +15,9 @@ const ServiceCenterSchema = new mongoose.Schema({
   district: {
     type: String,
   },
+  mobile: {
+    type: Number,
+  },
   proof: {
     type: Object,
     required: true,

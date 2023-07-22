@@ -43,15 +43,272 @@ export default function ChooseServiceCenter() {
           </Typography>
         </Box>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={4} sx={{ width: "356px" }}>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{ minWidth: "200px", maxWidth: "100%" }}
+          >
             <Paper sx={{ width: "100%", padding: "5px" }} elevation={5}>
               <img src={Service1} width="100%" alt="" />
               <Box
                 textAlign="center"
                 padding={3}
                 display="flex"
-               alignItems="center"
-               gap={2}
+                alignItems="center"
+                gap={2}
+                flexDirection="column"
+              >
+                <Typography variant="h4" fontWeight={500} color={grey[800]}>
+                  Center Name
+                </Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <FmdGood color="error" />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    Place, District
+                  </Typography>
+                </Box>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Call />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    +98767655434
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{ minWidth: "200px", maxWidth: "100%" }}
+          >
+            <Paper sx={{ width: "100%", padding: "5px" }} elevation={5}>
+              <img src={Service1} width="100%" alt="" />
+              <Box
+                textAlign="center"
+                padding={3}
+                display="flex"
+                alignItems="center"
+                gap={2}
+                flexDirection="column"
+              >
+                <Typography variant="h4" fontWeight={500} color={grey[800]}>
+                  Center Name
+                </Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <FmdGood color="error" />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    Place, District
+                  </Typography>
+                </Box>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Call />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    +98767655434
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{ minWidth: "200px", maxWidth: "100%" }}
+          >
+            <Paper sx={{ width: "100%", padding: "5px" }} elevation={5}>
+              <img src={Service1} width="100%" alt="" />
+              <Box
+                textAlign="center"
+                padding={3}
+                display="flex"
+                alignItems="center"
+                gap={2}
+                flexDirection="column"
+              >
+                <Typography variant="h4" fontWeight={500} color={grey[800]}>
+                  Center Name
+                </Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <FmdGood color="error" />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    Place, District
+                  </Typography>
+                </Box>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Call />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    +98767655434
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{ minWidth: "200px", maxWidth: "100%" }}
+          >
+            <Paper sx={{ width: "100%", padding: "5px" }} elevation={5}>
+              <img src={Service1} width="100%" alt="" />
+              <Box
+                textAlign="center"
+                padding={3}
+                display="flex"
+                alignItems="center"
+                gap={2}
+                flexDirection="column"
+              >
+                <Typography variant="h4" fontWeight={500} color={grey[800]}>
+                  Center Name
+                </Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <FmdGood color="error" />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    Place, District
+                  </Typography>
+                </Box>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Call />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    +98767655434
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{ minWidth: "200px", maxWidth: "100%" }}
+          >
+            <Paper sx={{ width: "100%", padding: "5px" }} elevation={5}>
+              <img src={Service1} width="100%" alt="" />
+              <Box
+                textAlign="center"
+                padding={3}
+                display="flex"
+                alignItems="center"
+                gap={2}
+                flexDirection="column"
+              >
+                <Typography variant="h4" fontWeight={500} color={grey[800]}>
+                  Center Name
+                </Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <FmdGood color="error" />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    Place, District
+                  </Typography>
+                </Box>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Call />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    +98767655434
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{ minWidth: "200px", maxWidth: "100%" }}
+          >
+            <Paper sx={{ width: "100%", padding: "5px" }} elevation={5}>
+              <img src={Service1} width="100%" alt="" />
+              <Box
+                textAlign="center"
+                padding={3}
+                display="flex"
+                alignItems="center"
+                gap={2}
+                flexDirection="column"
+              >
+                <Typography variant="h4" fontWeight={500} color={grey[800]}>
+                  Center Name
+                </Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <FmdGood color="error" />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    Place, District
+                  </Typography>
+                </Box>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Call />
+                  <Typography
+                    variant="body1"
+                    fontWeight={300}
+                    color={grey[800]}
+                  >
+                    +98767655434
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{ minWidth: "200px", maxWidth: "100%" }}
+          >
+            <Paper sx={{ width: "100%", padding: "5px" }} elevation={5}>
+              <img src={Service1} width="100%" alt="" />
+              <Box
+                textAlign="center"
+                padding={3}
+                display="flex"
+                alignItems="center"
+                gap={2}
                 flexDirection="column"
               >
                 <Typography variant="h4" fontWeight={500} color={grey[800]}>

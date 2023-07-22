@@ -34,9 +34,7 @@ export default function ServiceCenterRoutes() {
         <>
           <Route
             path="/"
-            element={
-              <PermissionPage center={serviceCenter.details}  />
-            }
+            element={<PermissionPage center={serviceCenter.details} />}
           />
           <Route
             path="/*"
@@ -50,7 +48,7 @@ export default function ServiceCenterRoutes() {
         <>
           <Route
             path="/"
-            element={<PermissionPage center={serviceCenter.details}  />}
+            element={<PermissionPage center={serviceCenter.details} />}
           />
           <Route
             path="/*"
@@ -65,6 +63,7 @@ export default function ServiceCenterRoutes() {
         <>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Navigate to="/service-center/" />} />
+          <Route path="/signup" element={<Navigate to="/service-center/" />} />
         </>
       )}
 
@@ -72,6 +71,7 @@ export default function ServiceCenterRoutes() {
         <>
           <Route path="/" element={<Navigate to="/service-center/login" />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </>
       )}
     </Routes>
