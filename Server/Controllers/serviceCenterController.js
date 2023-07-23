@@ -222,3 +222,14 @@ export async function addPackage(req, res) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
 }
+
+export async function getPackages(req, res) {
+  try {
+    let packages = await PackageModel.find({
+      centerId: req.serviceCenter._id,
+    }).lean();
+    res.json({ err: false, packages });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}

@@ -27,7 +27,6 @@ export default function ServiceCenterRoutes() {
       });
     })();
   }, [refresh]);
-  console.log(serviceCenter.details);
 
   return (
     <Routes>
@@ -64,6 +63,7 @@ export default function ServiceCenterRoutes() {
         <>
           <Route path="/" element={<Home />} />
           <Route path="/packages" element={<Packages />} />
+          <Route path="/packages/:id" element={<Packages />} />
           <Route path="/login" element={<Navigate to="/service-center/" />} />
           <Route path="/signup" element={<Navigate to="/service-center/" />} />
         </>
