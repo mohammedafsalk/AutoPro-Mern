@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import PackageModel from "../Models/packageModel.js";
 
-var salt = bcrypt.genSaltSync(10);
+var salt = bcrypt.genSaltSync(10);  
 
 export async function serviceCenterSignup(req, res) {
   try {

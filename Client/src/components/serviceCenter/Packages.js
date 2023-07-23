@@ -43,7 +43,6 @@ export default function Packages() {
       if (data.err) {
         toast.error(data.message);
       } else {
-        console.log(data.packages);
         setPackages(data.packages);
       }
     })();
@@ -64,7 +63,16 @@ export default function Packages() {
           marginTop: "20px",
         }}
       >
-        <IconButton onClick={handleOpen}>
+        <IconButton
+          sx={{
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            },
+          }}
+          onClick={handleOpen}
+        >
           <AddCircle />
         </IconButton>
         <Grid
@@ -96,17 +104,15 @@ export default function Packages() {
                       {item.packageType}
                     </Typography>
                     <Box marginTop={2} marginBottom={2}>
-                      {
-                        item.packageDetails &&
-                        item.packageDetails.map((value)=>(
+                      {item.packageDetails &&
+                        item.packageDetails.map((value) => (
                           <ListItem>
-                        <ListItemAvatar>
-                          <VerifiedOutlined color="success" />
-                        </ListItemAvatar>
-                        <ListItemText primary={value} />
-                      </ListItem>
-                        ))
-                      }
+                            <ListItemAvatar>
+                              <VerifiedOutlined color="success" />
+                            </ListItemAvatar>
+                            <ListItemText primary={value} />
+                          </ListItem>
+                        ))}
                     </Box>
                     <Button
                       sx={{
@@ -117,7 +123,7 @@ export default function Packages() {
                         },
                       }}
                     >
-                      Choose
+                      Edit
                     </Button>
                   </CardContent>
                 </Card>

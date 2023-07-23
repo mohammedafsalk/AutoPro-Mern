@@ -56,11 +56,9 @@ PackageSchema.pre("save", async function (next) {
 
 async function uploadImageToCloudinary(imagePath) {
   try {
-    console.log(imagePath);
     const result = await cloudinary.uploader.upload(imagePath, {
       folder: "AutoPro",
     });
-    console.log(result);
     return result;
   } catch (error) {
     console.error("Error uploading image to Cloudinary:", error);
