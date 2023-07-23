@@ -43,6 +43,7 @@ export default function Packages() {
       if (data.err) {
         toast.error(data.message);
       } else {
+        console.log(data.packages);
         setPackages(data.packages);
       }
     })();
@@ -52,7 +53,7 @@ export default function Packages() {
     <>
       <NavBar />
       <Toaster />
-      <AddPackage centeId={centerId} open={open} onClose={handleClose} />
+      <AddPackage centerId={centerId} open={open} onClose={handleClose} />
       <Container
         fixed
         sx={{
@@ -73,183 +74,55 @@ export default function Packages() {
           direction="row"
           justifyContent="center"
         >
-          <Grid item>
-            <Card sx={{ maxWidth: 345, borderRadius: 5 }} elevation={3}>
-              <CardMedia sx={{ height: 160 }} image={NoPackages} />
-              <CardContent>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  fontWeight={500}
-                  component="span"
-                  borderBottom="3px solid"
-                  borderBottomColor="#495DFC"
-                  sx={{
-                    borderRadius: "3px",
-                    padding: "8px",
-                    display: "inline-block",
-                  }}
-                >
-                  Standard
-                </Typography>
-                <Box marginTop={2} marginBottom={2}>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Quality Repairs" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Expert Technicians" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Quick Turnaround" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Affordable Prices" />
-                  </ListItem>
-                </Box>
-                <Button
-                  sx={{
-                    backgroundColor: "#5FA944",
-                    color: "#FFFFFF",
-                    "&:hover": {
-                      backgroundColor: "#4C863C",
-                    },
-                  }}
-                >
-                  Choose
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item>
-            <Card sx={{ maxWidth: 345, borderRadius: 5 }} elevation={3}>
-              <CardMedia sx={{ height: 160 }} image={NoPackages} />
-              <CardContent>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  fontWeight={500}
-                  component="span"
-                  borderBottom="3px solid"
-                  borderBottomColor="#495DFC"
-                  sx={{
-                    borderRadius: "3px",
-                    padding: "8px",
-                    display: "inline-block",
-                  }}
-                >
-                  Standard
-                </Typography>
-                <Box marginTop={2} marginBottom={2}>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Quality Repairs" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Expert Technicians" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Quick Turnaround" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Affordable Prices" />
-                  </ListItem>
-                </Box>
-                <Button
-                  sx={{
-                    backgroundColor: "#5FA944",
-                    color: "#FFFFFF",
-                    "&:hover": {
-                      backgroundColor: "#4C863C",
-                    },
-                  }}
-                >
-                  Choose
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item>
-            <Card sx={{ maxWidth: 345, borderRadius: 5 }} elevation={3}>
-              <CardMedia sx={{ height: 160 }} image={NoPackages} />
-              <CardContent>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  fontWeight={500}
-                  component="span"
-                  borderBottom="3px solid"
-                  borderBottomColor="#495DFC"
-                  sx={{
-                    borderRadius: "3px",
-                    padding: "8px",
-                    display: "inline-block",
-                  }}
-                >
-                  Standard
-                </Typography>
-                <Box marginTop={2} marginBottom={2}>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Quality Repairs" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Expert Technicians" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Quick Turnaround" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <VerifiedOutlined color="success" />
-                    </ListItemAvatar>
-                    <ListItemText primary="Affordable Prices" />
-                  </ListItem>
-                </Box>
-                <Button
-                  sx={{
-                    backgroundColor: "#5FA944",
-                    color: "#FFFFFF",
-                    "&:hover": {
-                      backgroundColor: "#4C863C",
-                    },
-                  }}
-                >
-                  Choose
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
+          {packages &&
+            packages.map((item, i) => (
+              <Grid item>
+                <Card sx={{ maxWidth: 345, borderRadius: 5 }} elevation={3}>
+                  <CardMedia sx={{ height: 160 }} image={item.packageImage} />
+                  <CardContent>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      fontWeight={500}
+                      component="span"
+                      borderBottom="3px solid"
+                      borderBottomColor="#495DFC"
+                      sx={{
+                        borderRadius: "3px",
+                        padding: "8px",
+                        display: "inline-block",
+                      }}
+                    >
+                      {item.packageType}
+                    </Typography>
+                    <Box marginTop={2} marginBottom={2}>
+                      {
+                        item.packageDetails &&
+                        item.packageDetails.map((value)=>(
+                          <ListItem>
+                        <ListItemAvatar>
+                          <VerifiedOutlined color="success" />
+                        </ListItemAvatar>
+                        <ListItemText primary={value} />
+                      </ListItem>
+                        ))
+                      }
+                    </Box>
+                    <Button
+                      sx={{
+                        backgroundColor: "#5FA944",
+                        color: "#FFFFFF",
+                        "&:hover": {
+                          backgroundColor: "#4C863C",
+                        },
+                      }}
+                    >
+                      Choose
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
         </Grid>
       </Container>
     </>

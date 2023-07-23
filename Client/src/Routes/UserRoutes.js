@@ -24,7 +24,6 @@ export default function UserRoutes() {
       });
     })();
   }, [refresh]);
-  console.log(user);
   return (
     <>
     <Routes>

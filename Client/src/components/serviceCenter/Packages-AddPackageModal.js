@@ -8,6 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import React from "react";
+import Backdropspinner from "../Loader/BackdropSpinner";
 import axios from "axios";
 
 const packages = ["Basic", "Standard", "Premium"];
@@ -16,11 +17,12 @@ const initialFormData = {
   details: "",
 };
 
-export default function AddPackage({ open, onClose, centerId }) {
+export default function AddPackage({ open, onClose, centerId}) {
   const theme = useTheme();
   const placeholder = "e.g: Oil Change, Washing, etc...";
 
   const [formData, setFormData] = React.useState(initialFormData);
+  // const [openLoader, setOpenLoader] = React.useState(false);
 
   const handleFormData = (e) => {
     const { name, value } = e.target;
@@ -28,6 +30,7 @@ export default function AddPackage({ open, onClose, centerId }) {
   };
 
   const handleSubmit = async () => {
+    // setOpenLoader(true);
     let { type, details } = formData;
     let { data } = await axios.post("service-center/package", {
       id: centerId,
@@ -35,10 +38,12 @@ export default function AddPackage({ open, onClose, centerId }) {
       details,
     });
     if (data.err) {
+      // setOpenLoader(false);
       onClose("error");
     } else {
+      // setOpenLoader(false);
       onClose("success");
-      setFormData(initialFormData)
+      setFormData(initialFormData);
     }
   };
 
@@ -63,51 +68,54 @@ export default function AddPackage({ open, onClose, centerId }) {
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Typography
-          id="modal-modal-title"
-          variant="h5"
-          sx={{ borderBottom: "1px solid black" }}
-          component="span"
-          fontWeight={500}
-        >
-          Add Package Details
-        </Typography>
-        <TextField
-          id="outlined-select-currency"
-          select
-          fullWidth
-          name="type"
-          value={formData.type}
-          onChange={handleFormData}
-          label="Package Type"
-          defaultValue={formData.type}
-        >
-          {packages.map((option, i) => (
-            <MenuItem key={i} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="filled-multiline-static"
-          label="Package Contents"
-          multiline
-          fullWidth
-          name="details"
-          value={formData.details}
-          onChange={handleFormData}
-          rows={6}
-          placeholder={placeholder}
-        />
-        <Button onClick={handleSubmit}>Add</Button>
-      </Box>
-    </Modal>
+    <>
+      <Modal
+        open={open}
+        onClose={onClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="modal-modal-title"
+            variant="h5"
+            sx={{ borderBottom: "1px solid black" }}
+            component="span"
+            fontWeight={500}
+          >
+            Add Package Details
+          </Typography>
+          <TextField
+            id="outlined-select-currency"
+            select
+            fullWidth
+            name="type"
+            value={formData.type}
+            onChange={handleFormData}
+            label="Package Type"
+            defaultValue={formData.type}
+          >
+            {packages.map((option, i) => (
+              <MenuItem key={i} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="filled-multiline-static"
+            label="Package Contents"
+            multiline
+            fullWidth
+            name="details"
+            value={formData.details}
+            onChange={handleFormData}
+            rows={6}
+            placeholder={placeholder}
+          />
+          <Button onClick={handleSubmit}>Add</Button>
+        </Box>
+      </Modal>
+      {/* <Backdropspinner OpenLoader={openLoader} /> */}
+    </>
   );
 }
