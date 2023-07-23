@@ -5,16 +5,43 @@ import {
   useTheme,
   Typography,
   TextField,
-  InputAdornment,
   Button,
 } from "@mui/material";
 import React from "react";
+import axios from "axios";
 
 const packages = ["Basic", "Standard", "Premium"];
+const initialFormData = {
+  type: "Basic",
+  details: "",
+};
 
-export default function AddPackage({ open }) {
+export default function AddPackage({ open, onClose, centerId }) {
   const theme = useTheme();
   const placeholder = "e.g: Oil Change, Washing, etc...";
+
+  const [formData, setFormData] = React.useState(initialFormData);
+
+  const handleFormData = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    let { type, details } = formData;
+    let { data } = await axios.post("service-center/package", {
+      id: centerId,
+      type,
+      details,
+    });
+    if (data.err) {
+      onClose("error");
+    } else {
+      onClose("success");
+      setFormData(initialFormData)
+    }
+  };
+
   const style = {
     position: "absolute",
     display: "flex",
@@ -38,6 +65,7 @@ export default function AddPackage({ open }) {
   return (
     <Modal
       open={open}
+      onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -55,8 +83,11 @@ export default function AddPackage({ open }) {
           id="outlined-select-currency"
           select
           fullWidth
+          name="type"
+          value={formData.type}
+          onChange={handleFormData}
           label="Package Type"
-          defaultValue="Basic"
+          defaultValue={formData.type}
         >
           {packages.map((option, i) => (
             <MenuItem key={i} value={option}>
@@ -69,13 +100,13 @@ export default function AddPackage({ open }) {
           label="Package Contents"
           multiline
           fullWidth
+          name="details"
+          value={formData.details}
+          onChange={handleFormData}
           rows={6}
           placeholder={placeholder}
-          
         />
-      <Button>
-        Add
-      </Button>
+        <Button onClick={handleSubmit}>Add</Button>
       </Box>
     </Modal>
   );

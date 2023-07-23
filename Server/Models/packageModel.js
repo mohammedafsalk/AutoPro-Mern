@@ -18,13 +18,13 @@ const PackageSchema = new mongoose.Schema({
 PackageSchema.pre("save", function (next) {
   if (!this.packageImage) {
     if (this.packageType === "Basic") {
-      this.packageImage = "default_basic_image.jpg";
+      this.packageImage = "/Packages/Basic.jpeg";
     } else if (this.packageType === "Standard") {
-      this.packageImage = "default_standard_image.jpg";
+      this.packageImage = "/Packages/Standard.jpeg";
     } else if (this.packageType === "Premium") {
-      this.packageImage = "default_premium_image.jpg";
+      this.packageImage = "/Packages/Premium.jpeg";
     } else {
-      this.packageImage = "default_image.jpg";
+      this.packageImage = "/Packages/Basic.jpeg";
     }
   }
   next();

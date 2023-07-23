@@ -8,6 +8,7 @@ import Login from "../components/user/login";
 import UserAuth from "../components/user/UserAuth";
 import UserProfile from "../components/user/UserProfile";
 import ChooseServiceCenter from "../components/user/ChooseServiceCenter";
+import Backdropspinner from "../components/Loader/BackdropSpinner";
 
 export default function UserRoutes() {
   const { user, refresh } = useSelector((state) => {
@@ -25,6 +26,7 @@ export default function UserRoutes() {
   }, [refresh]);
   console.log(user);
   return (
+    <>
     <Routes>
       {user.login && (
         <>
@@ -39,7 +41,7 @@ export default function UserRoutes() {
           <Route path="/callback" element={<Navigate to="/" />} />
         </>
       )}
-      {!user.login && (
+      {user.login==false && (
         <>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
@@ -52,6 +54,12 @@ export default function UserRoutes() {
           />
         </>
       )}
+      
     </Routes>
+    {
+      user.login===null && 
+      <Backdropspinner openLoader={true}></Backdropspinner>
+      }
+    </>
   );
 }

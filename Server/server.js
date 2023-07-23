@@ -6,8 +6,10 @@ import userAuthRouter from "./Routes/userAuthRouter.js";
 import adminAuthRouter from "./Routes/adminAuthRouter.js";
 import adminRouter from "./Routes/adminRouter.js";
 import userRouter from "./Routes/userRouter.js";
+import serviceCenterRouter from "./Routes/serviceCenterRouter.js";
 import { verifyAdminAuth } from "./Middlewares/verifyAdmin.js";
 import { verifyUserAuth } from "./Middlewares/verifyUser.js";
+import { verifyServiceCenter } from "./Middlewares/verifyServiceCenter.js";
 import serviceCenterAuthRouter from "./Routes/serviceCenterAuthRouter.js";
 import path from "path";
 import cors from "cors";
@@ -33,6 +35,7 @@ app.use("/user", verifyUserAuth, userRouter);
 app.use("/admin/auth/", adminAuthRouter);
 app.use("/admin", verifyAdminAuth, adminRouter);
 app.use("/service-center/auth/", serviceCenterAuthRouter);
+app.use("/service-center", verifyServiceCenter, serviceCenterRouter);
 
 app.listen(5000, () => {
   console.log("Server Up at 5000");

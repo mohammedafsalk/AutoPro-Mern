@@ -4,6 +4,7 @@ import sentOTP from "../helpers/sentOtp.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import PackageModel from "../Models/packageModel.js";
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -99,7 +100,6 @@ export async function loginVerify(req, res) {
     if (!serviceCenter) {
       return res.json({ loggedIn: false });
     }
-    console.log(serviceCenter);
     return res.json({ serviceCenter, loggedIn: true });
   } catch (error) {
     res.json({ error: error.message, message: "Something went wrong" });
@@ -208,5 +208,17 @@ export async function proofUpdate(req, res) {
 }
 
 export async function addPackage(req, res) {
-  const {id,type,details} = req.body
+  try {
+    const { id, type, details } = req.body;
+    let detailsConverted = details.split(",").map((item) => item.trim());
+    const newPackage = new PackageModel({
+      centerId: id,
+      packageType: type,
+      packageDetails: detailsConverted,
+    });
+    await newPackage.save();
+    res.json({ err: false, message: "Package Added Succesfully" });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
 }
