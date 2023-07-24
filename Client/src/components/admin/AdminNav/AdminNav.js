@@ -15,11 +15,13 @@ import {
   Box,
 } from "@mui/material";
 import { Menu, NewReleases, PeopleAlt, Warehouse } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+import profileImageUrl from "../../../assets/images/avatar.png";
+import { NavLink, Link } from "react-router-dom";
 
 export default function AdminNav() {
   const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
+
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -31,7 +33,7 @@ export default function AdminNav() {
   };
   return (
     <>
-      <AppBar position="sticky" >
+      <AppBar position="sticky">
         <Toolbar
           sx={{
             display: "flex",
@@ -72,57 +74,102 @@ export default function AdminNav() {
         anchor="left"
         open={open}
         onClose={toggleDrawer(false)}
-        sx={{ width: "50%" }}
+        sx={{ width: "100%" }}
       >
-        <Toolbar
+        <Box
+          width="250px"
           sx={{
             display: "flex",
-            justifyContent: "center",
-            bgcolor: "white",
-            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Typography variant="h5" fontWeight={500}>
-            ADMIN
-          </Typography>
-        </Toolbar>
-        <List sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <ListItem>
-            <ListItemIcon>
-              <NewReleases sx={{ fontSize: "30px", color: "black" }} />
-            </ListItemIcon>
-            <ListItemText>
-              <Typography
-                variant="h6"
-                fontSize={18}
-                component={NavLink}
-                to="/admin/requests"
-              >
-                Requests
-              </Typography>
-            </ListItemText>
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <PeopleAlt sx={{ fontSize: "30px", color: "black" }} />
-            </ListItemIcon>
-            <ListItemText>
-              <Typography variant="h6" fontSize={18}>
-                Users
-              </Typography>
-            </ListItemText>
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <Warehouse sx={{ fontSize: "30px", color: "black" }} />
-            </ListItemIcon>
-            <ListItemText>
-              <Typography variant="h6" fontSize={18}>
-                Service Centers
-              </Typography>
-            </ListItemText>
-          </ListItem>
-        </List>
+          <Toolbar
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              bgcolor: "white",
+              padding: "10px",
+              marginTop: "10px",
+              gap: "10px",
+              borderBottom: "1px solid black",
+            }}
+          >
+            <Avatar
+              alt="Profile Image"
+              src={profileImageUrl}
+              sx={{
+                width: 80,
+                height: 80,
+              }}
+            />
+            <Typography variant="h5" fontWeight={500}>
+              ADMIN
+            </Typography>
+          </Toolbar>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "400px",
+            }}
+          >
+            <ListItem>
+              <ListItemIcon>
+                <NewReleases sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "inherit" }}
+                  fontSize={18}
+                  component={NavLink}
+                  activeClassName="active"
+                  to="/admin/requests"
+                >
+                  Requests
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <PeopleAlt sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  sx={{ color: "inherit" }}
+                  variant="h6"
+                  fontSize={18}
+                  component={NavLink}
+                  activeClassName="active"
+                >
+                  Users
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Warehouse sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  sx={{ color: "inherit" }}
+                  variant="h6"
+                  fontSize={18}
+                  component={NavLink}
+                  activeClassName="active"
+                  to="/admin/service-centers"
+                >
+                  Service Centers
+                </Typography>
+              </ListItemText>
+            </ListItem>
+          </Box>
+        </Box>
       </Drawer>
     </>
   );

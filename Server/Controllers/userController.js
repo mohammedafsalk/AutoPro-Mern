@@ -315,8 +315,13 @@ export async function userPassReset(req, res) {
 
 export async function chooseServiceCenter(req, res) {
   try {
-    let center = await ServiceCenterModel.find({ permission: true }).lean();
-    res.json({ center,err:false });
+    const page = parseInt(req.query.page) ?? 0;
+    const count = await ServiceCenterModel.find({ permission: true }).count();
+    let center = await ServiceCenterModel.find({ permission: true })
+      .skip(page * 3)
+      .limit(3)
+      .lean();
+    res.json({ center, err: false, totalPage: Math.ceil(count / 3) });
   } catch (error) {
     res.json({ err: true, message: error.message });
   }

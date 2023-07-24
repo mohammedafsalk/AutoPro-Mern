@@ -6,6 +6,7 @@ import axios from "axios";
 import Login from "../components/admin/Login";
 import AdminNav from "../components/admin/AdminNav/AdminNav";
 import AdminReq from "../components/admin/AdminReq/AdminReq";
+import ServiceCenters from "../components/admin/service-centers";
 
 export default function AdminRoutes() {
   const { admin, refresh } = useSelector((state) => {
@@ -27,15 +28,21 @@ export default function AdminRoutes() {
     <Routes>
       {admin.login && (
         <>
-          <Route path="/" element={<AdminNav/>} />
-          <Route path="/requests" element={<AdminReq/>} />
+          <Route path="/" element={<AdminNav />} />
+          <Route path="/requests" element={<AdminReq />} />
+          <Route path="/service-centers" element={<ServiceCenters />} />
           <Route path="/login" element={<Navigate to="/admin/" />} />
         </>
       )}
       {!admin.login && (
         <>
-          <Route path="/" element={<Navigate to="/admin/login" />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Navigate to="/admin/login" />} />
+          <Route path="/requests" element={<Navigate to="/admin/login" />} />
+          <Route
+            path="/service-centers"
+            element={<Navigate to="/admin/login" />}
+          />
         </>
       )}
     </Routes>
