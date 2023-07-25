@@ -128,7 +128,7 @@ export default function AdminNav() {
                   sx={{ color: "inherit" }}
                   fontSize={18}
                   component={NavLink}
-                  activeClassName="active"
+                  // activeClassName="active"
                   to="/admin/requests"
                 >
                   Requests
@@ -145,7 +145,8 @@ export default function AdminNav() {
                   variant="h6"
                   fontSize={18}
                   component={NavLink}
-                  activeClassName="active"
+                  // activeClassName="active"
+                  to="/admin"
                 >
                   Users
                 </Typography>
@@ -161,7 +162,7 @@ export default function AdminNav() {
                   variant="h6"
                   fontSize={18}
                   component={NavLink}
-                  activeClassName="active"
+                  // activeClassName="active"
                   to="/admin/service-centers"
                 >
                   Service Centers

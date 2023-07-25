@@ -17,6 +17,7 @@ import validatePassword from "../../helpers/passwordValidate";
 import toast, { Toaster } from "react-hot-toast";
 
 import { BeatLoader } from "react-spinners";
+import MapSearchBox from "../MapBox/MapSearchBox";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -26,6 +27,7 @@ export default function SignUp() {
   const [confirmPassword, setconfirmPassword] = useState("");
   const [errMessage, setErrMessage] = useState("");
   const [showOtpPage, setShowOtpPage] = useState(false);
+  const [place, setPlace] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(10);
@@ -55,7 +57,9 @@ export default function SignUp() {
 
   const handleResendOtp = async () => {
     toast.success(`New OTP Has Been Sent to ${email}`);
-    let { data:resendOtpData } = await axios.post("user/auth/resendOtp", { email });
+    let { data: resendOtpData } = await axios.post("user/auth/resendOtp", {
+      email,
+    });
     setTimer(10);
     setCanResend(false);
   };
@@ -171,6 +175,7 @@ export default function SignUp() {
                     type="email"
                     size="lg"
                   />
+                  <MapSearchBox setPlace={setPlace} />
                   <MDBInput
                     wrapperClass="mb-4"
                     label="Mobile Number"
