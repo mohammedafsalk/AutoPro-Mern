@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import mapboxAPI from "./MapBoxApi";
 import { MyLocationOutlined } from "@mui/icons-material";
 import { MDBInput } from "mdb-react-ui-kit";
@@ -12,7 +12,10 @@ function MapSearchBox({ setPlace }) {
     setSearchValue(value);
     fetchSuggestions(value);
   };
-  setPlace(searchValue);
+  useEffect(() => {
+    setPlace(searchValue);
+  }, [searchValue]);
+
   const fetchSuggestions = async (value) => {
     try {
       const url = `/geocoding/v5/mapbox.places/${encodeURIComponent(
@@ -75,6 +78,7 @@ function MapSearchBox({ setPlace }) {
             type="text"
             label="Location"
             value={searchValue}
+            size="lg"
             onChange={handleSearchChange}
             containerClass="md-form"
           />

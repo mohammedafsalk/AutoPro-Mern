@@ -42,7 +42,7 @@ export async function userSignup(req, res) {
 
 export async function signUpVerify(req, res) {
   try {
-    const { name, email, password, phone, otp } = req.body;
+    const { name, email, password, phone, otp, place } = req.body;
     const temptoken = req.cookies.tempToken;
     if (!temptoken)
       return res.json({ err: true, message: "OTP Session failed" });
@@ -57,6 +57,7 @@ export async function signUpVerify(req, res) {
     const newUser = new UserModel({
       name,
       email,
+      place,
       password: hashedPassword,
       phone,
     });

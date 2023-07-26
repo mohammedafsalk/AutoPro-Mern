@@ -102,13 +102,12 @@ export default function SignUp() {
     e.preventDefault();
     let { data } = await axios.post(
       "http://localhost:5000/user/auth/signup/verify",
-      { otp, name, email, password, phone }
+      { otp, name, email, password, phone, place }
     );
+    console.log(place);
     if (data.err) {
       toast.error("Incorrect OTP");
-      console.log("hhhhhhh");
     } else {
-      console.log("kkkkkk");
       dispatch({ type: "refresh" });
       navigate("/login");
     }
@@ -183,6 +182,7 @@ export default function SignUp() {
                     onChange={(e) => setPhone(e.target.value)}
                     id=""
                     type="tel"
+                    maxLength={10}
                     size="lg"
                   />
                   <MDBInput

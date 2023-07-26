@@ -14,8 +14,14 @@ import {
   ListItemText,
   Box,
 } from "@mui/material";
-import { Menu, NewReleases, PeopleAlt, Warehouse } from "@mui/icons-material";
-import profileImageUrl from "../../../assets/images/avatar.png";
+import {
+  Menu,
+  NewReleases,
+  PeopleAlt,
+  Warehouse,
+  Window,
+} from "@mui/icons-material";
+import profileImageUrl from "../../assets/images/avatar.png";
 import { NavLink, Link } from "react-router-dom";
 
 export default function AdminNav() {
@@ -120,6 +126,22 @@ export default function AdminNav() {
           >
             <ListItem>
               <ListItemIcon>
+                <Window sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "inherit" }}
+                  fontSize={18}
+                  component={NavLink}
+                  to="/admin/"
+                >
+                  Dash Board
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
                 <NewReleases sx={{ fontSize: "30px", color: "black" }} />
               </ListItemIcon>
               <ListItemText>
@@ -128,7 +150,6 @@ export default function AdminNav() {
                   sx={{ color: "inherit" }}
                   fontSize={18}
                   component={NavLink}
-                  // activeClassName="active"
                   to="/admin/requests"
                 >
                   Requests
@@ -145,8 +166,7 @@ export default function AdminNav() {
                   variant="h6"
                   fontSize={18}
                   component={NavLink}
-                  // activeClassName="active"
-                  to="/admin"
+                  to="/admin/users"
                 >
                   Users
                 </Typography>
@@ -162,7 +182,6 @@ export default function AdminNav() {
                   variant="h6"
                   fontSize={18}
                   component={NavLink}
-                  // activeClassName="active"
                   to="/admin/service-centers"
                 >
                   Service Centers

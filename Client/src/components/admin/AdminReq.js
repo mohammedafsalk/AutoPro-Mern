@@ -1,5 +1,4 @@
 import React from "react";
-import AdminNav from "../AdminNav/AdminNav";
 import {
   Box,
   Button,
@@ -20,9 +19,10 @@ import {
   Typography,
 } from "@mui/material";
 import { CheckCircle, DoDisturb } from "@mui/icons-material";
-import img from "../../../assets/images/noRequests.jpg";
+import img from "../../assets/images/noRequests.jpg";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import AdminNav from "./AdminNav";
 
 export default function AdminReq() {
   const [centers, setCenters] = React.useState([]);

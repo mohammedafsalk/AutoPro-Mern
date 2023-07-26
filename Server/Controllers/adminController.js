@@ -1,5 +1,6 @@
 import AdminModel from "../Models/adminModel.js";
 import serviceCenterModel from "../Models/serviceCenterModel.js";
+import UserModel from "../Models/userModel.js";
 import bcrypt from "bcryptjs";
 import sentMail from "../helpers/sentMail.js";
 import jwt from "jsonwebtoken";
@@ -70,6 +71,18 @@ export async function adminLogout(req, res) {
   }
 }
 
+export async function adminDashboard(req, res) {
+  try {
+    let usersCount = await UserModel.countDocuments();
+    let centerCount = await serviceCenterModel
+      .find({ permission: true })
+      .countDocuments();
+    res.json({ usersCount, centerCount, err: false });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
 export async function requests(req, res) {
   try {
     const centerRequests = await serviceCenterModel
@@ -109,5 +122,23 @@ export async function rejectRequest(req, res) {
     );
   } catch (err) {
     res.json({ message: "Something Went Wrong", error: err, err: true });
+  }
+}
+
+export async function serviceCenters(req, res) {
+  try {
+    let centers = await serviceCenterModel.find({ permission: true }).lean();
+    res.json({ err: false, centers });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function users(req, res) {
+  try {
+    let users = await UserModel.find().lean();
+    res.json({ err: false, users });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
   }
 }

@@ -93,7 +93,7 @@ export default function ChooseServiceCenter() {
         setCount(data.totalPage);
       }
     })();
-  }, [page,search]);
+  }, [page, search]);
 
   return (
     <>
@@ -138,13 +138,19 @@ export default function ChooseServiceCenter() {
           {data &&
             filteredData.map((item, i) => (
               <Grid
+                key={i}
                 item
                 xs={12}
                 md={4}
-                sx={{ minWidth: "200px", maxWidth: "100%" }}
+                sx={{
+                  minWidth: "200px",
+                  maxWidth: "100%",
+                  maxHeight: "500px",
+                  height: "100%",
+                }}
               >
                 <Paper sx={{ width: "100%" }} elevation={5}>
-                  <img src={item.logo.url} width="100%" height="200px" alt="" />
+                  <img src={item.logo.url} width="100%" height="300px" alt="" />
                   <Box
                     textAlign="center"
                     padding={3}
