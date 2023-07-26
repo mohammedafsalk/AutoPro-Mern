@@ -142,3 +142,13 @@ export async function users(req, res) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
 }
+
+export async function deleteUser(req, res) {
+  try {
+    const id = req.params.id;
+    await UserModel.deleteOne({ _id: id });
+    res.json({ err: false, message: "User Deleted" });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}

@@ -10,8 +10,9 @@ import {
   TableRow,
 } from "@mui/material";
 import AdminNav from "./AdminNav";
-import TableComponent from "../tables/Table";
+
 import axios from "axios";
+import AdminServiceCenter_TableComponent from "../tables/AdminServiceCenterTable";
 
 export default function ServiceCenters() {
   let rowHeads = [
@@ -38,7 +39,7 @@ export default function ServiceCenters() {
     <>
       <AdminNav />
       <Container fixed sx={{ marginTop: "20px" }}>
-        <TableComponent centers={centers} rowHeads={rowHeads} />
+        <AdminServiceCenter_TableComponent centers={centers} rowHeads={rowHeads} />
       </Container>
     </>
   );
