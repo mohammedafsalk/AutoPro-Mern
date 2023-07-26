@@ -12,10 +12,10 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import { Block, Delete } from "@mui/icons-material";
-import avatar from "../../assets/images/avatar.png";
+import { Block, CheckCircleOutline, Delete } from "@mui/icons-material";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
+import Backdropspinner from "../Loader/BackdropSpinner";
 
 const styles = {
   imgContainer: {
@@ -53,6 +53,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 export default function AdminUserTable({ users, rowHeads, setRefresh }) {
+  const [openLoader, setOpenLoader] = React.useState(false);
+  const handleAccess = async (type, id) => {
+    setOpenLoader(true);
+    let { data } = await axios.post("admin/users", { type, id });
+    if (!data.err && data.blocked) {
+      setRefresh((prev) => !prev);
+      setOpenLoader(false);
+      toast.success(data.message);
+    } else if (!data.err && !data.blocked) {
+      setRefresh((prev) => !prev);
+      setOpenLoader(false);
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
+  };
+
   const handleDelete = async (id) => {
     let { data } = await axios.delete(`admin/users/${id}`);
     if (data.err) {
@@ -65,6 +82,7 @@ export default function AdminUserTable({ users, rowHeads, setRefresh }) {
   return (
     <>
       <Toaster />
+      <Backdropspinner openLoader={openLoader} />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -86,7 +104,7 @@ export default function AdminUserTable({ users, rowHeads, setRefresh }) {
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <Box style={styles.imgContainer}>
-                      <img src={avatar} alt="" style={styles.img} />
+                      <img src={item.profile} alt="" style={styles.img} />
                     </Box>
                   </StyledTableCell>
                   <StyledTableCell align="center">{item.name}</StyledTableCell>
@@ -97,9 +115,19 @@ export default function AdminUserTable({ users, rowHeads, setRefresh }) {
                       <IconButton onClick={() => handleDelete(item._id)}>
                         <Delete color="error" />
                       </IconButton>
-                      <IconButton>
-                        <Block color="error" />
-                      </IconButton>
+                      {item.block ? (
+                        <IconButton
+                          onClick={() => handleAccess("unblock", item._id)}
+                        >
+                          <CheckCircleOutline color="success" />
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          onClick={() => handleAccess("block", item._id)}
+                        >
+                          <Block color="error" />
+                        </IconButton>
+                      )}
                     </Box>
                   </StyledTableCell>
                 </StyledTableRow>

@@ -101,10 +101,10 @@ export default function SignUp() {
   const handleOtp = async (e) => {
     e.preventDefault();
     let { data } = await axios.post(
-      "http://localhost:5000/user/auth/signup/verify",
+      "user/auth/signup/verify",
       { otp, name, email, password, phone, place }
     );
-    console.log(place);
+    console.log(data);
     if (data.err) {
       toast.error("Incorrect OTP");
     } else {

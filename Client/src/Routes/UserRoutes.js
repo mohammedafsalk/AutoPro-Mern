@@ -26,39 +26,37 @@ export default function UserRoutes() {
   }, [refresh]);
   return (
     <>
-    <Routes>
-      {user.login && (
-        <>
-          <Route path="/" element={<Userhome />} />
-          <Route path="/profile" element={<UserProfile />} />
-          <Route
-            path="/chooseServiceCenter"
-            element={<ChooseServiceCenter />}
-          />
-          <Route path="/login" element={<Navigate to="/" />} />
-          <Route path="/signup" element={<Navigate to="/" />} />
-          <Route path="/callback" element={<Navigate to="/" />} />
-        </>
-      )}
-      {user.login==false && (
-        <>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/callback" element={<UserAuth />} />
-          <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/profile" element={<Navigate to="/login" />} />
-          <Route
-            path="/chooseServiceCenter"
-            element={<Navigate to="/login" />}
-          />
-        </>
-      )}
-      
-    </Routes>
-    {
-      user.login===null && 
-      <Backdropspinner openLoader={true}></Backdropspinner>
-      }
+      <Routes>
+        {user.login && (
+          <>
+            <Route path="/" element={<Userhome />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route
+              path="/chooseServiceCenter"
+              element={<ChooseServiceCenter />}
+            />
+            <Route path="/login" element={<Navigate to="/" />} />
+            <Route path="/signup" element={<Navigate to="/" />} />
+            <Route path="/callback" element={<Navigate to="/" />} />
+          </>
+        )}
+        {!user.login && (
+          <>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/callback" element={<UserAuth />} />
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/profile" element={<Navigate to="/login" />} />
+            <Route
+              path="/chooseServiceCenter"
+              element={<Navigate to="/login" />}
+            />
+          </>
+        )}
+      </Routes>
+      {/* {user.login === null && (
+        <Backdropspinner openLoader={true}></Backdropspinner>
+      )} */}
     </>
   );
 }

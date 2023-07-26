@@ -152,3 +152,26 @@ export async function deleteUser(req, res) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
 }
+
+export async function userAccessSetting(req, res) {
+  try {
+    const { type, id } = req.body;
+    const user = await UserModel.findById(id);
+
+    if (type === "block") {
+      user.block = true;
+      await user.save();
+      return res.json({ err: false, blocked: true, message: "User Blocked" });
+    } else {
+      user.block = false;
+      await user.save();
+      return res.json({
+        err: false,
+        blocked: false,
+        message: "User Unblocked",
+      });
+    }
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}

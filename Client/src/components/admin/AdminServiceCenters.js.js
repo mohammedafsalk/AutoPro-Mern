@@ -35,11 +35,15 @@ export default function ServiceCenters() {
       }
     })();
   }, []);
+
   return (
     <>
       <AdminNav />
       <Container fixed sx={{ marginTop: "20px" }}>
-        <AdminServiceCenter_TableComponent centers={centers} rowHeads={rowHeads} />
+        <AdminServiceCenter_TableComponent
+          centers={centers}
+          rowHeads={rowHeads}
+        />
       </Container>
     </>
   );

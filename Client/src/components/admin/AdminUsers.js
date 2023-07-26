@@ -1,7 +1,8 @@
 import React from "react";
 import AdminNav from "./AdminNav";
-import { Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import AdminUserTable from "../tables/AdminUserTable";
+import img from "../../assets/images/No User.jpg";
 import axios from "axios";
 
 export default function AdminUsers() {
@@ -18,15 +19,31 @@ export default function AdminUsers() {
       }
     })();
   }, [refresh]);
+
   return (
     <>
       <AdminNav />
       <Container fixed sx={{ marginTop: "20px" }}>
-        <AdminUserTable
-          users={users}
-          rowHeads={rowHeads}
-          setRefresh={setRefresh}
-        />
+        {users.length === 0 ? (
+          <Box
+            width="100%"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <Box component="img" maxWidth="300px" src={img} />
+            <Typography variant="h5">No Users Found!</Typography>
+          </Box>
+        ) : (
+          <AdminUserTable
+            users={users}
+            rowHeads={rowHeads}
+            setRefresh={setRefresh}
+          />
+        )}
       </Container>
     </>
   );
