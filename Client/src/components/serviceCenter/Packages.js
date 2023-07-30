@@ -20,14 +20,20 @@ import AddPackage from "./Packages-AddPackageModal";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
+import EditPackage from "./Packages-EditPackage";
 
 export default function Packages() {
   const centerId = useSelector((state) => {
     return state.serviceCenter.details._id;
   });
+  const [refresh, setrefresh] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [editItem, setEditItem] = React.useState([]);
   const [packages, setPackages] = React.useState([]);
   const handleOpen = () => setOpen(true);
+  const handleOpenEdit = () => setOpenEdit(true);
+
   const handleClose = (type) => {
     setOpen(false);
     if (type === "error") {
@@ -35,6 +41,22 @@ export default function Packages() {
     } else if (type === "success") {
       toast.success("Package Added Succesfully");
     }
+  };
+
+  const handleCloseEdit = (type) => {
+    setOpenEdit(false);
+    if (type === "error") {
+      toast.error("Please Try Again");
+    } else if (type === "success") {
+      setrefresh((prev) => !prev);
+      toast.success("Package Updated Succesfully");
+    }
+  };
+
+  const handleEdit = (id) => {
+    handleOpenEdit();
+    let item = packages.find((value) => value._id === id);
+    setEditItem(item);
   };
 
   React.useEffect(() => {
@@ -46,13 +68,19 @@ export default function Packages() {
         setPackages(data.packages);
       }
     })();
-  }, []);
+  }, [refresh]);
 
   return (
     <>
       <NavBar />
       <Toaster />
       <AddPackage centerId={centerId} open={open} onClose={handleClose} />
+      <EditPackage
+        editItem={editItem}
+        openEdit={openEdit}
+        onCloseEdit={handleCloseEdit}
+        centerId={centerId}
+      />
       <Container
         fixed
         sx={{
@@ -84,7 +112,7 @@ export default function Packages() {
         >
           {packages &&
             packages.map((item, i) => (
-              <Grid item>
+              <Grid item key={i}>
                 <Card sx={{ maxWidth: 345, borderRadius: 5 }} elevation={3}>
                   <CardMedia sx={{ height: 160 }} image={item.packageImage} />
                   <CardContent>
@@ -105,8 +133,8 @@ export default function Packages() {
                     </Typography>
                     <Box marginTop={2} marginBottom={2}>
                       {item.packageDetails &&
-                        item.packageDetails.map((value) => (
-                          <ListItem>
+                        item.packageDetails.map((value, i) => (
+                          <ListItem key={i}>
                             <ListItemAvatar>
                               <VerifiedOutlined color="success" />
                             </ListItemAvatar>
@@ -115,6 +143,7 @@ export default function Packages() {
                         ))}
                     </Box>
                     <Button
+                      onClick={() => handleEdit(item._id)}
                       sx={{
                         backgroundColor: "#5FA944",
                         color: "#FFFFFF",

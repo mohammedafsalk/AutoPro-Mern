@@ -9,36 +9,45 @@ import {
 } from "@mui/material";
 import React from "react";
 import axios from "axios";
-
 const packages = ["Basic", "Standard", "Premium"];
-const initialFormData = {
-  type: "Basic",
-  details: "",
-};
 
-export default function AddPackage({ open, onClose, centerId }) {
+export default function EditPackage({
+  openEdit,
+  onCloseEdit,
+  editItem,
+  centerId,
+}) {
   const theme = useTheme();
   const placeholder = "e.g: Oil Change, Washing, etc...";
 
-  const [formData, setFormData] = React.useState(initialFormData);
+  const [formData, setFormData] = React.useState({});
+  React.useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      type: editItem.packageType,
+      details: editItem.packageDetails?.join(",") || "",
+    }));
+  }, [editItem.packageType, editItem.packageDetails]);
 
   const handleFormData = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
+  const handleSave = async () => {
     let { type, details } = formData;
-    let { data } = await axios.post("service-center/package", {
-      id: centerId,
+    let { data } = await axios.put("service-center/package", {
+      id: editItem._id,
       type,
       details,
     });
     if (data.err) {
-      onClose("error");
+      onCloseEdit("error");
     } else {
-      onClose("success");
-      setFormData(initialFormData);
+      onCloseEdit("success");
+      setFormData({
+        ...formData,
+      });
     }
   };
 
@@ -65,8 +74,8 @@ export default function AddPackage({ open, onClose, centerId }) {
   return (
     <>
       <Modal
-        open={open}
-        onClose={onClose}
+        open={openEdit}
+        onClose={onCloseEdit}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -88,7 +97,6 @@ export default function AddPackage({ open, onClose, centerId }) {
             value={formData.type}
             onChange={handleFormData}
             label="Package Type"
-            defaultValue={formData.type}
           >
             {packages.map((option, i) => (
               <MenuItem key={i} value={option}>
@@ -107,7 +115,7 @@ export default function AddPackage({ open, onClose, centerId }) {
             rows={6}
             placeholder={placeholder}
           />
-          <Button onClick={handleSubmit}>Add</Button>
+          <Button onClick={handleSave}>Save</Button>
         </Box>
       </Modal>
     </>

@@ -100,16 +100,26 @@ export default function SignUp() {
 
   const handleOtp = async (e) => {
     e.preventDefault();
-    let { data } = await axios.post(
-      "user/auth/signup/verify",
-      { otp, name, email, password, phone, place }
-    );
-    console.log(data);
-    if (data.err) {
-      toast.error("Incorrect OTP");
-    } else {
-      dispatch({ type: "refresh" });
-      navigate("/login");
+    setLoading(true);
+    try {
+      let { data } = await axios.post("user/auth/signup/verify", {
+        otp,
+        name,
+        email,
+        password,
+        phone,
+        place,
+      });
+      if (data.err) {
+        toast.error("Incorrect OTP");
+      } else {
+        dispatch({ type: "refresh" });
+        navigate("/login");
+      }
+    } catch (error) {
+      toast.error("Server Is Down,Try Later");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -262,7 +272,13 @@ export default function SignUp() {
                       className="mb-4 w-100 bg-dark"
                       size="lg"
                     >
-                      Continue
+                      {!loading ? (
+                        "Continue"
+                      ) : (
+                        <div className="d-flex justify-content-center">
+                          <BeatLoader color="white" />
+                        </div>
+                      )}
                     </MDBBtn>
                   )}
                 </>

@@ -9,6 +9,7 @@ import UserAuth from "../components/user/UserAuth";
 import UserProfile from "../components/user/UserProfile";
 import ChooseServiceCenter from "../components/user/ChooseServiceCenter";
 import Backdropspinner from "../components/Loader/BackdropSpinner";
+import SelectPackage from "../components/user/SelectPackage";
 
 export default function UserRoutes() {
   const { user, refresh } = useSelector((state) => {
@@ -31,10 +32,8 @@ export default function UserRoutes() {
           <>
             <Route path="/" element={<Userhome />} />
             <Route path="/profile" element={<UserProfile />} />
-            <Route
-              path="/chooseServiceCenter"
-              element={<ChooseServiceCenter />}
-            />
+            <Route path="/serviceCenter" element={<ChooseServiceCenter />} />
+            <Route path="/select-package" element={<SelectPackage />} />
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="/signup" element={<Navigate to="/" />} />
             <Route path="/callback" element={<Navigate to="/" />} />
@@ -48,9 +47,10 @@ export default function UserRoutes() {
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/profile" element={<Navigate to="/login" />} />
             <Route
-              path="/chooseServiceCenter"
+              path="/serviceCenter"
               element={<Navigate to="/login" />}
             />
+            <Route path="/select-package" element={<Navigate to="/login" />} />
           </>
         )}
       </Routes>

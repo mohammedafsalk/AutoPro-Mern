@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import PackageModel from "../Models/packageModel.js";
 
-var salt = bcrypt.genSaltSync(10);  
+var salt = bcrypt.genSaltSync(10);
 
 export async function serviceCenterSignup(req, res) {
   try {
@@ -220,6 +220,23 @@ export async function addPackage(req, res) {
     res.json({ err: false, message: "Package Added Succesfully" });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function EditPackage(req, res) {
+  try {
+    const { id, type, details } = req.body;
+    console.log(req.body);
+    let detailsConverted = details.split(",").map((item) => item.trim());
+    await PackageModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { packageType: type, packageDetails: detailsConverted } },
+      { new: true }
+    );
+
+    res.json({ err: false });
+  } catch (error) {
+    res.json({ err: true });
   }
 }
 

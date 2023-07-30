@@ -17,6 +17,7 @@ import { grey } from "@mui/material/colors";
 import { Call, FmdGood } from "@mui/icons-material";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -49,7 +50,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -61,6 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function ChooseServiceCenter() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [data, setData] = React.useState([]);
   const [page, setPage] = React.useState(1);
@@ -83,9 +84,7 @@ export default function ChooseServiceCenter() {
 
   React.useEffect(() => {
     (async function () {
-      let { data } = await axios.get(
-        `user/chooseServiceCenter?page=${page - 1}`
-      );
+      let { data } = await axios.get(`user/service-centers?page=${page - 1}`);
       if (data.err) {
         toast.error(data.message);
       } else {
@@ -94,6 +93,15 @@ export default function ChooseServiceCenter() {
       }
     })();
   }, [page, search]);
+
+  const handlePackage = async (id) => {
+    let { data } = await axios.post("user/service-centers", { id });
+    if (data.err) {
+      toast.error(data.message);
+    } else {
+      navigate("/select-package");
+    }
+  };
 
   return (
     <>
@@ -150,7 +158,13 @@ export default function ChooseServiceCenter() {
                 }}
               >
                 <Paper sx={{ width: "100%" }} elevation={5}>
-                  <img src={item.logo.url} width="100%" height="300px" alt="" />
+                  <img
+                    src={item.logo.url}
+                    width="100%"
+                    onClick={() => handlePackage(item._id)}
+                    height="300px"
+                    alt=""
+                  />
                   <Box
                     textAlign="center"
                     padding={3}

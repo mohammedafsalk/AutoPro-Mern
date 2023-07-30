@@ -123,7 +123,7 @@ export async function googleAuth(req, res) {
         grant_type: "authorization_code",
       }
     );
-    const { access_token, id_token } = tokenResponse.data;
+    const { access_token } = tokenResponse.data;
     const userInfo = await axios.get(
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
     );
@@ -325,5 +325,15 @@ export async function chooseServiceCenter(req, res) {
     res.json({ center, err: false, totalPage: Math.ceil(count / 3) });
   } catch (error) {
     res.json({ err: true, message: error.message });
+  }
+}
+
+export async function getServiceCenter(req, res) {
+  try {
+    const { id } = req.body;
+    const center = await ServiceCenterModel.findById(id);
+    res.json({ err: false, center });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
   }
 }

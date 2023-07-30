@@ -1,7 +1,13 @@
 import express from "express";
-import { chooseServiceCenter } from "../Controllers/userController.js";
+import {
+  chooseServiceCenter,
+  getServiceCenter,
+} from "../Controllers/userController.js";
 const router = express.Router();
 
-router.get("/chooseServiceCenter", chooseServiceCenter);
+router
+  .route("/service-centers")
+  .get(chooseServiceCenter)
+  .post(getServiceCenter);
 
 export default router;

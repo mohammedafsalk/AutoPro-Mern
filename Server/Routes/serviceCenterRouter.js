@@ -1,8 +1,10 @@
 import express from "express";
-import { addPackage, getPackages } from "../Controllers/serviceCenterController.js";
+import {
+  EditPackage,
+  addPackage,
+  getPackages,
+} from "../Controllers/serviceCenterController.js";
 const router = express.Router();
 
-router.post('/package',addPackage)
-router.get('/package',getPackages)
-
+router.route("/package").get(getPackages).post(addPackage).put(EditPackage);
 export default router;

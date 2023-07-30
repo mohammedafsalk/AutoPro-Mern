@@ -9,7 +9,10 @@ import {
   MDBModalContent,
   MDBInput,
   MDBFile,
+  MDBModalBody,
+  MDBModalHeader,
 } from "mdb-react-ui-kit";
+import "../../assets/css/login.css";
 import loginImg from "../../assets/images/serviceCenterLogin.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import axios from "axios";
@@ -17,6 +20,10 @@ import { useNavigate } from "react-router-dom";
 import Backdropspinner from "../Loader/BackdropSpinner";
 
 export default function Signup() {
+  const handleChooseLocation = () => {
+    setShowMapModal(true);
+  };
+
   const [openLoader, setOpenLoader] = React.useState(false);
   const [proof, setProof] = useState(null);
   const [logo, setLogo] = useState(null);
@@ -168,16 +175,13 @@ export default function Signup() {
       >
         <Backdropspinner openLoader={openLoader} />
         <MDBContainer>
-          <MDBCol col="12">
-            <h1 className="text-left mb-4">Service Center</h1>
-          </MDBCol>
           <MDBRow>
-            <MDBCol col="12" md="7">
+            <MDBCol col="12" lg="7" className="d-flex flex-column justify-content-center" >
               <img src={loginImg} className="img-fluid" alt="Phone image" />
             </MDBCol>
             <MDBCol col={0} lg={1}></MDBCol>
-            <form onSubmit={handleSubmit}>
-              <MDBCol col="12" lg="4" className="pt-5">
+            <MDBCol col="12" lg="4" className="pt-5">
+              <form onSubmit={handleSubmit}>
                 <h3 className="w-100 text-center mb-5">Sign Up</h3>
                 <MDBInput
                   wrapperClass="mb-4"
@@ -209,7 +213,6 @@ export default function Signup() {
                 />
 
                 <MDBInput
-                  wrapperClass="mb-4"
                   label="Location"
                   name="location"
                   value={formData.location}
@@ -217,6 +220,15 @@ export default function Signup() {
                   type="text"
                   size="lg"
                 />
+
+                <MDBBtn
+                className="my-4"
+                  type="button"
+                  onClick={handleChooseLocation}
+                  color="primary"
+                >
+                  Choose Location
+                </MDBBtn>
 
                 <MDBInput
                   wrapperClass="mb-4"
@@ -308,8 +320,8 @@ export default function Signup() {
                 >
                   Sign in
                 </MDBBtn>
-              </MDBCol>
-            </form>
+              </form>
+            </MDBCol>
           </MDBRow>
         </MDBContainer>
         <MDBModal show={modalOpen} onHide={closeModal}>

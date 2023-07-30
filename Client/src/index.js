@@ -5,6 +5,7 @@ import App from "./App";
 import './index.css'
 import { BrowserRouter } from "react-router-dom";
 import store from "./store/store.js";
+import 'mapbox-gl/dist/mapbox-gl.css';
 import { Provider } from "react-redux";
 
 const container = document.getElementById("root");

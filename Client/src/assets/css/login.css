@@ -6,3 +6,54 @@
   background: #eee;
 }
 
+/* Add this CSS to your project's CSS file or component styles */
+
+/* Style the modal container */
+#map {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* Style the geocoder input container */
+.mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 400px; /* Adjust the width to your preference */
+  z-index: 1; /* Place it above the map */
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the geocoder input field */
+.mapboxgl-ctrl-geocoder input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+}
+
+/* Style the geocoder suggestion list */
+.mapboxgl-ctrl-geocoder .suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Style the geocoder suggestion items */
+.mapboxgl-ctrl-geocoder .suggestions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Style the selected suggestion item */
+.mapboxgl-ctrl-geocoder .suggestions .active {
+  background-color: #f0f0f0;
+}

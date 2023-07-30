@@ -45,7 +45,7 @@ const Mybtn = styled("Button")(({ theme }) => ({
 export default function Userbanner() {
   const navigate = useNavigate();
   const handleBookNow = () => {
-    navigate("/chooseServiceCenter");
+    navigate("/serviceCenter");
   };
 
   return (
