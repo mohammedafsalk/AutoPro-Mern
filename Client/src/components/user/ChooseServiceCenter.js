@@ -17,7 +17,7 @@ import { grey } from "@mui/material/colors";
 import { Call, FmdGood } from "@mui/icons-material";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -94,15 +94,6 @@ export default function ChooseServiceCenter() {
     })();
   }, [page, search]);
 
-  const handlePackage = async (id) => {
-    let { data } = await axios.post("user/service-centers", { id });
-    if (data.err) {
-      toast.error(data.message);
-    } else {
-      navigate("/select-package");
-    }
-  };
-
   return (
     <>
       <UserNav />
@@ -158,13 +149,14 @@ export default function ChooseServiceCenter() {
                 }}
               >
                 <Paper sx={{ width: "100%" }} elevation={5}>
-                  <img
-                    src={item.logo.url}
-                    width="100%"
-                    onClick={() => handlePackage(item._id)}
-                    height="300px"
-                    alt=""
-                  />
+                  <Link to={`/select-package/${item._id}`}>
+                    <img
+                      src={item.logo.url}
+                      width="100%"
+                      height="300px"
+                      alt=""
+                    />
+                  </Link>
                   <Box
                     textAlign="center"
                     padding={3}

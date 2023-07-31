@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import axios from "axios";
+import { BeatLoader } from "react-spinners";
 
 const packages = ["Basic", "Standard", "Premium"];
 const initialFormData = {
@@ -21,6 +22,7 @@ export default function AddPackage({ open, onClose, centerId }) {
   const placeholder = "e.g: Oil Change, Washing, etc...";
 
   const [formData, setFormData] = React.useState(initialFormData);
+  const [loading, setLoading] = React.useState(false);
 
   const handleFormData = (e) => {
     const { name, value } = e.target;
@@ -28,17 +30,27 @@ export default function AddPackage({ open, onClose, centerId }) {
   };
 
   const handleSubmit = async () => {
-    let { type, details } = formData;
-    let { data } = await axios.post("service-center/package", {
-      id: centerId,
-      type,
-      details,
-    });
-    if (data.err) {
+    setLoading(true);
+
+    try {
+      let { type, details } = formData;
+      let { data } = await axios.post("service-center/package", {
+        id: centerId,
+        type,
+        details,
+      });
+
+      if (data.err) {
+        onClose("error");
+      } else {
+        onClose("success");
+        setFormData(initialFormData);
+      }
+    } catch (error) {
+      console.error("Error while submitting:", error);
       onClose("error");
-    } else {
-      onClose("success");
-      setFormData(initialFormData);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,7 +119,13 @@ export default function AddPackage({ open, onClose, centerId }) {
             rows={6}
             placeholder={placeholder}
           />
-          <Button onClick={handleSubmit}>Add</Button>
+          {!loading ? (
+            <Button onClick={handleSubmit}>Add</Button>
+          ) : (
+            <Box display={"flex"} justifyContent={"center"}>
+              <BeatLoader color="blue" />
+            </Box>
+          )}
         </Box>
       </Modal>
     </>

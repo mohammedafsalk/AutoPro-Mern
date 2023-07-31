@@ -33,7 +33,7 @@ export default function UserRoutes() {
             <Route path="/" element={<Userhome />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/serviceCenter" element={<ChooseServiceCenter />} />
-            <Route path="/select-package" element={<SelectPackage />} />
+            <Route path="/select-package/:id" element={<SelectPackage />} />
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="/signup" element={<Navigate to="/" />} />
             <Route path="/callback" element={<Navigate to="/" />} />

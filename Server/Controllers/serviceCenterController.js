@@ -233,10 +233,19 @@ export async function EditPackage(req, res) {
       { $set: { packageType: type, packageDetails: detailsConverted } },
       { new: true }
     );
-
     res.json({ err: false });
   } catch (error) {
     res.json({ err: true });
+  }
+}
+
+export async function deletePackage(req, res) {
+  try {
+    const { id } = req.body;
+    await PackageModel.findByIdAndDelete(id);
+    res.json({ err: false, message: "Package Removed Successfully " });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
   }
 }
 
@@ -246,6 +255,20 @@ export async function getPackages(req, res) {
       centerId: req.serviceCenter._id,
     }).lean();
     res.json({ err: false, packages });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function saveCustom(req, res) {
+  try {
+    const { id, details } = req.body;
+    await ServiceCenterModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { customPackages: details } },
+      { new: true }
+    );
+    res.json({ err: false, message: "Custom Package Added Successfully" });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

@@ -13,14 +13,14 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { AddCircle, VerifiedOutlined } from "@mui/icons-material";
-import NoPackages from "../../assets/images/noRequests.jpg";
+import { AddCircle, Delete, VerifiedOutlined } from "@mui/icons-material";
 import NavBar from "./Navbar";
 import AddPackage from "./Packages-AddPackageModal";
 import { useSelector } from "react-redux";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import EditPackage from "./Packages-EditPackage";
+import CustomPackages from "./Packages-Custom";
 
 export default function Packages() {
   const centerId = useSelector((state) => {
@@ -29,18 +29,29 @@ export default function Packages() {
   const [refresh, setrefresh] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
+  const [openCustom, setOpenCustom] = React.useState(false);
   const [editItem, setEditItem] = React.useState([]);
   const [packages, setPackages] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleOpenEdit = () => setOpenEdit(true);
+  const handleOpenCustom = () => setOpenCustom(true);
 
   const handleClose = (type) => {
     setOpen(false);
     if (type === "error") {
       toast.error("Please Try Again");
     } else if (type === "success") {
+      setrefresh((prev) => !prev);
       toast.success("Package Added Succesfully");
     }
+  };
+
+  const handleCloseCustom = (type) => {
+    if (type === "closed") {
+      return setOpenCustom(false);
+    }
+    setOpenCustom(false);
+    toast.success(type);
   };
 
   const handleCloseEdit = (type) => {
@@ -50,6 +61,18 @@ export default function Packages() {
     } else if (type === "success") {
       setrefresh((prev) => !prev);
       toast.success("Package Updated Succesfully");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    let { data } = await axios.delete("service-center/package", {
+      data: { id },
+    });
+    if (data.err) {
+      toast.error(data.message);
+    } else {
+      setrefresh((prev) => !prev);
+      toast.success(data.message);
     }
   };
 
@@ -75,6 +98,11 @@ export default function Packages() {
       <NavBar />
       <Toaster />
       <AddPackage centerId={centerId} open={open} onClose={handleClose} />
+      <CustomPackages
+        openCustom={openCustom}
+        onCloseCustom={handleCloseCustom}
+        centerId={centerId}
+      />
       <EditPackage
         editItem={editItem}
         openEdit={openEdit}
@@ -91,18 +119,32 @@ export default function Packages() {
           marginTop: "20px",
         }}
       >
-        <IconButton
-          sx={{
-            backgroundColor: "transparent",
-            "&:hover": {
+        {packages.length < 3 ? (
+          <IconButton
+            sx={{
               backgroundColor: "transparent",
-              boxShadow: "none",
-            },
-          }}
-          onClick={handleOpen}
-        >
-          <AddCircle />
-        </IconButton>
+              "&:hover": {
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              },
+            }}
+            onClick={handleOpen}
+          >
+            <AddCircle />
+          </IconButton>
+        ) : (
+          ""
+        )}
+        <Box>
+          <Button
+            onClick={handleOpenCustom}
+            sx={{ marginY: "10px" }}
+            variant="outlined"
+            color="success"
+          >
+            Add Custom
+          </Button>
+        </Box>
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
@@ -154,6 +196,9 @@ export default function Packages() {
                     >
                       Edit
                     </Button>
+                    <IconButton onClick={() => handleDelete(item._id)}>
+                      <Delete color="error" />
+                    </IconButton>
                   </CardContent>
                 </Card>
               </Grid>

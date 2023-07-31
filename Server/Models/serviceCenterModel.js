@@ -31,7 +31,7 @@ const ServiceCenterSchema = new mongoose.Schema({
     default: false,
   },
   customPackages: {
-    type: [String],
+    type: Array,
   },
   permission: {
     type: Boolean,
