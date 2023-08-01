@@ -3,6 +3,7 @@ import {
   EditPackage,
   addPackage,
   deletePackage,
+  editCustom,
   getPackages,
   saveCustom,
 } from "../Controllers/serviceCenterController.js";
@@ -14,6 +15,7 @@ router
   .post(addPackage)
   .put(EditPackage)
   .delete(deletePackage);
-router.route("/custom-package").post(saveCustom);
+
+router.route("/custom-package").post(saveCustom).put(editCustom);
 
 export default router;

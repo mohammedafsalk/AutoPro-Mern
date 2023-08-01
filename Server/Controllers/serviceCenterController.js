@@ -251,10 +251,13 @@ export async function deletePackage(req, res) {
 
 export async function getPackages(req, res) {
   try {
+    let center = await ServiceCenterModel.findOne({
+      _id: req.serviceCenter._id,
+    });
     let packages = await PackageModel.find({
       centerId: req.serviceCenter._id,
     }).lean();
-    res.json({ err: false, packages });
+    res.json({ err: false, packages, center });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
@@ -269,6 +272,20 @@ export async function saveCustom(req, res) {
       { new: true }
     );
     res.json({ err: false, message: "Custom Package Added Successfully" });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function editCustom(req, res) {
+  try {
+    const { id, details } = req.body;
+    await ServiceCenterModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { customPackages: details } },
+      { new: true }
+    );
+    res.json({ err: false, message: "Custom Package Updated Successfully" });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

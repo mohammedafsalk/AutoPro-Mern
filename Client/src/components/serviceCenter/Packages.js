@@ -21,20 +21,30 @@ import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import EditPackage from "./Packages-EditPackage";
 import CustomPackages from "./Packages-Custom";
+import EditCustom from "./Packages-EditCustom";
 
 export default function Packages() {
   const centerId = useSelector((state) => {
     return state.serviceCenter.details._id;
   });
+
+  const center = useSelector((state) => {
+    return state.serviceCenter.details;
+  });
+
   const [refresh, setrefresh] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openCustom, setOpenCustom] = React.useState(false);
+  const [openCustomEdit, setOpenCustomEdit] = React.useState(false);
   const [editItem, setEditItem] = React.useState([]);
+  const [customItems, setCustomItems] = React.useState(null);
   const [packages, setPackages] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleOpenEdit = () => setOpenEdit(true);
   const handleOpenCustom = () => setOpenCustom(true);
+  const handleOpenCustomEdit = () => setOpenCustomEdit(true);
+  const handleCloseCustomEdit = () => setOpenCustomEdit(false);
 
   const handleClose = (type) => {
     setOpen(false);
@@ -82,6 +92,25 @@ export default function Packages() {
     setEditItem(item);
   };
 
+  const handleDeleteFrmCustom = (i) => {
+    let updated = customItems.filter((item, index) => index !== i);
+    setCustomItems(updated);
+  };
+
+  const handleSave = async () => {
+    let { data } = await axios.put("service-center/custom-package", {
+      details: customItems,
+      id: centerId,
+    });
+    if (data.err) {
+      setOpenCustomEdit(false);
+      toast.error(data.message);
+    } else {
+      setOpenCustomEdit(false);
+      toast.success(data.message);
+    }
+  };
+
   React.useEffect(() => {
     (async function () {
       let { data } = await axios.get("service-center/package");
@@ -89,6 +118,7 @@ export default function Packages() {
         toast.error(data.message);
       } else {
         setPackages(data.packages);
+        setCustomItems(data.center?.customPackages);
       }
     })();
   }, [refresh]);
@@ -102,6 +132,14 @@ export default function Packages() {
         openCustom={openCustom}
         onCloseCustom={handleCloseCustom}
         centerId={centerId}
+      />
+      <EditCustom
+        openCustomEdit={openCustomEdit}
+        onCloseCustomEdit={handleCloseCustomEdit}
+        customItems={customItems}
+        setCustomItems={setCustomItems}
+        handleDeleteFrmCustom={handleDeleteFrmCustom}
+        handlesave={handleSave}
       />
       <EditPackage
         editItem={editItem}
@@ -136,14 +174,25 @@ export default function Packages() {
           ""
         )}
         <Box>
-          <Button
-            onClick={handleOpenCustom}
-            sx={{ marginY: "10px" }}
-            variant="outlined"
-            color="success"
-          >
-            Add Custom
-          </Button>
+          {center?.customPackages.length > 0 ? (
+            <Button
+              onClick={handleOpenCustomEdit}
+              sx={{ marginY: "10px" }}
+              variant="outlined"
+              color="success"
+            >
+              Edit Custom
+            </Button>
+          ) : (
+            <Button
+              onClick={handleOpenCustom}
+              sx={{ marginY: "10px" }}
+              variant="outlined"
+              color="success"
+            >
+              Add Custom
+            </Button>
+          )}
         </Box>
         <Grid
           container
