@@ -14,11 +14,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Box,
 } from "@mui/material";
-import { Settings, Menu as MenuIcon } from "@mui/icons-material";
+import { Settings, Menu as MenuIcon, ViewCarousel } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import userimage from "../../assets/images/AutoPro-logos_black.png";
+import profileImageUrl from "../../assets/images/avatar.png";
 import { grey } from "@mui/material/colors";
 
 export default function NavBar() {
@@ -96,34 +97,68 @@ export default function NavBar() {
         anchor="left"
         open={open}
         onClose={toggleDrawer(false)}
-        sx={{ width: "50%" }}
+        sx={{ width: "100%" }}
       >
-        <Toolbar
+        <Box
+          width="250px"
           sx={{
             display: "flex",
-            justifyContent: "center",
-            bgcolor: "white",
-            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.4)",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Typography variant="h5" fontWeight={500}>
-            Service Center
-          </Typography>
-        </Toolbar>
-        <List sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <ListItem>
-            <ListItemIcon>
-              <Settings sx={{ fontSize: "30px" }} />
-            </ListItemIcon>
-            <ListItemText>
-              <NavLink to="/service-center/packages" className="packages-link">
-                <Typography variant="h6" fontSize={18}>
+          <Toolbar
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              bgcolor: "white",
+              padding: "10px",
+              marginTop: "10px",
+              gap: "10px",
+              borderBottom: "1px solid black",
+            }}
+          >
+            <Avatar
+              alt="Profile Image"
+              src={profileImageUrl}
+              sx={{
+                width: 80,
+                height: 80,
+              }}
+            />
+            <Typography variant="h5" fontWeight={500}>
+              Service Center
+            </Typography>
+          </Toolbar>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "400px",
+            }}
+          >
+            <ListItem>
+              <ListItemIcon>
+                <ViewCarousel sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "inherit" }}
+                  fontSize={18}
+                  component={NavLink}
+                  to="/service-center/packages"
+                >
                   Packages
                 </Typography>
-              </NavLink>
-            </ListItemText>
-          </ListItem>
-        </List>
+              </ListItemText>
+            </ListItem>
+          </Box>
+        </Box>
       </Drawer>
     </>
   );
