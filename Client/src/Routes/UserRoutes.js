@@ -10,6 +10,7 @@ import UserProfile from "../components/user/UserProfile";
 import ChooseServiceCenter from "../components/user/ChooseServiceCenter";
 import Backdropspinner from "../components/Loader/BackdropSpinner";
 import SelectPackage from "../components/user/SelectPackage";
+import BookingForm from "../components/user/BookingForm";
 
 export default function UserRoutes() {
   const { user, refresh } = useSelector((state) => {
@@ -34,6 +35,7 @@ export default function UserRoutes() {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/serviceCenter" element={<ChooseServiceCenter />} />
             <Route path="/select-package/:id" element={<SelectPackage />} />
+            <Route path="/booking-details" element={<BookingForm />} />
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="/signup" element={<Navigate to="/" />} />
             <Route path="/callback" element={<Navigate to="/" />} />
@@ -46,17 +48,18 @@ export default function UserRoutes() {
             <Route path="/callback" element={<UserAuth />} />
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/profile" element={<Navigate to="/login" />} />
+            <Route path="/serviceCenter" element={<Navigate to="/login" />} />
             <Route
-              path="/serviceCenter"
+              path="/select-package/:id"
               element={<Navigate to="/login" />}
             />
-            <Route path="/select-package" element={<Navigate to="/login" />} />
+            <Route path="/booking-details" element={<Navigate to="/login" />} />
           </>
         )}
       </Routes>
-      {/* {user.login === null && (
+      {user.login === null && (
         <Backdropspinner openLoader={true}></Backdropspinner>
-      )} */}
+      )}
     </>
   );
 }

@@ -37,6 +37,10 @@ const ServiceCenterSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  slot: {
+    type: Number,
+    default: 10,
+  },
   rejectMessage: {
     type: String,
     default: "",

@@ -10,7 +10,6 @@ export default function ForgetOtpModal({
   setDispatch,
   handleOtp,
 }) {
-  const [displayError, setDisplayError] = useState(false);
 
   return (
     <Modal
