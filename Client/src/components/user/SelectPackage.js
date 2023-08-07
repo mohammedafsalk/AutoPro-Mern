@@ -4,46 +4,30 @@ import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import { Typography as Joygraphy } from "@mui/joy";
 import img from "../../assets/images/avatar.png";
 import { Call, FmdGood, VerifiedOutlined } from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Backdropspinner from "../Loader/BackdropSpinner";
 import { grey } from "@mui/material/colors";
 import ChooseCustomPackageModal from "./ChooseCustomPackageModal";
-import BookingForm from "./BookingForm";
 import MessageModal from "./MessageModal";
 import loadingReducer from "../../reducers/loadingReducer";
 
 export default function SelectPackage() {
-  const [state, setState] = React.useReducer(loadingReducer, false);
+  const [state, setState] = React.useReducer(loadingReducer, false); 
 
   const { id } = useParams();
   const [center, setCenter] = React.useState({});
   const [types, setTypes] = React.useState([]);
   const [custom, setCustom] = React.useState([]);
   const [customPackage, setCustomPackage] = React.useState([]);
-  const [packageType, setPackageType] = React.useState([]);
+  const [packageType, setPackageType] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [openBooking, setOpenBooking] = React.useState(false);
   const [openMsgModal, setOpenMsgModal] = React.useState(false);
 
-  const handleClickOpenBooking = () => {
-    setState({ type: "stop" });
-    setOpenBooking(true);
-  };
-
-  const handleCloseBooking = () => {
-    setOpenBooking(false);
-  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleOpenMsg = () => setOpenMsgModal(true);
-  const handleCloseMsg = (type) => {
-    if (type === "proceed") {
-      setState({ type: "start" });
-      setTimeout(() => {
-        handleClickOpenBooking();
-      }, 1000);
-    }
+  const handleCloseMsg = () => {
     setOpenMsgModal(false);
   };
 
@@ -64,9 +48,11 @@ export default function SelectPackage() {
         setTypes(data.packages);
         setCustom(data.center.customPackages);
         setState({ type: "stop" });
-      }
+      }  
     })();
   }, []);
+
+
 
   return (
     <>
@@ -152,7 +138,7 @@ export default function SelectPackage() {
                     display: "flex",
                     flexDirection: "column",
                     overflow: "hidden",
-                    minHeight: 240,
+                    height: "100%",
                     gap: 1,
                     maxWidth: 500,
                     borderRadius: 3,
@@ -234,12 +220,13 @@ export default function SelectPackage() {
         setCustomPackage={setCustomPackage}
         handleOpenMsg={handleOpenMsg}
       />
-      <BookingForm
-        openBooking={openBooking}
-        onCloseBooking={handleCloseBooking}
+      <MessageModal
+        openMsg={openMsgModal}
+        onCloseMsg={handleCloseMsg}
+        id={id}
+        customPackage={customPackage}
         packageType={packageType}
       />
-      <MessageModal openMsg={openMsgModal} onCloseMsg={handleCloseMsg} />
     </>
   );
 }

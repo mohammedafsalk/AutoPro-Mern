@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import userimage from "../../assets/images/AutoPro-logos_black.png";
 import { grey } from "@mui/material/colors";
+import { MDBContainer } from "mdb-react-ui-kit";
 
 export default function UserNav() {
   const [show, setShow] = useState(false);
@@ -28,8 +29,9 @@ export default function UserNav() {
   };
 
   return (
-    <Container>
-      <AppBar style={{ backgroundColor: grey[100] }} position="sticky">
+      <AppBar style={{ backgroundColor: grey[100], boxShadow:"0px 0px 10px 3px RGBA(233, 233, 233, 0.9)" }} position="sticky">
+        <MDBContainer >
+
         <Toolbar
           sx={{
             display: "flex",
@@ -80,7 +82,7 @@ export default function UserNav() {
           </MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
+            </MDBContainer>
       </AppBar>
-    </Container>
   );
 }

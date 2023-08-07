@@ -10,18 +10,30 @@ const BookingSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "ServiceCenter",
     },
-    packageType: {
+    name: {
       type: String,
     },
-    customDetails: {
-      type: Array,
+    contactNo: {
+      type: Number,
     },
-    ExpectedDate: {
-      type: Date,
-      default: function () {
-        return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-      },
+    emailId: {
+      type: String,
     },
+    vehicleRegNo: {
+      type: String,
+    },
+    vehicleName: {
+      type: String,
+    },
+    brand: {
+      type: String,
+    },
+    status:{
+      type:String,
+      enum: ["service pending", "vehicle picked up", "service started","unpaid", "paid", "delivered", "cancelled", "refund processing", "refund completed"],
+      required:true,
+      default:"pending"
+    }
   },
   { timestamps: true }
 );

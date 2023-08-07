@@ -9,8 +9,6 @@ import {
   MDBModalContent,
   MDBInput,
   MDBFile,
-  MDBModalBody,
-  MDBModalHeader,
 } from "mdb-react-ui-kit";
 import "../../assets/css/login.css";
 import loginImg from "../../assets/images/serviceCenterLogin.jpg";
@@ -220,15 +218,6 @@ export default function Signup() {
                   type="text"
                   size="lg"
                 />
-
-                <MDBBtn
-                className="my-4"
-                  type="button"
-                  onClick={handleChooseLocation}
-                  color="primary"
-                >
-                  Choose Location
-                </MDBBtn>
 
                 <MDBInput
                   wrapperClass="mb-4"

@@ -1,12 +1,11 @@
 import UserModel from "../Models/userModel.js";
 import ServiceCenterModel from "../Models/serviceCenterModel.js";
-import packageModel from "../Models/packageModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import sentOTP from "../helpers/sentOtp.js";
 import crypto from "crypto";
 import axios from "axios";
-import PackageModel from "../Models/packageModel.js";
+
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -334,10 +333,7 @@ export async function getServiceCenter(req, res) {
   try {
     const { id } = req.body;
     const center = await ServiceCenterModel.findById(id);
-    const packages = await PackageModel.find({ centerId: id })
-      .populate("centerId")
-      .exec();
-    res.json({ err: false, center, packages });
+    res.json({ err: false, center });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

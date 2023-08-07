@@ -1,3 +1,29 @@
 .active {
   border-bottom: 3px solid rgb(51, 28, 185) !important;
 }
+.img-height-250{
+  height:250px !important;
+}
+.img-height-400-cover{
+  height:400px !important;
+  object-fit:cover
+}
+.gap-5{
+  gap:50px;
+}
+.gap-4{
+  gap:40px;
+}
+.gap-3{
+  gap:30px;
+}
+.gap-2{
+  gap:20px;
+}
+.gap-1{
+  gap:10px;
+}
+.img-height-200-cover{
+  height:200px;
+  object-fit:cover;
+}

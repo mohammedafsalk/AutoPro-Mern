@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Close } from "@mui/icons-material";
+import { Link as RouterLink } from "react-router-dom";
+import { Link } from "@mui/joy";
 import { IconButton } from "@mui/material";
 import Backdropspinner from "../Loader/BackdropSpinner";
 
@@ -13,7 +15,7 @@ const style = {
   flexDirection: "column",
   top: "50%",
   left: "50%",
-  gap:"10px",
+  gap: "10px",
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
@@ -22,7 +24,13 @@ const style = {
   p: 4,
 };
 
-const MessageModal = ({ openMsg, onCloseMsg }) => {
+const MessageModal = ({
+  openMsg,
+  onCloseMsg,
+  id,
+  customPackage,
+  packageType,
+}) => {
   return (
     <div>
       <Modal
@@ -32,7 +40,7 @@ const MessageModal = ({ openMsg, onCloseMsg }) => {
       >
         <Box sx={style}>
           <IconButton
-            onClick={()=>onCloseMsg("close")}
+            onClick={() => onCloseMsg("close")}
             sx={{ position: "absolute", top: "10px", right: "20px" }}
           >
             <Close color="error" />
@@ -43,10 +51,19 @@ const MessageModal = ({ openMsg, onCloseMsg }) => {
             informed through email once the service is completed. We appreciate
             your patience and understanding.
           </Typography>
-          <Box display={"flex"} justifyContent={"center"} >
-            <Button onClick={()=>onCloseMsg("proceed")} variant="contained" color="success">
-              Agree
-            </Button>
+          <Box display={"flex"} justifyContent={"center"}>
+            <Link
+              variant="solid"
+              color="success"
+              underline="none"
+              component={RouterLink}
+              to="/booking-details"
+              onClick={onCloseMsg}
+              state={{ id, customPackage, packageType }}
+            >
+              Proceed
+            </Link>
+            ;
           </Box>
         </Box>
       </Modal>

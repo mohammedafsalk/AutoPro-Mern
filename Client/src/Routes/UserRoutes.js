@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import SignUp from "../components/user/signup";
-import Userhome from "../components/user/userHome";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Login from "../components/user/login";
 import UserAuth from "../components/user/UserAuth";
 import UserProfile from "../components/user/UserProfile";
-import ChooseServiceCenter from "../components/user/ChooseServiceCenter";
 import Backdropspinner from "../components/Loader/BackdropSpinner";
 import SelectPackage from "../components/user/SelectPackage";
 import BookingForm from "../components/user/BookingForm";
+import UserHome from "../components/user/UserHome";
+import ChooseServiceCenter from "../components/user/ChooseServiceCenter";
+import UserServicePage from "../components/user/UserServicePage";
 
 export default function UserRoutes() {
   const { user, refresh } = useSelector((state) => {
@@ -31,10 +32,10 @@ export default function UserRoutes() {
       <Routes>
         {user.login && (
           <>
-            <Route path="/" element={<Userhome />} />
+            <Route path="/" element={<UserHome />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/serviceCenter" element={<ChooseServiceCenter />} />
-            <Route path="/select-package/:id" element={<SelectPackage />} />
+            <Route path="/select-package/:id" element={<UserServicePage />} />
             <Route path="/booking-details" element={<BookingForm />} />
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="/signup" element={<Navigate to="/" />} />

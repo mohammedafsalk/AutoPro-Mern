@@ -4,7 +4,6 @@ import sentOTP from "../helpers/sentOtp.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import PackageModel from "../Models/packageModel.js";
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -204,89 +203,5 @@ export async function proofUpdate(req, res) {
     res.json({ err: false });
   } catch (error) {
     res.json({ err: true, error: error.message });
-  }
-}
-
-export async function addPackage(req, res) {
-  try {
-    const { id, type, details } = req.body;
-    let detailsConverted = details.split(",").map((item) => item.trim());
-    const newPackage = new PackageModel({
-      centerId: id,
-      packageType: type,
-      packageDetails: detailsConverted,
-    });
-    await newPackage.save();
-    res.json({ err: false, message: "Package Added Succesfully" });
-  } catch (error) {
-    res.json({ err: true, message: "Something Went Wrong" });
-  }
-}
-
-export async function EditPackage(req, res) {
-  try {
-    const { id, type, details } = req.body;
-    console.log(req.body);
-    let detailsConverted = details.split(",").map((item) => item.trim());
-    await PackageModel.findOneAndUpdate(
-      { _id: id },
-      { $set: { packageType: type, packageDetails: detailsConverted } },
-      { new: true }
-    );
-    res.json({ err: false });
-  } catch (error) {
-    res.json({ err: true });
-  }
-}
-
-export async function deletePackage(req, res) {
-  try {
-    const { id } = req.body;
-    await PackageModel.findByIdAndDelete(id);
-    res.json({ err: false, message: "Package Removed Successfully " });
-  } catch (error) {
-    res.json({ err: true, message: "Something Went Wrong" });
-  }
-}
-
-export async function getPackages(req, res) {
-  try {
-    let center = await ServiceCenterModel.findOne({
-      _id: req.serviceCenter._id,
-    });
-    let packages = await PackageModel.find({
-      centerId: req.serviceCenter._id,
-    }).lean();
-    res.json({ err: false, packages, center });
-  } catch (error) {
-    res.json({ err: true, message: "Something Went Wrong" });
-  }
-}
-
-export async function saveCustom(req, res) {
-  try {
-    const { id, details } = req.body;
-    await ServiceCenterModel.findOneAndUpdate(
-      { _id: id },
-      { $set: { customPackages: details } },
-      { new: true }
-    );
-    res.json({ err: false, message: "Custom Package Added Successfully" });
-  } catch (error) {
-    res.json({ err: true, message: "Something Went Wrong" });
-  }
-}
-
-export async function editCustom(req, res) {
-  try {
-    const { id, details } = req.body;
-    await ServiceCenterModel.findOneAndUpdate(
-      { _id: id },
-      { $set: { customPackages: details } },
-      { new: true }
-    );
-    res.json({ err: false, message: "Custom Package Updated Successfully" });
-  } catch (error) {
-    res.json({ err: true, message: "Something Went Wrong" });
   }
 }
