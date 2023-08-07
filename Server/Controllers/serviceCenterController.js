@@ -1,9 +1,11 @@
 import ServiceCenterModel from "../Models/serviceCenterModel.js";
+import workerMOdel from "../Models/workerModel.js";
 import cloudinary from "../config/cloudinary.js";
 import sentOTP from "../helpers/sentOtp.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import workerModel from "../Models/workerModel.js";
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -203,5 +205,20 @@ export async function proofUpdate(req, res) {
     res.json({ err: false });
   } catch (error) {
     res.json({ err: true, error: error.message });
+  }
+}
+
+export async function addWorker(req, res) {
+  try {
+    const { password } = req.body;
+    let hashedPassword = bcrypt.hashSync(password, salt);
+    const worker = await workerModel.create({
+      ...req.body,
+      password: hashedPassword,
+      centerId: req.serviceCenter._id,
+    });
+    res.json({ err: false });
+  } catch (error) {
+    res.json({  err: true, message: "Something went wrong" });
   }
 }

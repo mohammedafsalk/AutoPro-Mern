@@ -16,6 +16,7 @@ import validatePassword from "../../helpers/passwordValidate";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Backdropspinner from "../Loader/BackdropSpinner";
+import { BeatLoader } from "react-spinners";
 
 export default function Signup() {
   const handleChooseLocation = () => {
@@ -174,7 +175,11 @@ export default function Signup() {
         <Backdropspinner openLoader={openLoader} />
         <MDBContainer>
           <MDBRow>
-            <MDBCol col="12" lg="7" className="d-flex flex-column justify-content-center" >
+            <MDBCol
+              col="12"
+              lg="7"
+              className="d-flex flex-column justify-content-center"
+            >
               <img src={loginImg} className="img-fluid" alt="Phone image" />
             </MDBCol>
             <MDBCol col={0} lg={1}></MDBCol>

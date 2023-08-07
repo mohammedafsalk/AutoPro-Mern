@@ -16,7 +16,7 @@ import {
   ListItemText,
   Box,
 } from "@mui/material";
-import { Settings, Menu as MenuIcon, ViewCarousel } from "@mui/icons-material";
+import { Settings, Menu as MenuIcon, ViewCarousel, Engineering } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import profileImageUrl from "../../assets/images/avatar.png";
@@ -143,7 +143,7 @@ export default function NavBar() {
           >
             <ListItem>
               <ListItemIcon>
-                <ViewCarousel sx={{ fontSize: "30px", color: "black" }} />
+                <Engineering sx={{ fontSize: "30px", color: "black" }} />
               </ListItemIcon>
               <ListItemText>
                 <Typography
@@ -151,9 +151,9 @@ export default function NavBar() {
                   sx={{ color: "inherit" }}
                   fontSize={18}
                   component={NavLink}
-                  to="/service-center/packages"
+                  to="/service-center/workers"
                 >
-                  Packages
+                  Workers
                 </Typography>
               </ListItemText>
             </ListItem>
