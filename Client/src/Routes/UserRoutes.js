@@ -7,8 +7,6 @@ import Login from "../components/user/login";
 import UserAuth from "../components/user/UserAuth";
 import UserProfile from "../components/user/UserProfile";
 import Backdropspinner from "../components/Loader/BackdropSpinner";
-import SelectPackage from "../components/user/SelectPackage";
-import BookingForm from "../components/user/BookingForm";
 import UserHome from "../components/user/UserHome";
 import ChooseServiceCenter from "../components/user/ChooseServiceCenter";
 import UserServicePage from "../components/user/UserServicePage";
@@ -36,7 +34,6 @@ export default function UserRoutes() {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/serviceCenter" element={<ChooseServiceCenter />} />
             <Route path="/select-package/:id" element={<UserServicePage />} />
-            <Route path="/booking-details" element={<BookingForm />} />
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="/signup" element={<Navigate to="/" />} />
             <Route path="/callback" element={<Navigate to="/" />} />

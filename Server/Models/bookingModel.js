@@ -13,13 +13,13 @@ const BookingSchema = new mongoose.Schema(
     name: {
       type: String,
     },
-    contactNo: {
+    mobile: {
       type: Number,
     },
-    emailId: {
+    email: {
       type: String,
     },
-    vehicleRegNo: {
+    vehicleNumber: {
       type: String,
     },
     vehicleName: {
@@ -28,12 +28,31 @@ const BookingSchema = new mongoose.Schema(
     brand: {
       type: String,
     },
-    status:{
-      type:String,
-      enum: ["service pending", "vehicle picked up", "service started","unpaid", "paid", "delivered", "cancelled", "refund processing", "refund completed"],
-      required:true,
-      default:"pending"
-    }
+    date: {
+      type: String,
+    },
+    place: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    status: {
+      type: String,
+      enum: [
+        "service pending",
+        "vehicle picked up",
+        "service started",
+        "unpaid",
+        "paid",
+        "delivered",
+        "cancelled",
+        "refund processing",
+        "refund completed",
+      ],
+      required: true,
+      default: "service pending",
+    },
   },
   { timestamps: true }
 );

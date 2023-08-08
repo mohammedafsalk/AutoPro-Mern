@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import workerModel from "../Models/workerModel.js";
 
-const verifyWorker = async (req, res, next) => {
+export async function verifyWorker(req, res, next) {
   try {
     const token = req.cookies.workerToken;
     if (!token) {
@@ -27,6 +27,6 @@ const verifyWorker = async (req, res, next) => {
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
-};
+}
 
-export default verifyWorker;
+

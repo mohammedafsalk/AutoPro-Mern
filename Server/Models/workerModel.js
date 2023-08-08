@@ -18,7 +18,7 @@ const workerSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: "true",
+    default: true,
   },
   centerId: {
     type: mongoose.Schema.Types.ObjectId,

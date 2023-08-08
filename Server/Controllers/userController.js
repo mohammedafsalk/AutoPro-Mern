@@ -5,7 +5,8 @@ import bcrypt from "bcryptjs";
 import sentOTP from "../helpers/sentOtp.js";
 import crypto from "crypto";
 import axios from "axios";
-
+import ScheduleModel from "../Models/scheduleModel.js";
+import BookingModel from "../Models/bookingModel.js";
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -334,6 +335,24 @@ export async function getServiceCenter(req, res) {
     const { id } = req.body;
     const center = await ServiceCenterModel.findById(id);
     res.json({ err: false, center });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+export async function getServiceCenterSchedule(req, res) {
+  try {
+    const { id } = req.params;
+    const schedule = await ScheduleModel.findOne({ serviceCenterId: id });
+    res.json({ err: false, schedule });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function getUserBookings(req, res) {
+  try {
+    const bookings = await BookingModel.find({ userId: req.user._id });
+    res.json({ err: false, bookings });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

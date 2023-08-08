@@ -253,7 +253,7 @@ export default function UserServicePage() {
             </section>
           </MDBCol>
         </MDBRow>
-        <BookNowModal open={openModal} setOpen={setOpenModal}></BookNowModal>
+        <BookNowModal open={openModal} id={id} setOpen={setOpenModal}></BookNowModal>
       </MDBContainer>
     </>
   );

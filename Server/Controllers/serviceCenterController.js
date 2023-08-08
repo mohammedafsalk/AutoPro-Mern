@@ -1,11 +1,11 @@
 import ServiceCenterModel from "../Models/serviceCenterModel.js";
-import workerMOdel from "../Models/workerModel.js";
 import cloudinary from "../config/cloudinary.js";
 import sentOTP from "../helpers/sentOtp.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import workerModel from "../Models/workerModel.js";
+import ScheduleModel from "../Models/scheduleModel.js";
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -208,6 +208,19 @@ export async function proofUpdate(req, res) {
   }
 }
 
+export async function getWorkers(req, res) {
+  try {
+    const serviceCenterId = req.serviceCenter._id;
+    const workers = await workerModel.find(
+      { centerId: serviceCenterId },
+      { password: 0 }
+    );
+    res.json({ err: false, workers });
+  } catch (error) {
+    res.json({ err: true, message: "Something went wrong" });
+  }
+}
+
 export async function addWorker(req, res) {
   try {
     const { password } = req.body;
@@ -219,6 +232,56 @@ export async function addWorker(req, res) {
     });
     res.json({ err: false });
   } catch (error) {
-    res.json({  err: true, message: "Something went wrong" });
+    res.json({ err: true, message: "Something went wrong" });
+  }
+}
+
+export async function workerAccessSetting(req, res) {
+  try {
+    const { type, id } = req.body;
+    const worker = await workerModel.findById(id);
+
+    if (type === "block") {
+      worker.active = false;
+      await worker.save();
+      return res.json({ err: false, blocked: true, message: "Worker Blocked" });
+    } else {
+      worker.active = true;
+      await worker.save();
+      return res.json({
+        err: false,
+        blocked: false,
+        message: "Worker Unblocked",
+      });
+    }
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function setSchedule(req, res) {
+  try{
+    console.log(req.body)
+    const schedule = await ScheduleModel.updateOne({serviceCenterId:req.serviceCenter._id},{
+    $set:{
+      ...req.body.schedule,
+      serviceCenterId: req.serviceCenter._id,
+    }}, {upsert:true});
+    console.log(schedule)
+    res.json({err:false})
+  }catch(err){
+    res.json({err:true})
+    console.log(err)
+  }
+}
+
+export async function getSchedule(req, res) {
+  try{
+    const schedule = await ScheduleModel.findOne({serviceCenterId:req.serviceCenter._id})
+    console.log(schedule)
+    res.json({err:false, schedule})
+  }catch(err){
+    res.json({err:true})
+    console.log(err)
   }
 }

@@ -3,34 +3,34 @@ import mongoose from "mongoose";
 const schema = new mongoose.Schema(
   {
     serviceCenterId:{
-        type:mongoose.Schema.Types.ObjectId;
+        type:mongoose.Schema.Types.ObjectId,
         ref:'ServiceCenter'
     },
-    mon:{
+    monday:{
         type:Boolean,
         default:false
     },
-    tue:{
+    tuesday:{
         type:Boolean,
         default:false
     },
-    tue:{
+    wednesday:{
         type:Boolean,
         default:false
     },
-    wed:{
+    thursday:{
         type:Boolean,
         default:false
     },
-    fri:{
+    friday:{
         type:Boolean,
         default:false
     },
-    sat:{
+    saturday:{
         type:Boolean,
         default:false
     },
-    sun:{
+    sunday:{
         type:Boolean,
         default:false
     },
@@ -43,5 +43,5 @@ const schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ScheduleModel = mongoose.model("ServiceCenter", schema);
+const ScheduleModel = mongoose.model("Schedule", schema);
 export default ScheduleModel;

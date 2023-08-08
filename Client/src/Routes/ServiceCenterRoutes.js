@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import PermissionPage from "../components/serviceCenter/PermissionPage";
 import Workers from "../components/serviceCenter/Workers";
+import Schedules from "../components/serviceCenter/Schedules";
 
 export default function ServiceCenterRoutes() {
   const { serviceCenter, refresh } = useSelector((state) => {
@@ -63,6 +64,7 @@ export default function ServiceCenterRoutes() {
         <>
           <Route path="/" element={<Home />} />
           <Route path="/workers" element={<Workers />} />
+          <Route path="/schedule" element={<Schedules />} />
           <Route path="/login" element={<Navigate to="/service-center/" />} />
           <Route path="/signup" element={<Navigate to="/service-center/" />} />
         </>
@@ -75,6 +77,10 @@ export default function ServiceCenterRoutes() {
           <Route path="/" element={<Navigate to="/service-center/login" />} />
           <Route
             path="/workers"
+            element={<Navigate to="/service-center/login" />}
+          />
+          <Route
+            path="/schedule"
             element={<Navigate to="/service-center/login" />}
           />
         </>

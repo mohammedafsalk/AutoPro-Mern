@@ -10,7 +10,7 @@ export async function workerLogin(req, res) {
     const worker = await workerModel.findOne({ email });
     if (!worker) return res.json({ err: true, message: "Account Not Found" });
     if (!worker.active)
-      res.json({
+      return res.json({
         err: true,
         message: "You Are Blocked From Using This Account",
       });
