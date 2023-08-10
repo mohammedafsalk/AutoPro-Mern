@@ -5,38 +5,29 @@ import bcrypt from "bcryptjs";
 import sentOTP from "../helpers/sentOtp.js";
 import crypto from "crypto";
 import axios from "axios";
+import twilio from "twilio";
 import ScheduleModel from "../Models/scheduleModel.js";
 import BookingModel from "../Models/bookingModel.js";
 
 var salt = bcrypt.genSaltSync(10);
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const serviceId = process.env.TWILIO_SERVICE_SID;
+const client = twilio(accountSid, authToken);
 
 export async function userSignup(req, res) {
   try {
-    const { email } = req.body;
+    const { phone, email } = req.body;
     const user = await UserModel.findOne({ email });
     if (user)
       return res.json({ err: true, message: "User already registered!" });
-    let otp = Math.ceil(Math.random() * 100000);
-    console.log(otp);
-    let otpHash = crypto
-      .createHmac("sha256", process.env.OTP_SECRET)
-      .update(otp.toString())
-      .digest("hex");
-    await sentOTP(email, otp);
-    const token = jwt.sign(
-      {
-        otp: otpHash,
-      },
-      process.env.JWT_SECRET
-    );
-    return res
-      .cookie("tempToken", token, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 1000 * 60 * 10,
-        sameSite: "none",
-      })
-      .json({ err: false, tempToken: token });
+    const otpResponse = await client.verify.v2
+      .services(serviceId)
+      .verifications.create({
+        to: `+91${phone}`,
+        channel: "sms",
+      });
+    res.json({ err:false,message: "Success" });
   } catch (error) {
     res.json({ error: error, err: true, message: "Something bad happend!" });
   }
@@ -45,39 +36,41 @@ export async function userSignup(req, res) {
 export async function signUpVerify(req, res) {
   try {
     const { name, email, password, phone, otp, place } = req.body;
-    const temptoken = req.cookies.tempToken;
-    if (!temptoken)
-      return res.json({ err: true, message: "OTP Session failed" });
-    const verifiedTemptoken = jwt.verify(temptoken, process.env.JWT_SECRET);
-    let otpHash = crypto
-      .createHmac("sha256", process.env.OTP_SECRET)
-      .update(otp.toString())
-      .digest("hex");
-    if (otpHash !== verifiedTemptoken.otp)
-      return res.json({ err: true, message: "Incorrect OTP" });
-    const hashedPassword = bcrypt.hashSync(password, salt);
-    const newUser = new UserModel({
-      name,
-      email,
-      place,
-      password: hashedPassword,
-      phone,
-    });
-    await newUser.save();
-    const token = jwt.sign(
-      {
-        id: newUser._id,
-      },
-      "myjwtsecretkey"
-    );
-    return res
-      .cookie("userToken", token, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7,
-        sameSite: "none",
+    const isVerified = await client.verify.v2
+      .services(serviceId)
+      .verificationChecks.create({
+        to: `+91${phone}`,
+        code: otp,
       })
-      .json({ err: false });
+      .then(async (verificationResponse) => {
+        if (verificationResponse.status === "approved") {
+          const hashedPassword = bcrypt.hashSync(password, salt);
+          const newUser = new UserModel({
+            name,
+            email,
+            place,
+            password: hashedPassword,
+            phone,
+          });
+          await newUser.save();
+          const token = jwt.sign(
+            {
+              id: newUser._id,
+            },
+            "myjwtsecretkey"
+          );
+          return res
+            .cookie("userToken", token, {
+              httpOnly: true,
+              secure: true,
+              maxAge: 1000 * 60 * 60 * 24 * 7,
+              sameSite: "none",
+            })
+            .json({ err: false });
+        }else{
+          res.json({err:true,message:"Invalid OTP"})
+        }
+      });
   } catch (error) {
     console.log(error.message);
     res.json({ error: error, err: true, message: "Something bad happend!" });

@@ -130,7 +130,7 @@ export default function SignUp() {
       try {
         let { data } = await axios.post(
           "http://localhost:5000/user/auth/signup",
-          { email }
+          { phone }
         );
         if (data.err) {
           setErrMessage(data.message);
