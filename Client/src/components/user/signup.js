@@ -56,9 +56,9 @@ export default function SignUp() {
   }, [timer]);
 
   const handleResendOtp = async () => {
-    toast.success(`New OTP Has Been Sent to ${email}`);
+    toast.success(`New OTP Has Been Sent to ${phone}`);
     let { data: resendOtpData } = await axios.post("user/auth/resendOtp", {
-      email,
+      phone,
     });
     setTimer(10);
     setCanResend(false);

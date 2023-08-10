@@ -27,7 +27,7 @@ export async function userSignup(req, res) {
         to: `+91${phone}`,
         channel: "sms",
       });
-    res.json({ err:false,message: "Success" });
+    res.json({ err: false, message: "Success" });
   } catch (error) {
     res.json({ error: error, err: true, message: "Something bad happend!" });
   }
@@ -67,8 +67,8 @@ export async function signUpVerify(req, res) {
               sameSite: "none",
             })
             .json({ err: false });
-        }else{
-          res.json({err:true,message:"Invalid OTP"})
+        } else {
+          res.json({ err: true, message: "Invalid OTP" });
         }
       });
   } catch (error) {
@@ -78,28 +78,18 @@ export async function signUpVerify(req, res) {
 }
 
 export async function resendOtp(req, res) {
-  const { email } = req.body;
-  let otp = Math.ceil(Math.random() * 100000);
-  let newOtpHash = crypto
-    .createHmac("sha256", process.env.OTP_SECRET)
-    .update(otp.toString())
-    .digest("hex");
-  await sentOTP(email, otp);
-  const token = jwt.sign(
-    {
-      otp: newOtpHash,
-    },
-    process.env.JWT_SECRET
-  );
-
-  return res
-    .cookie("tempToken", token, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 1000 * 60 * 10,
-      sameSite: "none",
-    })
-    .json({ err: false, tempToken: token });
+  try {
+    const { phone } = req.body;
+    const otpResponse = await client.verify.v2
+      .services(serviceId)
+      .verifications.create({
+        to: `+91${phone}`,
+        channel: "sms",
+      });
+    res.json({ err: true, message: "Success" });
+  } catch (error) {
+    res.json({ error: error, err: true, message: "Something bad happend!" });
+  }
 }
 
 export async function googleAuth(req, res) {
