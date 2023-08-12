@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addWorker,
+  getBookings,
   getSchedule,
   getWorkers,
   setSchedule,
@@ -13,6 +14,8 @@ router
   .get(getWorkers)
   .post(addWorker)
   .patch(workerAccessSetting);
+
+router.route("/bookings").get(getBookings)
 
 router.route("/schedule").post(setSchedule).get(getSchedule);
 

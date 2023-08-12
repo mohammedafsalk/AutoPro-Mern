@@ -31,7 +31,7 @@ export default function AttendingUsers({ bookings }) {
                   </MDBCardText>
                   <hr className="my-4" />
                   <div className="d-flex justify-content-start align-items-center">
-                    <Button color="error" onClick={handleCancel(item._id)} variant="contained">
+                    <Button color="error"  variant="contained">
                         Cancel
                     </Button>
                   </div>
@@ -41,6 +41,7 @@ export default function AttendingUsers({ bookings }) {
           </MDBRow>
         </MDBContainer>
       ))}
+    
     </>
   );
 }

@@ -1,4 +1,5 @@
 import ServiceCenterModel from "../Models/serviceCenterModel.js";
+import BookingModel from "../Models/bookingModel.js"
 import cloudinary from "../config/cloudinary.js";
 import sentOTP from "../helpers/sentOtp.js";
 import bcrypt from "bcryptjs";
@@ -260,28 +261,41 @@ export async function workerAccessSetting(req, res) {
 }
 
 export async function setSchedule(req, res) {
-  try{
-    console.log(req.body)
-    const schedule = await ScheduleModel.updateOne({serviceCenterId:req.serviceCenter._id},{
-    $set:{
-      ...req.body.schedule,
-      serviceCenterId: req.serviceCenter._id,
-    }}, {upsert:true});
-    console.log(schedule)
-    res.json({err:false})
-  }catch(err){
-    res.json({err:true})
-    console.log(err)
+  try {
+    console.log(req.body);
+    const schedule = await ScheduleModel.updateOne(
+      { serviceCenterId: req.serviceCenter._id },
+      {
+        $set: {
+          ...req.body.schedule,
+          serviceCenterId: req.serviceCenter._id,
+        },
+      },
+      { upsert: true }
+    );
+    res.json({ err: false });
+  } catch (err) {
+    res.json({ err: true, message: "Something Went Wrong" });
   }
 }
 
 export async function getSchedule(req, res) {
-  try{
-    const schedule = await ScheduleModel.findOne({serviceCenterId:req.serviceCenter._id})
-    console.log(schedule)
-    res.json({err:false, schedule})
-  }catch(err){
-    res.json({err:true})
-    console.log(err)
+  try {
+    const schedule = await ScheduleModel.findOne({
+      serviceCenterId: req.serviceCenter._id,
+    });
+    res.json({ err: false, schedule });
+  } catch (err) {
+    res.json({ err: true, message: "Something Went Wrong" });  }
+}
+
+export async function getBookings(req, res) {
+  try {
+    const bookings = await BookingModel.find({
+      centerId: req.serviceCenter._id,
+    });
+    res.json({ err: false, bookings });
+  } catch (err) {
+    res.json({ err: true, message: "Something Went Wrong" });
   }
 }

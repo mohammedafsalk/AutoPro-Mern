@@ -15,7 +15,7 @@ const style = {
   p: 4,
 };
 
-export default function AddWorkerModal({ handleClose, open }) {
+export default function AddWorkerModal({ handleClose, open, setRefresh }) {
   const [state, setState] = React.useReducer(loadingReducer, false);
   const [formData, setFormdata] = React.useState({
     name: "",
@@ -60,13 +60,14 @@ export default function AddWorkerModal({ handleClose, open }) {
       password,
       mobile,
     });
-    console.log(data);
     if (data.err) {
       setState({ type: "stop" });
       handleClose("error");
+      setRefresh((prev) => !prev);
     } else {
       setState({ type: "stop" });
       handleClose("success");
+      setRefresh((prev) => !prev);
     }
   };
   return (

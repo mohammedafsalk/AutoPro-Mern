@@ -128,7 +128,7 @@ export default function PermissionPage({ center }) {
               open={show}
               onClose={(e) => setShow(false)}
               anchorReference="anchorPosition"
-              anchorPosition={{ top: 50, left: 900 }}
+              anchorPosition={{ top: 50, left:2000}}
               anchorOrigin={{
                 vertical: "top",
                 horizontal: "left",

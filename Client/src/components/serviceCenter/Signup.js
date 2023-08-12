@@ -19,10 +19,7 @@ import Backdropspinner from "../Loader/BackdropSpinner";
 import { BeatLoader } from "react-spinners";
 
 export default function Signup() {
-  const handleChooseLocation = () => {
-    setShowMapModal(true);
-  };
-
+  
   const [openLoader, setOpenLoader] = React.useState(false);
   const [proof, setProof] = useState(null);
   const [logo, setLogo] = useState(null);
@@ -216,6 +213,7 @@ export default function Signup() {
                 />
 
                 <MDBInput
+                  wrapperClass="mb-4"
                   label="Location"
                   name="location"
                   value={formData.location}
@@ -232,7 +230,7 @@ export default function Signup() {
                   onChange={handleFormData}
                   type="text"
                   size="lg"
-                  maxLength={12}
+                  maxLength={10}
                 />
 
                 <MDBInput

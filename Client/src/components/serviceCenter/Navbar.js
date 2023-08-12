@@ -16,7 +16,12 @@ import {
   ListItemText,
   Box,
 } from "@mui/material";
-import { Settings, Menu as MenuIcon, ViewCarousel, Engineering } from "@mui/icons-material";
+import {
+  Settings,
+  Menu as MenuIcon,
+  ViewCarousel,
+  Engineering,
+} from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import profileImageUrl from "../../assets/images/avatar.png";
@@ -75,7 +80,7 @@ export default function NavBar() {
           open={show}
           onClose={(e) => setShow(false)}
           anchorReference="anchorPosition"
-          anchorPosition={{ top: 40, left: 1450 }}
+          anchorPosition={{ top: 50, left: 2000 }}
           anchorOrigin={{
             vertical: "top",
             horizontal: "left",
@@ -141,6 +146,22 @@ export default function NavBar() {
               minHeight: "400px",
             }}
           >
+            <ListItem>
+              <ListItemIcon>
+                <Engineering sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "inherit" }}
+                  fontSize={18}
+                  component={NavLink}
+                  to="/service-center/bookings"
+                >
+                  Bookings
+                </Typography>
+              </ListItemText>
+            </ListItem>
             <ListItem>
               <ListItemIcon>
                 <Engineering sx={{ fontSize: "30px", color: "black" }} />

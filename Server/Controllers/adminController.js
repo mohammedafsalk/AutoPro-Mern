@@ -5,6 +5,8 @@ import bcrypt from "bcryptjs";
 import sentMail from "../helpers/sentMail.js";
 import jwt from "jsonwebtoken";
 
+var salt = bcrypt.genSaltSync(10);
+
 export async function adminLogin(req, res) {
   try {
     const { email, password } = req.body;

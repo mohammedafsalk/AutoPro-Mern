@@ -1,19 +1,19 @@
 import React from "react";
 import UserNav from "./UserNav";
-import img from "../../assets/images/avatar.png";
 import {
-  Avatar,
-  Box,
-  Button,
-  Card,
   Container,
-  IconButton,
-  Typography,
+  Tab,
+  Tabs,
 } from "@mui/material";
+import {
+  AccountCircle,
+  EventNote,
+} from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import AttendingUsers from "./UserBookingCards";
+import ProfileCard from "./ProfileCard";
 
 export default function UserProfile() {
   const user = useSelector((state) => {
@@ -21,6 +21,12 @@ export default function UserProfile() {
   });
 
   const [bookings, setBookings] = React.useState([]);
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   React.useEffect(() => {
     (async function () {
@@ -37,46 +43,27 @@ export default function UserProfile() {
     <>
       <UserNav />
       <Toaster />
-      <Container sx={{ mt: 5 }}>
-        <Card
-          sx={{
-            maxWidth: 345,
-            p: 3,
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
+      <Container
+        sx={{
+          mt: 5,
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Tabs
+          variant="standard"
+          value={value}
+          onChange={handleChange}
+          aria-label="icon label tabs example"
+          sx={{ mb: 5 }}
         >
-          <Box display={"flex"} justifyContent={"center"}>
-            <Avatar
-              component={"image"}
-              src={img}
-              sx={{ width: 200, height: 200 }}
-            />
-          </Box>
-          <Box
-            display={"flex"}
-            justifyContent={"center"}
-            flexDirection={"column"}
-          >
-            <Box textAlign={"center"}>
-              <Typography variant="h5" fontWeight={500}>
-                {user?.name}
-              </Typography>
-            </Box>
-            <Box display={"flex"} justifyContent={"center"}>
-              <Typography variant="body1" fontWeight={300}>
-                {user?.email}
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"center"}>
-            <Button color="error" variant="contained">
-              LogOut
-            </Button>
-          </Box>
-        </Card>
-        <AttendingUsers bookings={bookings}  />
+          <Tab icon={<AccountCircle />} label="PROFILE" />
+          <Tab icon={<EventNote />} label="BOOKINGS" />
+        </Tabs>
+        {value === 0 && <ProfileCard user={user} />}
+        {value === 1 && <AttendingUsers bookings={bookings} />}
       </Container>
     </>
   );

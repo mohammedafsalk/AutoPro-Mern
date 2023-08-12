@@ -39,7 +39,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     let { email, password } = formData;
-    let { data } = await axios.post("http://localhost:5000/admin/auth/login", {
+    let { data } = await axios.post("admin/auth/login", {
       email,
       password,
     });

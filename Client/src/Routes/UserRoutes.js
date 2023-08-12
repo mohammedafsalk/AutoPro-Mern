@@ -39,7 +39,7 @@ export default function UserRoutes() {
             <Route path="/callback" element={<Navigate to="/" />} />
           </>
         )}
-        {!user.login && (
+        {user.login === false && (
           <>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />

@@ -53,7 +53,7 @@ export default function Workers() {
           setRefresh={setRefresh}
         />
       </Container>
-      <AddWorkerModal open={open} handleClose={handleClose} />
+      <AddWorkerModal open={open} handleClose={handleClose} setRefresh={setRefresh} />
     </>
   );
 }
