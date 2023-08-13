@@ -24,6 +24,9 @@ const workerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "serviceCenter",
   },
+  bookingId: {
+    type: Array,
+  },
 });
 
 const workerModel = mongoose.model("Workers", workerSchema);

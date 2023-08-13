@@ -1,5 +1,5 @@
 import ServiceCenterModel from "../Models/serviceCenterModel.js";
-import BookingModel from "../Models/bookingModel.js"
+import BookingModel from "../Models/bookingModel.js";
 import cloudinary from "../config/cloudinary.js";
 import sentOTP from "../helpers/sentOtp.js";
 import bcrypt from "bcryptjs";
@@ -286,7 +286,8 @@ export async function getSchedule(req, res) {
     });
     res.json({ err: false, schedule });
   } catch (err) {
-    res.json({ err: true, message: "Something Went Wrong" });  }
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
 }
 
 export async function getBookings(req, res) {
@@ -296,6 +297,25 @@ export async function getBookings(req, res) {
     });
     res.json({ err: false, bookings });
   } catch (err) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function assignWork(req, res) {
+  try {
+    const { bookingId, id } = req.body;
+    const item = await workerModel.findOne({ _id: id });
+    if (item.bookingId.includes(bookingId)) {
+      return res.json({ err: true, message: "Already Assigned!" });
+    } else {
+      await workerModel.findOneAndUpdate(
+        { _id: id },
+        { $addToSet: { bookingId: bookingId } },
+        { new: true }
+      );
+      res.json({ err: false });
+    }
+  } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
 }

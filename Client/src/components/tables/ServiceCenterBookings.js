@@ -3,6 +3,8 @@ import {
   Box,
   Button,
   IconButton,
+  Menu,
+  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -13,11 +15,18 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import { Block, CheckCircleOutline, Delete } from "@mui/icons-material";
+import {
+  Block,
+  CheckCircleOutline,
+  Delete,
+  MoreVert,
+} from "@mui/icons-material";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import Backdropspinner from "../Loader/BackdropSpinner";
 import loadingReducer from "../../reducers/loadingReducer";
+import BookingDetails from "../../modal/BookingDetailsModal";
+import AssignWorkers from "../../modal/WorkerAssignModal";
 
 const styles = {
   imgContainer: {
@@ -55,9 +64,54 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 export default function ServiceCenterBookings({ bookings, rowheads }) {
+  const [item, setItem] = React.useState([]);
+  const [modalActions, setModalActions] = React.useState({
+    openDetails: false,
+    openAssign: false,
+  });
+  const handleOpen = (id) => {
+    let clickedItem = bookings.find((value) => value._id === id);
+    setItem(clickedItem);
+    setModalActions((prev) => ({
+      ...prev,
+      openDetails: true,
+    }));
+  };
+
+  const handleClose = () => {
+    setModalActions((prev) => ({
+      ...prev,
+      openDetails: false,
+    }));
+  };
+
+  const handleOpenAssign = (id) => {
+    let clickedItem = bookings.find((value) => value._id === id);
+    setItem(clickedItem);
+    setModalActions((prev) => ({
+      ...prev,
+      openAssign: true,
+    }));
+  };
+
+  const handleCloseAssign = () =>
+    setModalActions((prev) => ({
+      ...prev,
+      openAssign: false,
+    }));
   return (
     <>
       <Toaster />
+      <BookingDetails
+        handleClose={handleClose}
+        open={modalActions.openDetails}
+        item={item}
+      />
+      <AssignWorkers
+        handleClose={handleCloseAssign}
+        open={modalActions.openAssign}
+        item={item}
+      />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -73,7 +127,7 @@ export default function ServiceCenterBookings({ bookings, rowheads }) {
           <TableBody>
             {bookings &&
               bookings.map((item, i) => (
-                <StyledTableRow key={i}>
+                <StyledTableRow key={item._id}>
                   <StyledTableCell component="th" scope="row" align="center">
                     {i + 1}
                   </StyledTableCell>
@@ -82,10 +136,23 @@ export default function ServiceCenterBookings({ bookings, rowheads }) {
                     {item.mobile}
                   </StyledTableCell>
                   <StyledTableCell align="center">{item.date}</StyledTableCell>
-                  <StyledTableCell align="center">{item.status}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {item.status}
+                  </StyledTableCell>
                   <StyledTableCell align="center">
                     <Box style={styles.iconContainer}>
-                      <Button>Details</Button>
+                      <Button
+                        color="success"
+                        onClick={() => handleOpen(item._id)}
+                      >
+                        Details
+                      </Button>
+                      <Button
+                        onClick={() => handleOpenAssign(item._id)}
+                        color="info"
+                      >
+                        Assign
+                      </Button>
                     </Box>
                   </StyledTableCell>
                 </StyledTableRow>
