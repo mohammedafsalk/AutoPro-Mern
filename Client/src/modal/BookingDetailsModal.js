@@ -48,10 +48,8 @@ export default function BookingDetails({ handleClose, open, item }) {
           <Button
             onClick={handleClose}
             type="button"
-            variant="contained"
-            sx={{ color: "white", bgcolor: "black" }}
           >
-            Assign
+            Close
           </Button>
         </Box>
       </Box>

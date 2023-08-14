@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import workerModel from "../Models/workerModel.js";
+import BookingModel from "../Models/bookingModel.js";
+import { isValidObjectId } from "mongoose";
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -73,6 +75,37 @@ export async function workerLogut(req, res) {
         sameSite: "none",
       })
       .json({ err: true, message: "Logged Out Succesfully" });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function getBookings(req, res) {
+  try {
+    const id = req.worker._id;
+    let worker = await workerModel.findById(id);
+    let bookingIds = worker.bookingId;
+    let bookings = await BookingModel.find({ _id: { $in: bookingIds } });
+    res.json({ err: false, bookings });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function setStatus(req, res) {
+  try {
+    const { status, id } = req.body;
+    if (!status || !id || !isValidObjectId(id)) {
+      return res.json({ err: true, message: "Data Is Not Correct" });
+    }
+    const booking = await BookingModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { status: status } }
+    );
+    if (!booking) {
+      return res.json({ err: true, message: "Booking Not Found" });
+    }
+    res.json({ err: false });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

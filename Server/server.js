@@ -9,8 +9,8 @@ import serviceCenterRouter from "./Routes/serviceCenterRouter.js";
 import userAuthRouter from "./Routes/userAuthRouter.js";
 import userRouter from "./Routes/userRouter.js";
 import workerAuthRouter from "./Routes/workerAuthRouter.js";
-// import workerRouter from "./Routes/workerRouter.js";
-// import { verifyWorker } from "./Middlewares/verifyWorker.js";
+import workerRouter from "./Routes/workerRouter.js";
+import { verifyWorker } from "./Middlewares/verifyWorker.js";
 import { verifyAdminAuth } from "./Middlewares/verifyAdmin.js";
 import { verifyUserAuth } from "./Middlewares/verifyUser.js";
 import { verifyServiceCenter } from "./Middlewares/verifyServiceCenter.js";
@@ -43,7 +43,7 @@ app.use("/admin", verifyAdminAuth, adminRouter);
 app.use("/service-center/auth/", serviceCenterAuthRouter);
 app.use("/service-center", verifyServiceCenter, serviceCenterRouter);
 app.use("/worker/auth/", workerAuthRouter);
-// app.use("/worker", verifyWorker, workerRouter);
+app.use("/worker", verifyWorker,workerRouter );
 
 app.listen(5000, () => {
   console.log("Server Up at 5000");
