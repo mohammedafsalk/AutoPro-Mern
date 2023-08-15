@@ -31,26 +31,49 @@ export default function WorkerBookingDetails({ handleClose, open, item }) {
   let currDate = new Date();
   let formattedDate = dayjs(currDate).format("DD-MM-YYYY");
 
-  const [change, setChange] = React.useState(false);
+  const [change, setChange] = React.useState({
+    pickup: false,
+    delivery: false,
+  });
 
   const handleChange = (e) => {
     if (e.target.checked) {
-      setChange(true);
+      setChange((prev) => ({ ...prev, pickup: true }));
     } else {
-      setChange(false);
+      setChange((prev) => ({ ...prev, pickup: false }));
+    }
+  };
+  const handleChangeDelivery = (e) => {
+    if (e.target.checked) {
+      setChange((prev) => ({ ...prev, delivery: true }));
+    } else {
+      setChange((prev) => ({ ...prev, delivery: false }));
     }
   };
 
-  const handleSave = async (id) => {
-    let { data } = await axios.patch("worker/view-bookings", {
-      status: "Vehicle Picked Up",
-      id: id,
-    });
-    if (data.err) {
-      toast.error(data.message);
-    } else {
-      toast.success(data.message);
-      handleClose();
+  const handleSave = async (id, status) => {
+    if (status === "Waiting For Pickup") {
+      let { data } = await axios.patch("worker/view-bookings", {
+        status: "Vehicle Picked Up",
+        id: id,
+      });
+      if (data.err) {
+        toast.error(data.message);
+      } else {
+        toast.success(data.message);
+        handleClose();
+      }
+    } else if (status === "Paid") {
+      let { data } = await axios.patch("worker/view-bookings", {
+        status: "Delivered",
+        id: id,
+      });
+      if (data.err) {
+        toast.error(data.message);
+      } else {
+        toast.success(data.message);
+        handleClose();
+      }
     }
   };
 
@@ -81,23 +104,37 @@ export default function WorkerBookingDetails({ handleClose, open, item }) {
             {item.address}
           </Typography>
         </Box>
-        {item.date === formattedDate && (
+        {item.date === formattedDate &&
+          item.status === "Waiting For Pickup" && (
+            <Box display={"flex"} justifyContent={"center"}>
+              <FormControlLabel
+                onChange={handleChange}
+                control={<Checkbox />}
+                label="Proceed PickUp"
+              />
+            </Box>
+          )}
+        {item.status === "Paid" && (
           <Box display={"flex"} justifyContent={"center"}>
             <FormControlLabel
-              onChange={handleChange}
+              onChange={handleChangeDelivery}
               control={<Checkbox />}
-              label="Proceed PickUp"
+              label="Delivery Completed"
             />
           </Box>
         )}
         <Box display={"flex"} justifyContent={"center"}>
           <Button
-            onClick={change ? () => handleSave(item._id) : handleClose}
+            onClick={
+              change.delivery || change.pickup
+                ? () => handleSave(item._id, item.status)
+                : handleClose
+            }
             type="button"
             variant="contained"
             sx={{ color: "white", bgcolor: "black" }}
           >
-            {change ? "Save" : "Close"}
+            {change.delivery || change.pickup ? "Save" : "Close"}
           </Button>
         </Box>
       </Box>

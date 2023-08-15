@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   MDBCol,
   MDBContainer,
@@ -13,14 +13,22 @@ import {
 } from "mdb-react-ui-kit";
 import { Button } from "@mui/material";
 import ViewInvoice from "../../modal/ViewInvoice";
+import AddReview from "../../modal/AddReview";
 
-export default function AttendingUsers({ bookings,setRefresh }) {
+export default function AttendingUsers({ bookings, setRefresh }) {
   const [basicModal, setBasicModal] = useState(false);
-  const [data, setData] = useState([])
-  const openInvoice=(item)=>{
-    setData(prev=>item)
-    setBasicModal(true)
-  }
+  const [reviewModal, setReviewModal] = useState(false);
+  const [centerId, setCenterId] = useState("");
+  const [data, setData] = useState([]);
+  const handleOpenReview = (id) => {
+    setCenterId(id);
+    setReviewModal(true);
+  };
+  const openInvoice = (item) => {
+    setData((prev) => item);
+    setBasicModal(true);
+  };
+
   return (
     <>
       {bookings.map((item) => (
@@ -39,24 +47,41 @@ export default function AttendingUsers({ bookings,setRefresh }) {
                   <hr className="my-4" />
                   <div className="d-flex justify-content-start gap-1 align-items-center">
                     {item?.invoice[0] ? (
-                        <Button color="primary" onClick={()=>openInvoice(item)} variant="contained">
-                      View Bill
+                      <Button
+                        color="primary"
+                        onClick={() => openInvoice(item)}
+                        variant="contained"
+                      >
+                        View Bill
                       </Button>
-                      )
-                      :
+                    ) : (
                       <Button color="error" variant="contained">
-                      Cancel
+                        Cancel
                       </Button>
-                    }
-                    </div>
-                    </MDBCardBody>
-                    </MDBCard>
+                    )}
+                    {item?.status === "Delivered" && (
+                      <Button
+                        color="primary"
+                        onClick={() => handleOpenReview(item.centerId)}
+                        variant="outlined"
+                      >
+                        Add Review
+                      </Button>
+                    )}
+                  </div>
+                </MDBCardBody>
+              </MDBCard>
             </MDBCol>
-            </MDBRow>
-            </MDBContainer>
-            ))}
-            <ViewInvoice data={data} setRefresh={setRefresh} setBasicModal={setBasicModal} basicModal={basicModal}/>
-
+          </MDBRow>
+        </MDBContainer>
+      ))}
+      <ViewInvoice
+        data={data}
+        setRefresh={setRefresh}
+        setBasicModal={setBasicModal}
+        basicModal={basicModal}
+      />
+      <AddReview setReviewModal={setReviewModal} reviewModal={reviewModal} centerId={centerId} />
     </>
   );
 }

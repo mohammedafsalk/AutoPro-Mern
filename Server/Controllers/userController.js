@@ -8,6 +8,7 @@ import axios from "axios";
 import twilio from "twilio";
 import ScheduleModel from "../Models/scheduleModel.js";
 import BookingModel from "../Models/bookingModel.js";
+import reviewModel from "../Models/reviewModel.js";
 
 var salt = bcrypt.genSaltSync(10);
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -336,6 +337,22 @@ export async function getUserBookings(req, res) {
   try {
     const bookings = await BookingModel.find({ userId: req.user._id });
     res.json({ err: false, bookings });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function addReview(req, res) {
+  try {
+    const { description, rating, centerId } = req.body;
+    const review = await reviewModel.create({
+      description: description,
+      rating: rating,
+      centerId: centerId,
+      userId: req.user._id,
+    });
+    await review.save();
+    res.json({ err: false, message: "Review Added Successfully!" });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

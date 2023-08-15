@@ -68,7 +68,6 @@ export default function ViewInvoice({ basicModal, setBasicModal, data, setRefres
   return (
     <>
     <Toaster/>
-      <MDBBtn onClick={toggleShow}>LAUNCH DEMO MODAL</MDBBtn>
       <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
         <MDBModalDialog centered>
           <MDBModalContent>

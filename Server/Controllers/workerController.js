@@ -83,9 +83,7 @@ export async function workerLogut(req, res) {
 export async function getBookings(req, res) {
   try {
     const id = req.worker._id;
-    let worker = await workerModel.findById(id);
-    let bookingIds = worker.bookingId;
-    let bookings = await BookingModel.find({ _id: { $in: bookingIds } });
+    let bookings = await BookingModel.find({ workerId: id });
     res.json({ err: false, bookings });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });

@@ -11,6 +11,7 @@ export default function WorkerHome() {
   React.useEffect(() => {
     (async function () {
       let { data } = await axios.get("worker/view-bookings");
+      console.log(data);
       if (!data.err) {
         setBookings(data.bookings);
       } else {

@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+  addReview,
   chooseServiceCenter,
   getServiceCenter,
   getServiceCenterSchedule,
@@ -23,5 +24,5 @@ router.post("/payment", paymentOrder);
 router.post("/payment/verify", verifyPayment);
 router.post("/payment/bill/verify", verifyBillPayment);
 
-router.route("/bookings").get(getUserBookings);
+router.route("/bookings").get(getUserBookings).patch(addReview)
 export default router;
