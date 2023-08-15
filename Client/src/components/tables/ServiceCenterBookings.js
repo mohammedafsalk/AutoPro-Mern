@@ -2,6 +2,7 @@ import React from "react";
 import {
   Box,
   Button,
+  Chip,
   IconButton,
   Menu,
   MenuItem,
@@ -20,6 +21,7 @@ import {
   CheckCircleOutline,
   Delete,
   MoreVert,
+  ReceiptRounded,
 } from "@mui/icons-material";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
@@ -27,6 +29,7 @@ import Backdropspinner from "../Loader/BackdropSpinner";
 import loadingReducer from "../../reducers/loadingReducer";
 import BookingDetails from "../../modal/BookingDetailsModal";
 import AssignWorkers from "../../modal/WorkerAssignModal";
+import InvoiceForm from "../../modal/InvoiceModal";
 
 const styles = {
   imgContainer: {
@@ -63,11 +66,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-export default function ServiceCenterBookings({ bookings, rowheads }) {
+export default function ServiceCenterBookings({ bookings, rowheads, setRefresh }) {
   const [item, setItem] = React.useState([]);
   const [modalActions, setModalActions] = React.useState({
     openDetails: false,
     openAssign: false,
+    openInvoice: false,
   });
   const handleOpen = (id) => {
     let clickedItem = bookings.find((value) => value._id === id);
@@ -92,13 +96,35 @@ export default function ServiceCenterBookings({ bookings, rowheads }) {
       ...prev,
       openAssign: true,
     }));
+    setRefresh(prev=>!prev)
   };
 
   const handleCloseAssign = () =>
+    {
+      setModalActions((prev) => ({
+        ...prev,
+        openAssign: false,
+      }));
+      setRefresh(prev=>!prev)
+    }
+
+  const handleOpenInvoice = (item) => {
+    setItem(item);
     setModalActions((prev) => ({
       ...prev,
-      openAssign: false,
+      openInvoice: true,
     }));
+    setRefresh(prev=>!prev)
+  };
+
+  const handleCloseInvoice = () =>
+    {
+      setModalActions((prev) => ({
+        ...prev,
+        openInvoice: false,
+      }));
+    setRefresh(prev=>!prev)
+    }
   return (
     <>
       <Toaster />
@@ -110,6 +136,11 @@ export default function ServiceCenterBookings({ bookings, rowheads }) {
       <AssignWorkers
         handleClose={handleCloseAssign}
         open={modalActions.openAssign}
+        item={item}
+      />
+      <InvoiceForm
+        handleClose={handleCloseInvoice}
+        open={modalActions.openInvoice}
         item={item}
       />
       <TableContainer component={Paper}>
@@ -140,14 +171,18 @@ export default function ServiceCenterBookings({ bookings, rowheads }) {
                     {item.status}
                   </StyledTableCell>
                   <StyledTableCell align="center">
+                    <Button
+                      color="success"
+                      onClick={() => handleOpen(item._id)}
+                    >
+                      Details
+                    </Button>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
                     <Box style={styles.iconContainer}>
-                      <Button
-                        color="success"
-                        onClick={() => handleOpen(item._id)}
-                      >
-                        Details
-                      </Button>
-                      {item.status === "Waiting For Pickup" && (
+                      {item?.workerId ? (
+                        item?.workerId?.name
+                      ) : (
                         <Button
                           onClick={() => handleOpenAssign(item._id)}
                           color="info"
@@ -156,6 +191,15 @@ export default function ServiceCenterBookings({ bookings, rowheads }) {
                         </Button>
                       )}
                     </Box>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {item.status === "Vehicle Picked Up" ? (
+                      <Chip
+                        label="Update Invoice"
+                        variant="outlined"
+                        onClick={() => handleOpenInvoice(item)}
+                      />
+                    ) : "N/A"}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}

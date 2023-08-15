@@ -15,8 +15,6 @@ import { verifyAdminAuth } from "./Middlewares/verifyAdmin.js";
 import { verifyUserAuth } from "./Middlewares/verifyUser.js";
 import { verifyServiceCenter } from "./Middlewares/verifyServiceCenter.js";
 
-
-
 import path from "path";
 import cors from "cors";
 
@@ -43,7 +41,7 @@ app.use("/admin", verifyAdminAuth, adminRouter);
 app.use("/service-center/auth/", serviceCenterAuthRouter);
 app.use("/service-center", verifyServiceCenter, serviceCenterRouter);
 app.use("/worker/auth/", workerAuthRouter);
-app.use("/worker", verifyWorker,workerRouter );
+app.use("/worker", verifyWorker, workerRouter);
 
 app.listen(5000, () => {
   console.log("Server Up at 5000");

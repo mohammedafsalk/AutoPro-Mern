@@ -37,6 +37,18 @@ const BookingSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+    workerId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Workers"
+    },
+    invoice:{
+      type:Array,
+      default:[]
+    },
+    billPayment:{
+      type:Object,
+      default:null
+    },
     status: {
       type: String,
       enum: [

@@ -2,10 +2,12 @@ import express from "express";
 import {
   addWorker,
   assignWork,
+  createInvoice,
   getBookings,
   getSchedule,
   getWorkers,
   setSchedule,
+  updateInvoice,
   workerAccessSetting,
 } from "../Controllers/serviceCenterController.js";
 const router = express.Router();
@@ -18,6 +20,7 @@ router
 
 router.route("/bookings").get(getBookings)
 router.patch('/bookings/assignWork',assignWork)
+router.patch('/bookings/invoice',updateInvoice)
 
 router.route("/schedule").post(setSchedule).get(getSchedule);
 

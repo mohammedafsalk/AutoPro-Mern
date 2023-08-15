@@ -81,3 +81,38 @@ export async function verifyPayment(req, res) {
     res.json({ error, err: true, message: "Something went wrong" });
   }
 }
+
+export async function verifyBillPayment(req, res) {
+  try {
+    const {
+      response,
+      bookingId
+    } = req.body;
+    let body = response.razorpay_order_id + "|" + response.razorpay_payment_id;
+
+    var expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest("hex");
+
+    if (expectedSignature === response.razorpay_signature) {
+      await BookingModel.findByIdAndUpdate(bookingId, {
+        $set:{
+          billPayment:response,
+          status:"Paid"
+        }
+      })
+      return res.json({
+        err: false
+      });
+    } else {
+      return res.json({
+        err: true,
+        message: "payment verification failed",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ error, err: true, message: "Something went wrong" });
+  }
+}

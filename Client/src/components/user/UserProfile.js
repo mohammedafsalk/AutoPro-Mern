@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import UserNav from "./UserNav";
 import {
   Container,
   Tab,
   Tabs,
+  setRef,
 } from "@mui/material";
 import {
   AccountCircle,
@@ -27,6 +28,8 @@ export default function UserProfile() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const [refresh, setRefresh] = useState(false)
+
 
   React.useEffect(() => {
     (async function () {
@@ -37,7 +40,7 @@ export default function UserProfile() {
         toast.error(data.message);
       }
     })();
-  }, []);
+  }, [refresh]);
 
   return (
     <>
@@ -63,7 +66,7 @@ export default function UserProfile() {
           <Tab icon={<EventNote />} label="BOOKINGS" />
         </Tabs>
         {value === 0 && <ProfileCard user={user} />}
-        {value === 1 && <AttendingUsers bookings={bookings} />}
+        {value === 1 && <AttendingUsers setRefresh={setRefresh} bookings={bookings} />}
       </Container>
     </>
   );

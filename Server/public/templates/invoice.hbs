@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <style>
+      /* Add your CSS styles here */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .invoice-container {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .invoice-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .invoice-details {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .invoice-details p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <div class="invoice-header">
+        <h1>Invoice</h1>
+        <p>Date: {{ invoiceData.date }}</p>
+      </div>
+      <div class="invoice-details">
+        <p>Center Name: {{ invoiceData.centerName }}</p>
+        <p>User Contact: {{ invoiceData.userContact }}</p>
+      </div>
+      <div class="invoice-details">
+        <p>Vehicle Name: {{ invoiceData.vehicleName }}</p>
+        <p>Vehicle Brand: {{ invoiceData.vehicleBrand }}</p>
+      </div>
+      <div class="invoice-details">
+        <p>Service Details: {{ invoiceData.serviceDetails }}</p>
+        <p>Amount: ${{ invoiceData.amount }}</p>
+      </div>
+    </div>
+  </body>
+</html>
