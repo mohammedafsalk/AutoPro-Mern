@@ -55,7 +55,7 @@ export default function UserHome() {
                     Effortless Vehicle Care: Schedule Your Pickup Today at Our
                     Service Center!
                   </b>
-                  <MDBBtn color="light">Search Service centers</MDBBtn>
+                  <MDBBtn color="light">Book Now</MDBBtn>
                 </div>
               </div>
             </div>

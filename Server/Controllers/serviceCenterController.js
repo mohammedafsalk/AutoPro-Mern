@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import workerModel from "../Models/workerModel.js";
 import ScheduleModel from "../Models/scheduleModel.js";
-import invoiceModel from "../Models/InvoiceModel.js";
+
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -331,17 +331,3 @@ export async function updateInvoice(req, res){
   }
 }
 
-export async function createInvoice(req, res) {
-  try {
-    const { details, price, item } = req.body;
-    const invoice = await invoiceModel.create({
-      details: details,
-      price: price,
-      bookingId: item._id,
-    });
-    await invoice.save();
-    res.json({err:false,message:"Invoice Added"})
-  } catch (error) {
-    res.json({ err: true, message: "Something Went Wrong" });
-  }
-}

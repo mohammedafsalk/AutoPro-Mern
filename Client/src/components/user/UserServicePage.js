@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   MDBContainer,
   MDBRow,
@@ -21,12 +21,13 @@ import BookNowModal from "../../modal/BookNowModal";
 export default function UserServicePage() {
   const { id } = useParams();
   const [center, setCenter] = React.useState({});
-  const [openModal, setOpenModal] = useState(false)
+  const [reviews, setReviews] = React.useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
-  const handleBooking=()=>{
-    setOpenModal(true)
-    console.log(openModal)
-  }
+  const handleBooking = () => {
+    setOpenModal(true);
+    console.log(openModal);
+  };
 
   React.useEffect(() => {
     (async function () {
@@ -35,6 +36,7 @@ export default function UserServicePage() {
         console.log(data.message);
       } else {
         setCenter(data.center);
+        setReviews(data.reviews);
       }
     })();
   }, []);
@@ -93,7 +95,7 @@ export default function UserServicePage() {
               <MDBCardBody className="pb-0">
                 <div className="d-flex justify-content-between">
                   <p>
-                    Welcome to our Auto PRo, where exceptional care meets
+                    Welcome to our Auto PRO, where exceptional care meets
                     automotive expertise! Our mission is to provide you with
                     top-notch vehicle maintenance and repair services that keep
                     your wheels running smoothly and your journeys worry-free.
@@ -104,7 +106,9 @@ export default function UserServicePage() {
               <MDBCardBody className="pb-0">
                 <div className="d-flex justify-content-between align-items-center pb-2 mb-4">
                   <span></span>
-                  <MDBBtn color="dark" onClick={handleBooking}>Book now</MDBBtn>
+                  <MDBBtn color="dark" onClick={handleBooking}>
+                    Book now
+                  </MDBBtn>
                 </div>
               </MDBCardBody>
             </MDBCard>
@@ -126,7 +130,7 @@ export default function UserServicePage() {
                       className="py-3 border-0"
                       style={{ backgroundColor: "#f8f9fa" }}
                     >
-                      <div className="d-flex flex-start w-100">
+                      <div className="d-flex flex-start w-100 d-none">
                         <MDBCardImage
                           className="rounded-circle shadow-1-strong me-3"
                           src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
@@ -150,7 +154,7 @@ export default function UserServicePage() {
                           />
                         </div>
                       </div>
-                      <div className="float-end mt-2 pt-1">
+                      <div className="float-end mt-2 pt-1 d-none">
                         <MDBBtn outline color="dark" size="sm">
                           Cancel
                         </MDBBtn>
@@ -159,101 +163,48 @@ export default function UserServicePage() {
                         </MDBBtn>
                       </div>
                     </MDBCardFooter>
-                    <MDBCardBody className="border-bottom">
-                      <div className="d-flex flex-start align-items-center">
-                        <MDBCardImage
-                          className="rounded-circle shadow-1-strong me-3"
-                          src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
-                          alt="avatar"
-                          width="60"
-                          height="60"
-                        />
-                        <div>
-                          <h6 className="fw-bold text-primary mb-1">
-                            Lily Coleman
-                          </h6>
-                          <p className="text-muted small mb-0">
-                            <Rating
-                              name="read-only"
-                              sx={{ color: "#DC4C64" }}
-                              value={3}
-                              size="small"
+                    {reviews &&
+                      reviews.map((item) => (
+                        <MDBCardBody className="border-bottom" key={item._id}>
+                          <div className="d-flex flex-start align-items-center">
+                            <MDBCardImage
+                              className="rounded-circle shadow-1-strong me-3"
+                              src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
+                              alt="avatar"
+                              width="60"
+                              height="60"
                             />
-                          </p>
-                        </div>
-                      </div>
+                            <div>
+                              <h6 className="fw-bold text-primary mb-1">
+                                {item.userId.name}
+                              </h6>
+                              <p className="text-muted small mb-0">
+                                <Rating
+                                  readOnly
+                                  sx={{ color: "#DC4C64" }}
+                                  defaultValue={item.rating}
+                                  size="small"
+                                />
+                              </p>
+                            </div>
+                          </div>
 
-                      <p className="mt-3 mb-4 pb-2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip consequat.
-                      </p>
-                    </MDBCardBody>
-                    <MDBCardBody className="border-bottom">
-                      <div className="d-flex flex-start align-items-center">
-                        <MDBCardImage
-                          className="rounded-circle shadow-1-strong me-3"
-                          src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
-                          alt="avatar"
-                          width="60"
-                          height="60"
-                        />
-                        <div>
-                          <h6 className="fw-bold text-primary mb-1">
-                            Lily Coleman
-                          </h6>
-                          <p className="text-muted small mb-0">
-                            <Rating
-                              name="read-only"
-                              sx={{ color: "#DC4C64" }}
-                              value={3}
-                              size="small"
-                            />
+                          <p className="mt-3 mb-4 pb-2">
+                            {item.description}
                           </p>
-                        </div>
-                      </div>
-
-                      <p className="mt-3 mb-4 pb-2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip consequat.
-                      </p>
-                    </MDBCardBody>
-                    <MDBCardBody className="border-bottom">
-                      <div className="d-flex flex-start align-items-center">
-                        <MDBCardImage
-                          className="rounded-circle shadow-1-strong me-3"
-                          src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
-                          alt="avatar"
-                          width="60"
-                          height="60"
-                        />
-                        <div>
-                          <h6 className="fw-bold text-primary mb-1">
-                            Lily Coleman
-                          </h6>
-                          <p className="text-muted small mb-0">
-                            <Rating name="read-only" value={3} size="small" />
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="mt-3 mb-4 pb-2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip consequat.
-                      </p>
-                    </MDBCardBody>
+                        </MDBCardBody>
+                      ))}
                   </MDBCard>
                 </MDBCol>
               </MDBRow>
             </section>
           </MDBCol>
         </MDBRow>
-        <BookNowModal open={openModal} id={id} setOpen={setOpenModal}></BookNowModal>
+        <BookNowModal
+          open={openModal}
+          id={id}
+          setOpen={setOpenModal}
+        ></BookNowModal>
       </MDBContainer>
     </>
   );

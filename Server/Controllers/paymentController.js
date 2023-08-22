@@ -44,6 +44,13 @@ export async function verifyPayment(req, res) {
       centerId,
       userId,
     } = req.body;
+    let item = await BookingModel.findOne({
+      vehicleNumber: vehicleNumber,
+      status: { $ne: "Delivered" },
+    });
+    if (item) {
+      return res.json({ err: true, message: "This Vehicle Is Already Booked" });
+    }
     let formattedDate = dayjs(date).format("DD-MM-YYYY");
     let body = response.razorpay_order_id + "|" + response.razorpay_payment_id;
 
@@ -60,7 +67,7 @@ export async function verifyPayment(req, res) {
         vehicleNumber,
         vehicleName,
         brand,
-        date:formattedDate,
+        date: formattedDate,
         place,
         address,
         centerId,
@@ -84,10 +91,7 @@ export async function verifyPayment(req, res) {
 
 export async function verifyBillPayment(req, res) {
   try {
-    const {
-      response,
-      bookingId
-    } = req.body;
+    const { response, bookingId } = req.body;
     let body = response.razorpay_order_id + "|" + response.razorpay_payment_id;
 
     var expectedSignature = crypto
@@ -97,13 +101,13 @@ export async function verifyBillPayment(req, res) {
 
     if (expectedSignature === response.razorpay_signature) {
       await BookingModel.findByIdAndUpdate(bookingId, {
-        $set:{
-          billPayment:response,
-          status:"Paid"
-        }
-      })
+        $set: {
+          billPayment: response,
+          status: "Paid",
+        },
+      });
       return res.json({
-        err: false
+        err: false,
       });
     } else {
       return res.json({

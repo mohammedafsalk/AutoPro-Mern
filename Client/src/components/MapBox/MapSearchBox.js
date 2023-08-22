@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import mapboxAPI from "./MapBoxApi";
-import { MyLocationOutlined } from "@mui/icons-material";
 import { MDBInput } from "mdb-react-ui-kit";
+import { Button } from "@mui/material";
 
-function MapSearchBox({ setPlace }) {
+function MapSearchBox({ setFormData }) {
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [items, seItems] = useState([]);
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
     setSearchValue(value);
     fetchSuggestions(value);
   };
-  useEffect(() => {
-    setPlace(searchValue);
-  }, [searchValue]);
 
   const fetchSuggestions = async (value) => {
     try {
@@ -22,6 +20,8 @@ function MapSearchBox({ setPlace }) {
         value
       )}.json`;
       const response = await mapboxAPI.get(url);
+      seItems(response.data.features);
+      console.log(response.data.features);
       const suggestions = response.data.features.map(
         (feature) => feature.place_name
       );
@@ -51,8 +51,9 @@ function MapSearchBox({ setPlace }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.features && data.features.length > 0) {
-          const placeName = data.features[0].place_name;
-          setSearchValue(placeName);
+          const placeName = data.features[0].text;
+          const district = data.features[0].context[3].text;
+          setSearchValue(placeName + ", " + district);
         }
       })
       .catch((error) => {
@@ -63,54 +64,66 @@ function MapSearchBox({ setPlace }) {
   const onError = (error) => {
     console.log("Error occurred during geolocation:", error);
   };
-
   const handleSuggestionClick = (suggestion) => {
-    setSearchValue(suggestion.split(",")[0].trim());
+    let value = items.find((item) => item.place_name === suggestion);
+    console.log(value.context);
+    const placeName = value.text;
+    let district;
+    for (let obj of value.context) {
+      if (obj.id.includes("district")) {
+        district = obj.text;
+      } else if (obj.id.includes("locality")) {
+        district = obj.text;
+      } else {
+        district = "Kerala";
+      }
+    }
+
+    setSearchValue(placeName + ", " + district);
     setSuggestions([]);
   };
-
   return (
-    <div>
-      <fieldset>
-        <div style={{ position: "relative" }}>
-          <MDBInput
-            wrapperClass="mb-1"
-            type="text"
-            label="Location"
-            value={searchValue}
-            size="lg"
-            onChange={handleSearchChange}
-            containerClass="md-form"
-          />
-          {suggestions.length > 0 && (
-            <div
-              style={{
-                position: "absolute",
-                top: "100%",
-                left: 0,
-                zIndex: 1,
-                background: "#fff",
-                padding: "5px",
-              }}
-            >
-              {suggestions.map((suggestion) => (
-                <div
-                  key={suggestion}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {suggestion.substring(0, 20)}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div style={{ display: "flex", gap: 10 }} onClick={getCurrentLocation}>
-          <p>Choose Current Location</p>
-          <MyLocationOutlined />
-        </div>
-      </fieldset>
-    </div>
+    <>
+      <div>
+        <fieldset>
+          <div style={{ position: "relative" }}>
+            <MDBInput
+              wrapperClass="mb-1"
+              type="text"
+              label="Location"
+              value={searchValue}
+              size="lg"
+              onChange={handleSearchChange}
+            />
+            {suggestions.length > 0 && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  zIndex: 1,
+                  background: "#fff",
+                  padding: "5px",
+                }}
+              >
+                {suggestions.map((suggestion) => (
+                  <div
+                    key={suggestion._id}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </fieldset>
+      </div>
+      <div>
+        <Button onClick={getCurrentLocation}>Get Current Location</Button>
+      </div>
+    </>
   );
 }
 

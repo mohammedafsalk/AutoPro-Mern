@@ -2,6 +2,7 @@ import express from "express";
 import {
   acceptRequest,
   adminDashboard,
+  bookings,
   deleteUser,
   rejectRequest,
   requests,
@@ -19,5 +20,6 @@ router.get("/service-centers", serviceCenters);
 router.get("/requests", requests);
 router.post("/requests/accept", acceptRequest);
 router.post("/requests/reject", rejectRequest);
+router.get("/bookings", bookings);
 
 export default router;

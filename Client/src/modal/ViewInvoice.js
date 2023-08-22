@@ -15,6 +15,8 @@ import {
 import axios from 'axios'
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import autoTable from 'jspdf-autotable'
 
 export default function ViewInvoice({ basicModal, setBasicModal, data, setRefresh }) {
   const [totalPrice, setTotalPrice] = useState(0)
@@ -63,6 +65,29 @@ export default function ViewInvoice({ basicModal, setBasicModal, data, setRefres
       toast.error("Payment Failed");
     });
   };
+  const downloadPdf = () => {
+    console.log("hai")
+    const body = data?.invoice.map(((item, index) => [index+1,item.details, item.price]))
+    body.push(["#", "Total", totalPrice])
+    const doc = new jsPDF();
+    doc.setFontSize(13);
+    doc.text("Invoice Details", 13, 10);
+    doc.setFontSize(10);
+    doc.text("Customer Name : "+data.name, 13, 20);
+    doc.text("Vehicle No : "+data.vehicleNumber, 13, 25);
+    doc.text("Vehicle Name : "+data.brand, 13, 30);
+    doc.text("Vehicle Brand : "+data.vehicleName, 13, 35);
+    doc.text("Date : "+data.date, 13, 40);
+
+    autoTable(doc, {
+        head: [["#", "Service", "Price"]],
+        body: body,
+        startY: 50
+
+    })
+
+    doc.save("invoice.pdf");
+}
 
 
   return (
@@ -105,7 +130,7 @@ export default function ViewInvoice({ basicModal, setBasicModal, data, setRefres
                     </tr>
                 </MDBTableBody>
               </MDBTable>
-              <MDBBtn className="w-100" color="secondary" onClick={toggleShow}>
+              <MDBBtn onClick={()=>downloadPdf()} className="w-100" color="secondary">
                 Download Invoice
               </MDBBtn>
             </MDBModalBody>

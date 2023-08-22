@@ -1,6 +1,7 @@
 import AdminModel from "../Models/adminModel.js";
 import serviceCenterModel from "../Models/serviceCenterModel.js";
 import UserModel from "../Models/userModel.js";
+import BookingModel from '../Models/bookingModel.js'
 import bcrypt from "bcryptjs";
 import sentMail from "../helpers/sentMail.js";
 import jwt from "jsonwebtoken";
@@ -140,6 +141,14 @@ export async function users(req, res) {
   try {
     let users = await UserModel.find().lean();
     res.json({ err: false, users });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+export async function bookings(req, res) {
+  try {
+    let bookings = await BookingModel.find().lean();
+    res.json({ err: false, bookings });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

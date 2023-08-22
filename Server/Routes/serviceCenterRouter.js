@@ -2,7 +2,6 @@ import express from "express";
 import {
   addWorker,
   assignWork,
-  createInvoice,
   getBookings,
   getSchedule,
   getWorkers,

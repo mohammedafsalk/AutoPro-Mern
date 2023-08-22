@@ -43,7 +43,7 @@ export default function NavBar() {
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    await axios.get("http://localhost:5000/user/auth/logout");
+    await axios.get("service-center/auth/logout");
     dispatch({ type: "refresh" });
   };
 

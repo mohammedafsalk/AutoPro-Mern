@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Link as link} from "react-router-dom"
+import { Link as link, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Avatar,
@@ -10,6 +10,7 @@ import {
   Menu,
   Typography,
   Link,
+  IconButton,
 } from "@mui/material";
 import {} from "@mui/icons-material";
 import { useDispatch } from "react-redux";
@@ -20,6 +21,11 @@ import { MDBContainer } from "mdb-react-ui-kit";
 
 export default function UserNav() {
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+
+  const navigateto = () => {
+    navigate('/')
+  };
 
   const dispatch = useDispatch();
 
@@ -29,9 +35,14 @@ export default function UserNav() {
   };
 
   return (
-      <AppBar style={{ backgroundColor: grey[100], boxShadow:"0px 0px 10px 3px RGBA(233, 233, 233, 0.9)" }} position="sticky">
-        <MDBContainer >
-
+    <AppBar
+      style={{
+        backgroundColor: grey[100],
+        boxShadow: "0px 0px 10px 3px RGBA(233, 233, 233, 0.9)",
+      }}
+      position="sticky"
+    >
+      <MDBContainer>
         <Toolbar
           sx={{
             display: "flex",
@@ -40,18 +51,20 @@ export default function UserNav() {
             alignItems: "center",
           }}
         >
-          <Typography
-            variant="h5"
-            noWrap
-            sx={{
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".2rem",
-              color: "black",
-            }}
-          >
-            AUTO PRO
-          </Typography>
+          <IconButton onClick={() => navigateto()}>
+            <Typography
+              variant="h5"
+              noWrap
+              sx={{
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".2rem",
+                color: "black",
+              }}
+            >
+              AUTO PRO
+            </Typography>
+          </IconButton>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img
               src={userimage}
@@ -78,11 +91,13 @@ export default function UserNav() {
           }}
         >
           <MenuItem>
-            <Link component={link} to="/profile" >Profile</Link>
+            <Link component={link} to="/profile">
+              Profile
+            </Link>
           </MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
-            </MDBContainer>
-      </AppBar>
+      </MDBContainer>
+    </AppBar>
   );
 }

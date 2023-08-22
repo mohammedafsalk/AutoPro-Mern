@@ -16,10 +16,10 @@ import validatePassword from "../../helpers/passwordValidate";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Backdropspinner from "../Loader/BackdropSpinner";
-import { BeatLoader } from "react-spinners";
+import { Button } from "@mui/material";
+import MapSearchBox from "../MapBox/MapSearchBox";
 
 export default function Signup() {
-  
   const [openLoader, setOpenLoader] = React.useState(false);
   const [proof, setProof] = useState(null);
   const [logo, setLogo] = useState(null);
@@ -37,7 +37,6 @@ export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    district: "",
     location: "",
     password: "",
     mobile: "",
@@ -54,7 +53,6 @@ export default function Signup() {
       formData.password.trim() === "" ||
       formData.email.trim() === "" ||
       formData.location.trim() === "" ||
-      formData.district.trim() === "" ||
       !err.Imagelogo.valid ||
       !err.Imageproof.valid ||
       formData.password != formData.confrmPassword
@@ -201,17 +199,6 @@ export default function Signup() {
                   type="email"
                   size="lg"
                 />
-
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="District"
-                  name="district"
-                  value={formData.district}
-                  onChange={handleFormData}
-                  type="text"
-                  size="lg"
-                />
-
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Location"
@@ -221,6 +208,8 @@ export default function Signup() {
                   type="text"
                   size="lg"
                 />
+
+                <MapSearchBox formData={formData} setFormData={setFormData} />
 
                 <MDBInput
                   wrapperClass="mb-4"

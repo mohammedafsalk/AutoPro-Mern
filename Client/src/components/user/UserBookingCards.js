@@ -11,7 +11,7 @@ import {
   MDBTypography,
   MDBIcon,
 } from "mdb-react-ui-kit";
-import { Button } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import ViewInvoice from "../../modal/ViewInvoice";
 import AddReview from "../../modal/AddReview";
 
@@ -28,12 +28,11 @@ export default function AttendingUsers({ bookings, setRefresh }) {
     setData((prev) => item);
     setBasicModal(true);
   };
-
   return (
     <>
-      {bookings.map((item) => (
-        <MDBContainer className="py-5 h-100">
-          <MDBRow className=" align-items-center h-100">
+      <MDBContainer className="py-5 h-100 ">
+        <MDBRow className=" align-items-center h-100 ">
+          {bookings && bookings.map((item) => (
             <MDBCol sm="3" md="4">
               <MDBCard className="mb-5" style={{ borderRadius: "15px" }}>
                 <MDBCardBody className="p-4">
@@ -42,9 +41,8 @@ export default function AttendingUsers({ bookings, setRefresh }) {
                     <strong>Booked On</strong> {item.date}
                   </MDBCardText>
                   <MDBCardText className="small">
-                    <strong>Status</strong> {item.status}
+                    <Chip color="success" label={item?.status} />
                   </MDBCardText>
-                  <hr className="my-4" />
                   <div className="d-flex justify-content-start gap-1 align-items-center">
                     {item?.invoice[0] ? (
                       <Button
@@ -72,16 +70,20 @@ export default function AttendingUsers({ bookings, setRefresh }) {
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>
-          </MDBRow>
-        </MDBContainer>
-      ))}
+          ))}
+        </MDBRow>
+      </MDBContainer>
       <ViewInvoice
         data={data}
         setRefresh={setRefresh}
         setBasicModal={setBasicModal}
         basicModal={basicModal}
       />
-      <AddReview setReviewModal={setReviewModal} reviewModal={reviewModal} centerId={centerId} />
+      <AddReview
+        setReviewModal={setReviewModal}
+        reviewModal={reviewModal}
+        centerId={centerId}
+      />
     </>
   );
 }

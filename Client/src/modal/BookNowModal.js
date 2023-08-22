@@ -47,6 +47,23 @@ export default function BookNowModal({ open, id, setOpen }) {
     address: "",
   });
 
+  const validForm = () => {
+    if (
+      formData.name.trim() === "" ||
+      formData.email.trim() === "" ||
+      formData.vehicleName.trim() === "" ||
+      formData.vehicleNumber.trim() === "" ||
+      formData.brand.trim() === "" ||
+      formData.mobile.trim() === "" ||
+      formData.date.trim() === "" ||
+      formData.place.trim() === "" ||
+      formData.address.trim() === ""
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   const toggleShow = () => setOpen(!open);
   useEffect(() => {
     fetchData();
@@ -56,7 +73,6 @@ export default function BookNowModal({ open, id, setOpen }) {
     const { data } = await axios.get("/user/schedule/" + id);
     console.log(!data.err && data.schedule);
     if (!data.err && data.schedule) {
-      console.log("hai");
       const scheduleData = data.schedule;
       let date = new Date(),
         n = 0;
@@ -78,7 +94,6 @@ export default function BookNowModal({ open, id, setOpen }) {
 
   const handleBooking = async () => {
     const { data } = await axios.post("/user/payment", { amount: 100 });
-    console.log(formData);
     if (!data.err) {
       handleRazorPay(data.order);
     }
@@ -140,7 +155,7 @@ export default function BookNowModal({ open, id, setOpen }) {
 
   return (
     <>
-    <Toaster/>
+      <Toaster />
       <MDBModal tabIndex="-1" show={open} setShow={setOpen}>
         <MDBModalDialog centered size="lg">
           <MDBModalContent>
@@ -278,7 +293,11 @@ export default function BookNowModal({ open, id, setOpen }) {
               <MDBBtn color="dark" outline onClick={toggleShow}>
                 Close
               </MDBBtn>
-              <MDBBtn color="dark" onClick={handleBooking}>
+              <MDBBtn
+                color="dark"
+                disabled={!validForm()}
+                onClick={handleBooking}
+              >
                 Book Now
               </MDBBtn>
             </MDBModalFooter>

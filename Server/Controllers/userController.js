@@ -303,8 +303,22 @@ export async function userPassReset(req, res) {
 export async function chooseServiceCenter(req, res) {
   try {
     const page = parseInt(req.query.page) ?? 0;
+    const name = req.query.name ?? "";
     const count = await ServiceCenterModel.find({ permission: true }).count();
-    let center = await ServiceCenterModel.find({ permission: true })
+    let center = await ServiceCenterModel.find({
+      permission: true,
+      $or: [
+        {
+          name: new RegExp(name, "i"),
+        },
+        {
+          district: new RegExp(name, "i"),
+        },
+        {
+          location: new RegExp(name, "i"),
+        },
+      ],
+    })
       .skip(page * 3)
       .limit(3)
       .lean();
@@ -318,7 +332,8 @@ export async function getServiceCenter(req, res) {
   try {
     const { id } = req.body;
     const center = await ServiceCenterModel.findById(id);
-    res.json({ err: false, center });
+    const reviews = await reviewModel.find({ centerId: id }).populate("userId");
+    res.json({ err: false, center, reviews });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
