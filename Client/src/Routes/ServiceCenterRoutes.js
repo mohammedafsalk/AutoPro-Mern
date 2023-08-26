@@ -9,6 +9,7 @@ import PermissionPage from "../components/serviceCenter/PermissionPage";
 import Workers from "../components/serviceCenter/Workers";
 import Schedules from "../components/serviceCenter/Schedules";
 import Bookings from "../components/serviceCenter/Bookings";
+import Dashboard from "../components/serviceCenter/Dashboard";
 
 export default function ServiceCenterRoutes() {
   const { serviceCenter, refresh } = useSelector((state) => {
@@ -67,6 +68,7 @@ export default function ServiceCenterRoutes() {
           <Route path="/workers" element={<Workers />} />
           <Route path="/schedule" element={<Schedules />} />
           <Route path="/bookings" element={<Bookings />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<Navigate to="/service-center/" />} />
           <Route path="/signup" element={<Navigate to="/service-center/" />} />
         </>
@@ -87,6 +89,10 @@ export default function ServiceCenterRoutes() {
           />
           <Route
             path="/bookings"
+            element={<Navigate to="/service-center/login" />}
+          />
+          <Route
+            path="/dashboard"
             element={<Navigate to="/service-center/login" />}
           />
         </>

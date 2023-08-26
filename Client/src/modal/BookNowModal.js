@@ -55,7 +55,6 @@ export default function BookNowModal({ open, id, setOpen }) {
       formData.vehicleNumber.trim() === "" ||
       formData.brand.trim() === "" ||
       formData.mobile.trim() === "" ||
-      formData.date.trim() === "" ||
       formData.place.trim() === "" ||
       formData.address.trim() === ""
     ) {

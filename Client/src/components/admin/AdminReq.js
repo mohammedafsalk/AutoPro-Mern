@@ -160,16 +160,6 @@ export default function AdminReq() {
                         color="text.primary"
                         sx={{ fontWeight: "500" }}
                       >
-                        District:{" "}
-                        <Typography variant="h7" fontWeight={3}>
-                          {item.district}
-                        </Typography>
-                      </Typography>
-                      <Typography
-                        variant="h7"
-                        color="text.primary"
-                        sx={{ fontWeight: "500" }}
-                      >
                         Contact No:{" "}
                         <Typography variant="h7" fontWeight={3}>
                           {item.mobile}

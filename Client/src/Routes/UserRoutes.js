@@ -15,10 +15,12 @@ export default function UserRoutes() {
   const { user, refresh } = useSelector((state) => {
     return state;
   });
+
   const dispatch = useDispatch();
   useEffect(() => {
     (async function () {
       let { data } = await axios.get("user/auth/check");
+
       dispatch({
         type: "user",
         payload: { login: data.loggedIn, details: data.user },

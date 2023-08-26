@@ -15,16 +15,46 @@ import axios from "axios";
 import UserNav from "./UserNav";
 import { Link } from "react-router-dom";
 import img from "../../assets/images/No service centers.jpeg";
-import { Box, Grid, Pagination, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import loadingReducer from "../../reducers/loadingReducer";
 import Backdropspinner from "../Loader/BackdropSpinner";
+import { LocationCity, MyLocation } from "@mui/icons-material";
+import ShowMap from "../MapBox/ShowMap";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function ChooseServiceCenter() {
   const [data, setData] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [count, setCount] = React.useState(0);
   const [name, setName] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [latitude, setLatitude] = React.useState("");
+  const [longitude, setLongitude] = React.useState("");
+  const handleOpen = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+        setOpen(true);
+      },
+      (error) => {
+        toast.error("Error Fetching Location,Try Again");
+        console.log("Error getting geolocation:", error);
+      },
+      { enableHighAccuracy: true }
+    );
+  };
 
+  const handleClose = () => setOpen(false);
   const [state, setState] = React.useReducer(loadingReducer, false);
 
   React.useEffect(() => {
@@ -37,7 +67,7 @@ export default function ChooseServiceCenter() {
         setState({ type: "stop" });
         toast.error(data.message);
       } else {
-        setData(data.center);
+        setData([...data.center]);
         setCount(data.totalPage);
         setState({ type: "stop" });
       }
@@ -47,17 +77,27 @@ export default function ChooseServiceCenter() {
   return (
     <>
       <UserNav></UserNav>
+      <Toaster />
       <MDBContainer className="my-5 ">
         <>
           <MDBRow className="justify-content-center">
             <MDBCol md={3}>
-              <MDBInputGroup>
-                <MDBInput
+              <MDBInputGroup className=" d-flex justify-content-center align-items-center ">
+                <TextField
                   size="lg"
                   label="Search"
                   placeholder="Search Centers"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton onClick={handleOpen}>
+                          <MyLocation color="primary" />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </MDBInputGroup>
             </MDBCol>
@@ -125,7 +165,7 @@ export default function ChooseServiceCenter() {
                 <MDBCol sm={2}>
                   <Stack spacing={2}>
                     <Pagination
-                      color="secondary"
+                      color="standard"
                       count={count}
                       page={page}
                       onChange={(e, val) => setPage(val)}
@@ -148,6 +188,19 @@ export default function ChooseServiceCenter() {
           )}
         </>
       </MDBContainer>
+
+      {
+        (longitude && latitude )&&
+        <ShowMap
+          open={open}
+          handleClose={handleClose}
+          data={data}
+          latitude={latitude}
+          longitude={longitude}
+        />
+      }
+
+
       <Backdropspinner openLoader={state.loading} />
     </>
   );

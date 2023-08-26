@@ -37,17 +37,17 @@ const BookingSchema = new mongoose.Schema(
     address: {
       type: String,
     },
-    workerId:{
+    workerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Workers"
+      ref: "Workers",
     },
-    invoice:{
-      type:Array,
-      default:[]
+    invoice: {
+      type: Array,
+      default: [],
     },
-    billPayment:{
-      type:Object,
-      default:null
+    billPayment: {
+      type: Object,
+      default: null,
     },
     status: {
       type: String,
@@ -67,9 +67,20 @@ const BookingSchema = new mongoose.Schema(
       required: true,
       default: "Waiting For Pickup",
     },
+    amountPaid: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );
+
+BookingSchema.pre("save", function (next) {
+  if (this.status === "Paid") {
+    const sumRs = this.invoice.reduce((sum, item) => sum + item.price, 0);
+    this.amountPaid = sumRs + 100;
+  }
+  next();
+});
 
 const BookingModel = mongoose.model("Booking", BookingSchema);
 export default BookingModel;

@@ -8,7 +8,7 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import "../../assets/css/login.css";
-import loginImg from "../../assets/images/serviceCenterLogin.jpg";
+import loginImg from "../../assets/images/signupServiceCenter.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import ForgetOtpModal from "./forgetOtpModal";
 import { Link, useNavigate } from "react-router-dom";

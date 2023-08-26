@@ -27,7 +27,6 @@ export default function SignUp() {
   const [confirmPassword, setconfirmPassword] = useState("");
   const [errMessage, setErrMessage] = useState("");
   const [showOtpPage, setShowOtpPage] = useState(false);
-  const [place, setPlace] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(10);
@@ -108,7 +107,6 @@ export default function SignUp() {
         email,
         password,
         phone,
-        place,
       });
       if (data.err) {
         toast.error("Incorrect OTP");
@@ -184,7 +182,6 @@ export default function SignUp() {
                     type="email"
                     size="lg"
                   />
-                  <MapSearchBox setPlace={setPlace} />
                   <MDBInput
                     wrapperClass="mb-4"
                     label="Mobile Number"

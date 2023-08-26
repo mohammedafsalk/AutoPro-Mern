@@ -24,6 +24,12 @@ const ServiceCenterSchema = new mongoose.Schema(
       type: Object,
       required: true,
     },
+    latitude: {
+      type: Number,
+    },
+    longitude: {
+      type: Number,
+    },
     logo: {
       type: Object,
       required: true,
@@ -32,9 +38,6 @@ const ServiceCenterSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    customPackages: {
-      type: Array,
-    },
     permission: {
       type: Boolean,
       default: false,
@@ -42,6 +45,9 @@ const ServiceCenterSchema = new mongoose.Schema(
     rejectMessage: {
       type: String,
       default: "",
+    },
+    wallet: {
+      type: Number,
     },
   },
   { timestamps: true }

@@ -7,13 +7,15 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import workerModel from "../Models/workerModel.js";
 import ScheduleModel from "../Models/scheduleModel.js";
-
+import WithdrawModel from "../Models/withdrawModel.js";
 
 var salt = bcrypt.genSaltSync(10);
 
 export async function serviceCenterSignup(req, res) {
   try {
-    const { name, email, password, location, district, mobile } = req.body;
+    console.log(req.body);
+    const { name, email, password, location, latitude, longitude, mobile } =
+      req.body;
     const temp = await ServiceCenterModel.findOne({ email });
     if (temp) {
       return res.json({ err: true, message: "Center Already Registered" });
@@ -25,12 +27,14 @@ export async function serviceCenterSignup(req, res) {
       folder: "AutoPro",
     });
     const hashedPassword = bcrypt.hashSync(password, salt);
+    console.log(hashedPassword);
     const newCenter = new ServiceCenterModel({
       name,
       email,
       password: hashedPassword,
       location,
-      district,
+      latitude,
+      longitude,
       mobile,
       proof,
       logo,
@@ -58,11 +62,13 @@ export async function serviceCenterSignup(req, res) {
 export async function serviceCenterLogin(req, res) {
   try {
     const { email, password } = req.body;
-    const center = await ServiceCenterModel.findOne({ email });
+    const center = await ServiceCenterModel.findOne({ email }).lean();
+    console.log(center);
     if (!center) {
       return res.json({ err: true, message: "No Service Center Found" });
     }
     const centerValid = bcrypt.compareSync(password, center.password);
+    centerValid;
     if (!centerValid) {
       return res.json({ err: true, message: "Email Or Password Is Wrong" });
     }
@@ -72,7 +78,6 @@ export async function serviceCenterLogin(req, res) {
       },
       process.env.JWT_SECRET
     );
-
     return res
       .cookie("serviceCenterToken", token, {
         httpOnly: true,
@@ -82,7 +87,8 @@ export async function serviceCenterLogin(req, res) {
       })
       .json({ err: false });
   } catch (error) {
-    res.json({ error: error, message: "Something went wrong" });
+    console.log(error.message);
+    res.json({ err: true, message: "Something went wrong" });
   }
 }
 
@@ -105,7 +111,7 @@ export async function loginVerify(req, res) {
     }
     return res.json({ serviceCenter, loggedIn: true });
   } catch (error) {
-    res.json({ error: error.message, message: "Something went wrong" });
+    res.json({ err: true, message: "Something went wrong" });
   }
 }
 
@@ -295,7 +301,7 @@ export async function getBookings(req, res) {
   try {
     const bookings = await BookingModel.find({
       centerId: req.serviceCenter._id,
-    }).populate('workerId');
+    }).populate("workerId");
     res.json({ err: false, bookings });
   } catch (err) {
     res.json({ err: true, message: "Something Went Wrong" });
@@ -305,29 +311,84 @@ export async function getBookings(req, res) {
 export async function assignWork(req, res) {
   try {
     const { bookingId, id } = req.body;
-    await BookingModel.findByIdAndUpdate(bookingId,{
-      $set:{
-        workerId:id
-      }
-    })
-      res.json({ err: false });
+    await BookingModel.findByIdAndUpdate(bookingId, {
+      $set: {
+        workerId: id,
+      },
+    });
+    res.json({ err: false });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
 }
 
-export async function updateInvoice(req, res){
-  try{
-    const {invoice, bookingId} = req.body;
+export async function updateInvoice(req, res) {
+  try {
+    const { invoice, bookingId } = req.body;
+    console.log(req.body);
     await BookingModel.findByIdAndUpdate(bookingId, {
-      $set:{
-        invoice
-      }
-    })
-    return res.json({err:false})
-  }catch(err){
-    console.log(err)
-    res.json({err:true, message:"server error"})
+      $set: {
+        invoice,
+      },
+    });
+    return res.json({ err: false });
+  } catch (err) {
+    console.log(err);
+    res.json({ err: true, message: "server error" });
   }
 }
 
+export async function centerDashboard(req, res) {
+  try {
+    let bookingCount = await BookingModel.find({
+      centerId: req.serviceCenter._id,
+    }).countDocuments();
+    const monthlyDataArray = await BookingModel.aggregate([
+      {
+        $addFields: {
+          parsedDate: {
+            $dateFromString: {
+              dateString: "$date",
+              format: "%d-%m-%Y",
+            },
+          },
+        },
+      },
+      {
+        $match: {
+          centerId: req.serviceCenter._id, // Assuming req.serviceCenter._id is the centerId you want to match against
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$parsedDate" },
+          totalRevenue: { $sum: "$amountPaid" },
+        },
+      },
+    ]);
+    let monthlyDataObject = {};
+    let totalRevenue = 0;
+    monthlyDataArray.map((item) => {
+      totalRevenue += item.totalRevenue;
+      monthlyDataObject[item._id] = item.totalRevenue;
+    });
+    let monthlyData = [];
+    for (let i = 1; i <= 12; i++) {
+      monthlyData[i - 1] = monthlyDataObject[i] ?? 0;
+    }
+    res.json({ err: false, bookingCount, totalRevenue, monthlyData });
+  } catch (err) {
+    res.json({ err: true, message: "server error" });
+  }
+}
+
+export async function withdrawWallet(req, res) {
+  const { ifsc, accno, branch } = req.body;
+  await WithdrawModel.create({
+    ifsc: ifsc,
+    accountNo: accno,
+    branch: branch,
+    centerId: req.serviceCenter._id,
+  });
+  return res.json({err:false})
+}

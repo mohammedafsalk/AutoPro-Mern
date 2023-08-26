@@ -156,6 +156,22 @@ export default function NavBar() {
                   sx={{ color: "inherit" }}
                   fontSize={18}
                   component={NavLink}
+                  to="/service-center/dashboard"
+                >
+                  DashBoard
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Engineering sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "inherit" }}
+                  fontSize={18}
+                  component={NavLink}
                   to="/service-center/bookings"
                 >
                   Bookings

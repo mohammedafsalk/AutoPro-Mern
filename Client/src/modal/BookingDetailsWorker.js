@@ -100,6 +100,9 @@ export default function WorkerBookingDetails({ handleClose, open, item }) {
           <Typography fontWeight={500} gutterBottom color={"black"}>
             {item.vehicleNumber}
           </Typography>
+          <Typography fontWeight={500} gutterBottom color={"black"}>
+            {item.place}
+          </Typography>
           <Typography fontWeight={500} color={"black"}>
             {item.address}
           </Typography>

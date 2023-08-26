@@ -32,45 +32,51 @@ export default function AttendingUsers({ bookings, setRefresh }) {
     <>
       <MDBContainer className="py-5 h-100 ">
         <MDBRow className=" align-items-center h-100 ">
-          {bookings && bookings.map((item) => (
-            <MDBCol sm="3" md="4">
-              <MDBCard className="mb-5" style={{ borderRadius: "15px" }}>
-                <MDBCardBody className="p-4">
-                  <MDBTypography tag="h3">{item.vehicleName}</MDBTypography>
-                  <MDBCardText className="small">
-                    <strong>Booked On</strong> {item.date}
-                  </MDBCardText>
-                  <MDBCardText className="small">
-                    <Chip color="success" label={item?.status} />
-                  </MDBCardText>
-                  <div className="d-flex justify-content-start gap-1 align-items-center">
-                    {item?.invoice[0] ? (
-                      <Button
-                        color="primary"
-                        onClick={() => openInvoice(item)}
-                        variant="contained"
-                      >
-                        View Bill
-                      </Button>
-                    ) : (
-                      <Button color="error" variant="contained">
-                        Cancel
-                      </Button>
-                    )}
-                    {item?.status === "Delivered" && (
-                      <Button
-                        color="primary"
-                        onClick={() => handleOpenReview(item.centerId)}
-                        variant="outlined"
-                      >
-                        Add Review
-                      </Button>
-                    )}
-                  </div>
-                </MDBCardBody>
-              </MDBCard>
+          {bookings[0] ? (
+            bookings.map((item) => (
+              <MDBCol sm="3" md="4">
+                <MDBCard className="mb-5" style={{ borderRadius: "15px" }}>
+                  <MDBCardBody className="p-4">
+                    <MDBTypography tag="h3">{item.vehicleName}</MDBTypography>
+                    <MDBCardText className="small">
+                      <strong>Booked On</strong> {item.date}
+                    </MDBCardText>
+                    <MDBCardText className="small">
+                      <Chip color="success" label={item?.status} />
+                    </MDBCardText>
+                    <div className="d-flex justify-content-start gap-1 align-items-center">
+                      {item?.invoice[0] ? (
+                        <Button
+                          color="primary"
+                          onClick={() => openInvoice(item)}
+                          variant="contained"
+                        >
+                          View Bill
+                        </Button>
+                      ) : (
+                        <Button color="error" variant="contained">
+                          Cancel
+                        </Button>
+                      )}
+                      {item?.status === "Delivered" && (
+                        <Button
+                          color="primary"
+                          onClick={() => handleOpenReview(item.centerId)}
+                          variant="outlined"
+                        >
+                          Add Review
+                        </Button>
+                      )}
+                    </div>
+                  </MDBCardBody>
+                </MDBCard>
+              </MDBCol>
+            ))
+          ) : (
+            <MDBCol className="d-flex justify-content-center" >
+              <p>No Bookings</p>
             </MDBCol>
-          ))}
+          )}
         </MDBRow>
       </MDBContainer>
       <ViewInvoice

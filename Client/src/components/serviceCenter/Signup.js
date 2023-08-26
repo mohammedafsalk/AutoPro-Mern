@@ -11,7 +11,7 @@ import {
   MDBFile,
 } from "mdb-react-ui-kit";
 import "../../assets/css/login.css";
-import loginImg from "../../assets/images/serviceCenterLogin.jpg";
+import loginImg from "../../assets/images/signupServiceCenter.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +39,8 @@ export default function Signup() {
     email: "",
     location: "",
     password: "",
+    latitude: "",
+    longitude: "",
     mobile: "",
     confrmPassword: "",
   });
@@ -52,7 +54,7 @@ export default function Signup() {
       !validatePassword(formData.password).status ||
       formData.password.trim() === "" ||
       formData.email.trim() === "" ||
-      formData.location.trim() === "" ||
+      // formData.location.trim() === "" ||
       !err.Imagelogo.valid ||
       !err.Imageproof.valid ||
       formData.password != formData.confrmPassword
@@ -88,7 +90,6 @@ export default function Signup() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleProofChange = (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -98,7 +99,7 @@ export default function Signup() {
     } else {
       setErr((prev) => ({
         ...prev,
-        Imageproof: { ...prev, message: "selected Wrong File" },
+        Imageproof: { ...prev, message: "Selected Wrong File" },
       }));
       setProof(null);
     }
@@ -143,7 +144,6 @@ export default function Signup() {
       setUploadImg((prev) => ({ ...prev, logoUpload: reader.result }));
     };
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setOpenLoader(true);
@@ -199,18 +199,11 @@ export default function Signup() {
                   type="email"
                   size="lg"
                 />
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Location"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleFormData}
-                  type="text"
-                  size="lg"
+                <MapSearchBox
+                  formData={formData}
+                  setFormData={setFormData}
+                  handleFormData={handleFormData}
                 />
-
-                <MapSearchBox formData={formData} setFormData={setFormData} />
-
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Mobile"

@@ -36,7 +36,7 @@ export async function userSignup(req, res) {
 
 export async function signUpVerify(req, res) {
   try {
-    const { name, email, password, phone, otp, place } = req.body;
+    const { name, email, password, phone, otp } = req.body;
     const isVerified = await client.verify.v2
       .services(serviceId)
       .verificationChecks.create({
@@ -49,7 +49,6 @@ export async function signUpVerify(req, res) {
           const newUser = new UserModel({
             name,
             email,
-            place,
             password: hashedPassword,
             phone,
           });
@@ -58,7 +57,7 @@ export async function signUpVerify(req, res) {
             {
               id: newUser._id,
             },
-            "myjwtsecretkey"
+            process.env.JWT_SECRET
           );
           return res
             .cookie("userToken", token, {
@@ -204,7 +203,7 @@ export const checkUserLoggedIn = async (req, res) => {
       });
     }
     const verifiedJWT = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await UserModel.findById(verifiedJWT.id, { password: 0 });
+    const user = await UserModel.findById(verifiedJWT.id, { password: 0 })
     if (!user) {
       return res.json({ loggedIn: false });
     }

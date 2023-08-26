@@ -43,6 +43,12 @@ export default function BookingDetails({ handleClose, open, item }) {
           <Typography fontWeight={500} color={"black"}>
             {item.vehicleNumber}
           </Typography>
+          <Typography fontWeight={500} gutterBottom color={"black"}>
+            {item.place}
+          </Typography>
+          <Typography fontWeight={500} color={"black"}>
+            {item.address}
+          </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"center"}>
           <Button

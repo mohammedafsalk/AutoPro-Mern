@@ -66,11 +66,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-export default function AdminBookingsTable({
-  bookings,
-  rowheads,
-  setRefresh,
-}) {
+export default function AdminBookingsTable({ bookings, rowheads, setRefresh }) {
   return (
     <>
       <TableContainer component={Paper}>
@@ -94,18 +90,14 @@ export default function AdminBookingsTable({
                   </StyledTableCell>
                   <StyledTableCell align="center">{item.name}</StyledTableCell>
                   <StyledTableCell align="center">
-                    {item.mobile}
+                    {item.centerId.name}
                   </StyledTableCell>
                   <StyledTableCell align="center">{item.date}</StyledTableCell>
                   <StyledTableCell align="center">
-                    {item.status}
+                    {item.amountPaid}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    <Button
-                      color="success"
-                    >
-                      Details
-                    </Button>
+                    {item.status}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}

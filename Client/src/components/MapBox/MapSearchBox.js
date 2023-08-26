@@ -3,7 +3,7 @@ import mapboxAPI from "./MapBoxApi";
 import { MDBInput } from "mdb-react-ui-kit";
 import { Button } from "@mui/material";
 
-function MapSearchBox({ setFormData }) {
+function MapSearchBox({ setFormData, handleFormData }) {
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [items, seItems] = useState([]);
@@ -13,7 +13,6 @@ function MapSearchBox({ setFormData }) {
     setSearchValue(value);
     fetchSuggestions(value);
   };
-
   const fetchSuggestions = async (value) => {
     try {
       const url = `/geocoding/v5/mapbox.places/${encodeURIComponent(
@@ -21,7 +20,6 @@ function MapSearchBox({ setFormData }) {
       )}.json`;
       const response = await mapboxAPI.get(url);
       seItems(response.data.features);
-      console.log(response.data.features);
       const suggestions = response.data.features.map(
         (feature) => feature.place_name
       );
@@ -52,8 +50,15 @@ function MapSearchBox({ setFormData }) {
       .then((data) => {
         if (data.features && data.features.length > 0) {
           const placeName = data.features[0].text;
+          let [long, lat] = data.features[0].center;
           const district = data.features[0].context[3].text;
           setSearchValue(placeName + ", " + district);
+          setFormData((prev) => ({
+            ...prev,
+            location: placeName + ", " + district,
+            latitude: lat,
+            longitude: long,
+          }));
         }
       })
       .catch((error) => {
@@ -66,7 +71,7 @@ function MapSearchBox({ setFormData }) {
   };
   const handleSuggestionClick = (suggestion) => {
     let value = items.find((item) => item.place_name === suggestion);
-    console.log(value.context);
+    let [long, lat] = value.center;
     const placeName = value.text;
     let district;
     for (let obj of value.context) {
@@ -78,8 +83,13 @@ function MapSearchBox({ setFormData }) {
         district = "Kerala";
       }
     }
-
     setSearchValue(placeName + ", " + district);
+    setFormData((prev) => ({
+      ...prev,
+      location: placeName + ", " + district,
+      latitude: lat,
+      longitude: long,
+    }));
     setSuggestions([]);
   };
   return (

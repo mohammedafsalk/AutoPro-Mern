@@ -126,7 +126,7 @@ export default function UserServicePage() {
                         <h5>Rating And Reviews</h5>
                       </div>
                     </MDBCardFooter>
-                    <MDBCardFooter
+                    {/* <MDBCardFooter
                       className="py-3 border-0"
                       style={{ backgroundColor: "#f8f9fa" }}
                     >
@@ -162,8 +162,8 @@ export default function UserServicePage() {
                           Post Review
                         </MDBBtn>
                       </div>
-                    </MDBCardFooter>
-                    {reviews &&
+                    </MDBCardFooter> */}
+                    {reviews[0] ? (
                       reviews.map((item) => (
                         <MDBCardBody className="border-bottom" key={item._id}>
                           <div className="d-flex flex-start align-items-center">
@@ -189,11 +189,14 @@ export default function UserServicePage() {
                             </div>
                           </div>
 
-                          <p className="mt-3 mb-4 pb-2">
-                            {item.description}
-                          </p>
+                          <p className="mt-3 mb-4 pb-2">{item.description}</p>
                         </MDBCardBody>
-                      ))}
+                      ))
+                    ) : (
+                      <MDBCol className=" p-2 d-flex justify-content-center">
+                        <p>No Reviews</p>
+                      </MDBCol>
+                    )}
                   </MDBCard>
                 </MDBCol>
               </MDBRow>

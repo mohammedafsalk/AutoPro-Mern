@@ -1,7 +1,7 @@
 import AdminModel from "../Models/adminModel.js";
 import serviceCenterModel from "../Models/serviceCenterModel.js";
 import UserModel from "../Models/userModel.js";
-import BookingModel from '../Models/bookingModel.js'
+import BookingModel from "../Models/bookingModel.js";
 import bcrypt from "bcryptjs";
 import sentMail from "../helpers/sentMail.js";
 import jwt from "jsonwebtoken";
@@ -80,7 +80,41 @@ export async function adminDashboard(req, res) {
     let centerCount = await serviceCenterModel
       .find({ permission: true })
       .countDocuments();
-    res.json({ usersCount, centerCount, err: false });
+    const monthlyDataArray = await BookingModel.aggregate([
+      {
+        $addFields: {
+          parsedDate: {
+            $dateFromString: {
+              dateString: "$date",
+              format: "%d-%m-%Y",
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$parsedDate" },
+          totalRevenue: { $sum: "$amountPaid" },
+        },
+      },
+    ]);
+    let monthlyDataObject = {};
+    let totalRevenue = 0;
+    monthlyDataArray.map((item) => {
+      totalRevenue += item.totalRevenue;
+      monthlyDataObject[item._id] = item.totalRevenue;
+    });
+    let monthlyData = [];
+    for (let i = 1; i <= 12; i++) {
+      monthlyData[i - 1] = monthlyDataObject[i] ?? 0;
+    }
+    res.json({
+      usersCount,
+      centerCount,
+      monthlyData,
+      totalRevenue,
+      err: false,
+    });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
@@ -147,8 +181,19 @@ export async function users(req, res) {
 }
 export async function bookings(req, res) {
   try {
-    let bookings = await BookingModel.find().lean();
-    res.json({ err: false, bookings });
+    let bookings;
+    let status = req.query.status ?? "";
+    if (req.query.status) {
+      let statusRegex = new RegExp(status, "i");
+      bookings = await BookingModel.find({ status: statusRegex })
+        .populate("centerId")
+        .lean();
+      res.json({ err: false, bookings });
+    }
+    if (req.query.status === "") {
+      bookings = await BookingModel.find().populate("centerId").lean();
+      res.json({ err: false, bookings });
+    }
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

@@ -66,7 +66,6 @@ export default function InvoiceForm({ handleClose, open, item }) {
     let arr = billItems.filter((item, i)=>i!=index)
     setBillItems([...arr])
   };
-  console.log(billItems);
   return (
     <Modal
       open={open}
