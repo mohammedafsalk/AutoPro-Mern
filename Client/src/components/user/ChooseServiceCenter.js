@@ -104,7 +104,7 @@ export default function ChooseServiceCenter() {
           </MDBRow>
           {data[0] ? (
             <>
-              <MDBRow className="mt-5">
+              <MDBRow className="my-5">
                 {data &&
                   data.map((item) => (
                     <MDBCol md="12" lg="4" className="mb-4 mb-lg-0">
