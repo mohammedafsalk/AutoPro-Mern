@@ -137,6 +137,8 @@ export async function requests(req, res) {
 export async function acceptRequest(req, res) {
   try {
     const { email } = req.body;
+    const center = await serviceCenterModel.findOne({ email: email });
+    if (!center) return res.json({ err: true, message: "Center Not Found" });
     await serviceCenterModel.updateOne({ email }, { permission: true });
     res.json({ err: false, message: "Permission Added Successfully" });
     await sentMail(email, "Your Request For Center Registration Has Accepted");
@@ -148,6 +150,8 @@ export async function acceptRequest(req, res) {
 export async function rejectRequest(req, res) {
   try {
     const { email, rejectionMsg } = req.body;
+    const center = await serviceCenterModel.findOne({ email: email });
+    if (!center) return res.json({ err: true, message: "Center Not Found" });
     await serviceCenterModel.findOneAndUpdate(
       { email },
       { $set: { rejected: true, rejectMessage: rejectionMsg } }
@@ -213,7 +217,9 @@ export async function userAccessSetting(req, res) {
   try {
     const { type, id } = req.body;
     const user = await UserModel.findById(id);
-
+    if (!user) {
+      return res.json({ err: true, message: "User Not Found" });
+    }
     if (type === "block") {
       user.block = true;
       await user.save();

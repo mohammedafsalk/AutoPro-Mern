@@ -13,7 +13,6 @@ var salt = bcrypt.genSaltSync(10);
 
 export async function serviceCenterSignup(req, res) {
   try {
-    console.log(req.body);
     const { name, email, password, location, latitude, longitude, mobile } =
       req.body;
     const temp = await ServiceCenterModel.findOne({ email });
@@ -63,7 +62,6 @@ export async function serviceCenterLogin(req, res) {
   try {
     const { email, password } = req.body;
     const center = await ServiceCenterModel.findOne({ email }).lean();
-    console.log(center);
     if (!center) {
       return res.json({ err: true, message: "No Service Center Found" });
     }
@@ -152,11 +150,9 @@ export async function verifyForgetOtp(req, res) {
   try {
     const { otp } = req.body;
     const tempToken = req.cookies.tempToken;
-
     if (!tempToken) {
       return res.json({ err: true, message: "OTP Session Timed Out" });
     }
-
     const verifiedTempToken = jwt.verify(tempToken, process.env.JWT_SECRET);
     let otpHash = crypto
       .createHmac("sha256", process.env.OTP_SECRET)
@@ -174,6 +170,10 @@ export async function verifyForgetOtp(req, res) {
 export async function centerPassReset(req, res) {
   try {
     const { email, password } = req.body;
+    const center = await ServiceCenterModel.findOne({ email: email });
+    if (!center) {
+      return res.json({ error: true, message: "No Center Found" });
+    }
     let hashedPassword = bcrypt.hashSync(password, salt);
     await ServiceCenterModel.updateOne(
       { email },
@@ -203,6 +203,10 @@ export async function serviceCenterLogout(req, res) {
 export async function proofUpdate(req, res) {
   try {
     const { email, image } = req.body;
+    const center = await ServiceCenterModel.findOne({ email: email });
+    if (!center) {
+      return res.json({ error: true, message: "No Center Found" });
+    }
     const data = await cloudinary.uploader.upload(image, {
       folder: "AutoPro",
     });
@@ -219,6 +223,10 @@ export async function proofUpdate(req, res) {
 export async function getWorkers(req, res) {
   try {
     const serviceCenterId = req.serviceCenter._id;
+    const center = await ServiceCenterModel.findById(serviceCenterId);
+    if (!center) {
+      return res.json({ error: true, message: "No Center Found" });
+    }
     const workers = await workerModel.find(
       { centerId: serviceCenterId },
       { password: 0 }
@@ -248,7 +256,6 @@ export async function workerAccessSetting(req, res) {
   try {
     const { type, id } = req.body;
     const worker = await workerModel.findById(id);
-
     if (type === "block") {
       worker.active = false;
       await worker.save();
@@ -269,7 +276,6 @@ export async function workerAccessSetting(req, res) {
 
 export async function setSchedule(req, res) {
   try {
-    console.log(req.body);
     const schedule = await ScheduleModel.updateOne(
       { serviceCenterId: req.serviceCenter._id },
       {
@@ -390,5 +396,5 @@ export async function withdrawWallet(req, res) {
     branch: branch,
     centerId: req.serviceCenter._id,
   });
-  return res.json({err:false})
+  return res.json({ err: false });
 }

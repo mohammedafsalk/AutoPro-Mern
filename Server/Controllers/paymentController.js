@@ -92,8 +92,11 @@ export async function verifyPayment(req, res) {
 export async function verifyBillPayment(req, res) {
   try {
     const { response, bookingId } = req.body;
+    const booking = await BookingModel.findById(bookingId);
+    if (!booking) {
+      return res.json({ err: true, message: "Booking Not Found" });
+    }
     let body = response.razorpay_order_id + "|" + response.razorpay_payment_id;
-
     var expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body.toString())
