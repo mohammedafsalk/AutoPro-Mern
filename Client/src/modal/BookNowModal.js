@@ -86,8 +86,6 @@ export default function BookNowModal({ open, id, setOpen }) {
         n++;
       }
       setDatesAvailable([...tempDatesAvailable]);
-    } else {
-      console.log("jojojojojodjofjojojsofjsfosjofsj");
     }
   };
 

@@ -5,7 +5,7 @@ import UserRoutes from "./Routes/UserRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
 import ServiceCenterRoutes from "./Routes/ServiceCenterRoutes";
 import WorkerRoutes from "./Routes/WorkerRoutes";
-
+import Checking from "./components/check";
 
 export default function App() {
   axios.defaults.baseURL = "http://localhost:5000/";
@@ -17,6 +17,7 @@ export default function App() {
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/service-center/*" element={<ServiceCenterRoutes />} />
         <Route path="/worker/*" element={<WorkerRoutes />} />
+        <Route path="/check" element={<Checking />} />
       </Routes>
     </div>
   );
