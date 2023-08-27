@@ -24,6 +24,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import getDayName from "../utils/getDayName";
+import { validatePlace } from "../helpers/placeValidator";
 import { Toaster, toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -90,9 +91,15 @@ export default function BookNowModal({ open, id, setOpen }) {
   };
 
   const handleBooking = async () => {
-    const { data } = await axios.post("/user/payment", { amount: 100 });
-    if (!data.err) {
-      handleRazorPay(data.order);
+    const exist = await validatePlace(formData.place);
+    if (exist) {
+      const { data } = await axios.post("/user/payment", { amount: 100 });
+      if (!data.err) {
+        handleRazorPay(data.order);
+      }
+    } else {
+      toggleShow()
+      toast.error("Enter a Valid Place And Address");
     }
   };
   const handleRazorPay = (order) => {
