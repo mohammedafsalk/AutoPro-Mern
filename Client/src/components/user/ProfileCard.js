@@ -3,7 +3,6 @@ import React from "react";
 import profile from "../../assets/images/avatar.png";
 
 export default function ProfileCard({user}) {
-    console.log(user);
   return (
     <Box sx={{ minWidth: 300 }} display={"flex"} flexDirection={"column"} alignItems={"center"} gap={2}>
       <Box>
