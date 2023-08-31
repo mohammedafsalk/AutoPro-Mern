@@ -30,7 +30,7 @@ export default function ForgetOtpModal({
   React.useEffect(() => {
     if (timer === 0) {
       setCanResend(true);
-    }
+    } 
   }, [timer]);
 
   const handleResendOtp = () => {

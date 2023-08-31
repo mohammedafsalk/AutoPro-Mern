@@ -21,6 +21,10 @@ import {
   Menu as MenuIcon,
   ViewCarousel,
   Engineering,
+  SpaceDashboard,
+  CalendarMonth,
+  AccessTime,
+  AccountCircle,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -148,7 +152,7 @@ export default function NavBar() {
           >
             <ListItem>
               <ListItemIcon>
-                <Engineering sx={{ fontSize: "30px", color: "black" }} />
+                <SpaceDashboard sx={{ fontSize: "30px", color: "black" }} />
               </ListItemIcon>
               <ListItemText>
                 <Typography
@@ -164,7 +168,7 @@ export default function NavBar() {
             </ListItem>
             <ListItem>
               <ListItemIcon>
-                <Engineering sx={{ fontSize: "30px", color: "black" }} />
+                <CalendarMonth sx={{ fontSize: "30px", color: "black" }} />
               </ListItemIcon>
               <ListItemText>
                 <Typography
@@ -196,7 +200,7 @@ export default function NavBar() {
             </ListItem>
             <ListItem>
               <ListItemIcon>
-                <Engineering sx={{ fontSize: "30px", color: "black" }} />
+                <AccessTime sx={{ fontSize: "30px", color: "black" }} />
               </ListItemIcon>
               <ListItemText>
                 <Typography
@@ -207,6 +211,22 @@ export default function NavBar() {
                   to="/service-center/schedule"
                 >
                   Schedules
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <AccountCircle sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "inherit" }}
+                  fontSize={18}
+                  component={NavLink}
+                  to="/service-center/profile"
+                >
+                  Profile
                 </Typography>
               </ListItemText>
             </ListItem>
