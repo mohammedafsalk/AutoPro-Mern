@@ -54,7 +54,6 @@ export default function Signup() {
       !validatePassword(formData.password).status ||
       formData.password.trim() === "" ||
       formData.email.trim() === "" ||
-      // formData.location.trim() === "" ||
       !err.Imagelogo.valid ||
       !err.Imageproof.valid ||
       formData.password != formData.confrmPassword

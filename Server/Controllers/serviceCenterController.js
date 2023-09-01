@@ -26,7 +26,6 @@ export async function serviceCenterSignup(req, res) {
       folder: "AutoPro",
     });
     const hashedPassword = bcrypt.hashSync(password, salt);
-    console.log(hashedPassword);
     const newCenter = new ServiceCenterModel({
       name,
       email,
@@ -397,4 +396,33 @@ export async function withdrawWallet(req, res) {
     centerId: req.serviceCenter._id,
   });
   return res.json({ err: false });
+}
+
+export async function profileUpdate(req, res) {
+  try {
+    const { name, mobile, logo } = req.body;
+    console.log(req.body);
+    if (logo) {
+      const logoUpld = await cloudinary.uploader.upload(logo, {
+        folder: "AutoPro",
+      });
+      await ServiceCenterModel.findByIdAndUpdate(req.serviceCenter._id, {
+        $set: {
+          logo: logoUpld,
+          name,
+          mobile,
+        },
+      });
+    } else {
+      await ServiceCenterModel.findByIdAndUpdate(req.serviceCenter._id, {
+        $set: {
+          name,
+          mobile,
+        },
+      });
+    }
+    res.json({ err: false });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
 }

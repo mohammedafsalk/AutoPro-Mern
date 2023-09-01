@@ -15,9 +15,7 @@ import loginImg from "../../assets/images/login.jpg";
 import axios from "axios";
 import validatePassword from "../../helpers/passwordValidate";
 import toast, { Toaster } from "react-hot-toast";
-
 import { BeatLoader } from "react-spinners";
-import MapSearchBox from "../MapBox/MapSearchBox";
 
 export default function SignUp() {
   const [name, setName] = useState("");
