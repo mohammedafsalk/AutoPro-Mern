@@ -42,6 +42,10 @@ const ServiceCenterSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    pickUpPrice: {
+      type: Array,
+      default: [],
+    },
     rejectMessage: {
       type: String,
       default: "",

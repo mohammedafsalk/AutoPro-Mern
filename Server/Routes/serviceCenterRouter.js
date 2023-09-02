@@ -4,9 +4,11 @@ import {
   assignWork,
   centerDashboard,
   getBookings,
+  getPriceRange,
   getSchedule,
   getWorkers,
   profileUpdate,
+  setPriceRange,
   setSchedule,
   updateInvoice,
   workerAccessSetting,
@@ -19,13 +21,12 @@ router
   .post(addWorker)
   .patch(workerAccessSetting);
 
-router.route("/bookings").get(getBookings)
-router.route("/").get(centerDashboard)
-router.patch('/bookings/assignWork',assignWork)
-router.patch('/bookings/invoice',updateInvoice)
-router.patch('/profile',profileUpdate)
-
-
+router.route("/bookings").get(getBookings);
+router.route("/").get(centerDashboard);
+router.patch("/bookings/assignWork", assignWork);
+router.patch("/bookings/invoice", updateInvoice);
+router.patch("/profile", profileUpdate);
+router.route("/priceRanges").patch(setPriceRange).get(getPriceRange);
 router.route("/schedule").post(setSchedule).get(getSchedule);
 
 export default router;

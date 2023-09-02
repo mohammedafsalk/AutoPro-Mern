@@ -330,7 +330,6 @@ export async function assignWork(req, res) {
 export async function updateInvoice(req, res) {
   try {
     const { invoice, bookingId } = req.body;
-    console.log(req.body);
     await BookingModel.findByIdAndUpdate(bookingId, {
       $set: {
         invoice,
@@ -361,7 +360,7 @@ export async function centerDashboard(req, res) {
       },
       {
         $match: {
-          centerId: req.serviceCenter._id, // Assuming req.serviceCenter._id is the centerId you want to match against
+          centerId: req.serviceCenter._id,
         },
       },
       {
@@ -424,5 +423,36 @@ export async function profileUpdate(req, res) {
     res.json({ err: false });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function getPriceRange(req, res) {
+  try {
+    const center = await ServiceCenterModel.findOne({
+      _id: req.serviceCenter._id,
+    });
+    let ranges = center.pickUpPrice
+    res.json({ err: false, ranges });
+  } catch (err) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function setPriceRange(req, res) {
+  try {
+    const { pickUpPrice } = req.body;
+    console.log(pickUpPrice);
+    await ServiceCenterModel.findByIdAndUpdate(req.serviceCenter._id, {
+      $set: {
+        pickUpPrice,
+      },
+    });
+    return res.json({
+      err: false,
+      message: "Price Range Updated Successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ err: true, message: "server error" });
   }
 }

@@ -24,7 +24,7 @@ export default function UserNav() {
   const navigate = useNavigate();
 
   const navigateto = () => {
-    navigate('/')
+    navigate("/");
   };
 
   const dispatch = useDispatch();
@@ -91,7 +91,11 @@ export default function UserNav() {
           }}
         >
           <MenuItem>
-            <Link component={link} to="/profile">
+            <Link
+              component={link}
+              to="/profile"
+              sx={{ textDecoration: "none", color: "inherit" }}
+            >
               Profile
             </Link>
           </MenuItem>

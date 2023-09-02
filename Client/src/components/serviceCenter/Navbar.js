@@ -95,7 +95,11 @@ export default function NavBar() {
           }}
         >
           <MenuItem>
-            <Link component={link} to="/profile">
+            <Link
+              component={link}
+              to="/service-center/profile"
+              sx={{ textDecoration: "none",color:"inherit" }}
+            >
               Profile
             </Link>
           </MenuItem>
