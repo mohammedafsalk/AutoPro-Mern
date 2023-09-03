@@ -30,7 +30,9 @@ export async function userSignup(req, res) {
       });
     res.json({ err: false, message: "Success" });
   } catch (error) {
+    console.log(error);
     res.json({ error: error, err: true, message: "Something bad happend!" });
+
   }
 }
 

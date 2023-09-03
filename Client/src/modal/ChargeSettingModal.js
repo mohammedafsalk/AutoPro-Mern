@@ -38,7 +38,7 @@ export default function ChargeSettingModal({ open, handleClose }) {
       if (data.err) {
         toast.error(data.message);
       } else {
-       setSaved([...data.ranges])
+        setSaved([...data.ranges]);
       }
     })();
   }, []);
@@ -108,7 +108,7 @@ export default function ChargeSettingModal({ open, handleClose }) {
             {saved.map((item, i) => (
               <Box display="flex" alignItems="center" gap={2}>
                 <Typography fontWeight={500}>
-                {i}  {item.range} Km : Rs.{item.price}
+                  {item.range} Km : Rs.{item.price}
                 </Typography>
                 <IconButton onClick={() => handleDelete(i)}>
                   <Delete color="error" />

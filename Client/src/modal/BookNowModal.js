@@ -17,24 +17,27 @@ import {
 import {
   FormControl,
   InputLabel,
-  Menu,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
 import axios from "axios";
 import getDayName from "../utils/getDayName";
 import { validatePlace } from "../helpers/placeValidator";
+import { calculateDistance } from "../helpers/distanceCalculator";
+import { priceChecker } from "../helpers/priceSetter";
 import { Toaster, toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default function BookNowModal({ open, id, setOpen }) {
+export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
+  const serviceCenterLatitude = serviceCenter.latitude;
+  const serviceCenterLongitude = serviceCenter.longitude;
+  const priceRanges = serviceCenter.pickUpPrice;
+
   const navigate = useNavigate();
   const userId = useSelector((state) => {
     return state.user.details._id;
   });
-
   const [datesAvailable, setDatesAvailable] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -71,7 +74,6 @@ export default function BookNowModal({ open, id, setOpen }) {
 
   const fetchData = async () => {
     const { data } = await axios.get("/user/schedule/" + id);
-    console.log(!data.err && data.schedule);
     if (!data.err && data.schedule) {
       const scheduleData = data.schedule;
       let date = new Date(),
@@ -91,14 +93,22 @@ export default function BookNowModal({ open, id, setOpen }) {
   };
 
   const handleBooking = async () => {
-    const exist = await validatePlace(formData.place);
-    if (exist) {
-      const { data } = await axios.post("/user/payment", { amount: 100 });
+    const data = await validatePlace(formData.place);
+    const { latitude, longitude } = data;
+    if (data.isValid) {
+      const distance = calculateDistance(
+        latitude,
+        longitude,
+        serviceCenterLatitude,
+        serviceCenterLongitude
+      );
+      const amount = priceChecker(distance, priceRanges);
+      const { data } = await axios.post("/user/payment", { amount });
       if (!data.err) {
         handleRazorPay(data.order);
       }
     } else {
-      toggleShow()
+      toggleShow();
       toast.error("Enter a Valid Place And Address");
     }
   };

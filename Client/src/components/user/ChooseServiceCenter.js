@@ -111,6 +111,7 @@ export default function ChooseServiceCenter() {
                       <Link
                         className="text-dark"
                         to={`/select-package/${item._id}`}
+                        state={{ itemData: item }}
                       >
                         <MDBCard>
                           <MDBCardImage
@@ -189,8 +190,7 @@ export default function ChooseServiceCenter() {
         </>
       </MDBContainer>
 
-      {
-        (longitude && latitude )&&
+      {longitude && latitude && (
         <ShowMap
           open={open}
           handleClose={handleClose}
@@ -198,8 +198,7 @@ export default function ChooseServiceCenter() {
           latitude={latitude}
           longitude={longitude}
         />
-      }
-
+      )}
 
       <Backdropspinner openLoader={state.loading} />
     </>

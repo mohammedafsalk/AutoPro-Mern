@@ -14,12 +14,14 @@ import {
 } from "mdb-react-ui-kit";
 import UserNav from "./UserNav";
 import { Rating } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import BookNowModal from "../../modal/BookNowModal";
 
 export default function UserServicePage() {
   const { id } = useParams();
+  const location = useLocation();
+  const serviceCenter = location.state.itemData
   const [center, setCenter] = React.useState({});
   const [reviews, setReviews] = React.useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -207,6 +209,7 @@ export default function UserServicePage() {
           open={openModal}
           id={id}
           setOpen={setOpenModal}
+          serviceCenter={serviceCenter}
         ></BookNowModal>
       </MDBContainer>
     </>
