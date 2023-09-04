@@ -9,6 +9,7 @@ import ServiceCenters from "../components/admin/AdminServiceCenters.js";
 import AdminDashBoard from "../components/admin/AdminDashBoard";
 import AdminUsers from "../components/admin/AdminUsers";
 import AdminBookings from "../components/admin/AdminBookings";
+import NotFoundPage from "../components/pageNotFound/PageNotFound";
 
 export default function AdminRoutes() {
   const { admin, refresh } = useSelector((state) => {
@@ -51,6 +52,7 @@ export default function AdminRoutes() {
           />
         </>
       )}
+      <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
 }

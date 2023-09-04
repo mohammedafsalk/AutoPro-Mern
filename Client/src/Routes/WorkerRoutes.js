@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import WorkerLogin from "../components/Worker/WorkerLogin";
 import WorkerHome from "../components/Worker/WorkerHome";
 import axios  from "axios";
+import NotFoundPage from "../components/pageNotFound/PageNotFound";
 export default function WorkerRoutes() {
   const { worker, refresh } = useSelector((state) => {
     return state;
@@ -34,6 +35,7 @@ export default function WorkerRoutes() {
           <Route path="/" element={<Navigate to="/worker/login" />} />
         </>
       )}
+        <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
 }

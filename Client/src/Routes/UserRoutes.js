@@ -10,6 +10,7 @@ import Backdropspinner from "../components/Loader/BackdropSpinner";
 import UserHome from "../components/user/UserHome";
 import ChooseServiceCenter from "../components/user/ChooseServiceCenter";
 import UserServicePage from "../components/user/UserServicePage";
+import NotFoundPage from "../components/pageNotFound/PageNotFound";
 
 export default function UserRoutes() {
   const { user, refresh } = useSelector((state) => {
@@ -56,6 +57,7 @@ export default function UserRoutes() {
             <Route path="/booking-details" element={<Navigate to="/login" />} />
           </>
         )}
+        <Route path="/*" element={<NotFoundPage />} />
       </Routes>
       {user.login === null && (
         <Backdropspinner openLoader={true}></Backdropspinner>

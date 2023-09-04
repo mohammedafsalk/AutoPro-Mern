@@ -50,7 +50,6 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
     place: "",
     address: "",
   });
-
   const validForm = () => {
     if (
       formData.name.trim() === "" ||
@@ -66,7 +65,6 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
     }
     return true;
   };
-
   const toggleShow = () => setOpen(!open);
   useEffect(() => {
     fetchData();
