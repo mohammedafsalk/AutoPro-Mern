@@ -431,7 +431,7 @@ export async function getPriceRange(req, res) {
     const center = await ServiceCenterModel.findOne({
       _id: req.serviceCenter._id,
     });
-    let ranges = center.pickUpPrice
+    let ranges = center.pickUpPrice;
     res.json({ err: false, ranges });
   } catch (err) {
     res.json({ err: true, message: "Something Went Wrong" });
@@ -455,4 +455,12 @@ export async function setPriceRange(req, res) {
     console.log(err);
     res.json({ err: true, message: "server error" });
   }
+}
+
+export async function manageCategories(req, res) {
+  await ServiceCenterModel.findByIdAndUpdate(req.serviceCenter._id, {
+    $set: {
+      categories: req.body,
+    }
+  });
 }

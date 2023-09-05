@@ -234,6 +234,22 @@ export default function NavBar() {
                 </Typography>
               </ListItemText>
             </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Settings sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "inherit" }}
+                  fontSize={18}
+                  component={NavLink}
+                  to="/service-center/settings"
+                >
+                  Settings
+                </Typography>
+              </ListItemText>
+            </ListItem>
           </Box>
         </Box>
       </Drawer>

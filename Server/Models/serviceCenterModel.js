@@ -30,6 +30,14 @@ const ServiceCenterSchema = new mongoose.Schema(
     longitude: {
       type: Number,
     },
+    categories: {
+      type: Array,
+      default: [],
+    },
+    brands: {
+      type: Array,
+      default: [],
+    },
     logo: {
       type: Object,
       required: true,

@@ -12,6 +12,7 @@ import Bookings from "../components/serviceCenter/Bookings";
 import Dashboard from "../components/serviceCenter/Dashboard";
 import Profile from "../components/serviceCenter/Profile";
 import NotFoundPage from "../components/pageNotFound/PageNotFound";
+import Settings from "../components/serviceCenter/Settings";
 
 export default function ServiceCenterRoutes() {
   const { serviceCenter, refresh } = useSelector((state) => {
@@ -72,6 +73,7 @@ export default function ServiceCenterRoutes() {
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/login" element={<Navigate to="/service-center/" />} />
           <Route path="/signup" element={<Navigate to="/service-center/" />} />
         </>
@@ -102,9 +104,16 @@ export default function ServiceCenterRoutes() {
             path="/profile"
             element={<Navigate to="/service-center/login" />}
           />
+          <Route
+            path="/settings"
+            element={<Navigate to="/service-center/login" />}
+          />
         </>
-      )}
-      <Route path="/*" element={<NotFoundPage />} />
+      )} 
+      {
+        serviceCenter.login!==null &&
+       <Route path="/*" element={<NotFoundPage />} />
+      }
     </Routes>
   );
 }
