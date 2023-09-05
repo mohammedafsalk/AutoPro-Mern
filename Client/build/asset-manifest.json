@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4c48e3ba.css",
+    "main.js": "/static/js/main.d657d516.js",
+    "static/js/498.50c5a5ef.chunk.js": "/static/js/498.50c5a5ef.chunk.js",
+    "static/js/703.1d2cf27b.chunk.js": "/static/js/703.1d2cf27b.chunk.js",
+    "static/js/513.18f79652.chunk.js": "/static/js/513.18f79652.chunk.js",
+    "static/media/signupServiceCenter.jpg": "/static/media/signupServiceCenter.f7fd9352cf6df9a4a85b.jpg",
+    "static/media/Rejected.jpg": "/static/media/Rejected.42a08ef169b9c31c3e62.jpg",
+    "static/media/No User.jpg": "/static/media/No User.14860c38b88940560c2f.jpg",
+    "static/media/Permission waiting.jpg": "/static/media/Permission waiting.c1fb73615b4ad15a11d7.jpg",
+    "static/media/login.jpg": "/static/media/login.a9b07379a38eb73c9228.jpg",
+    "static/media/pickup.jpg": "/static/media/pickup.e996882ab9e39162c2a5.jpg",
+    "static/media/order.png": "/static/media/order.943977a437da5e1e3d20.png",
+    "static/media/noRequests.jpg": "/static/media/noRequests.6ad779927917d6a2121b.jpg",
+    "static/media/avatar.png": "/static/media/avatar.308fa01688ba268b3d45.png",
+    "static/media/delivery.png": "/static/media/delivery.a8248f93919cd03662ac.png",
+    "static/media/AutoPro-logos_black.png": "/static/media/AutoPro-logos_black.3d7b4a3910bc6cc0ef70.png",
+    "static/media/Admin.png": "/static/media/Admin.f5f422ea377fe6938fd3.png",
+    "index.html": "/index.html",
+    "main.4c48e3ba.css.map": "/static/css/main.4c48e3ba.css.map",
+    "main.d657d516.js.map": "/static/js/main.d657d516.js.map",
+    "498.50c5a5ef.chunk.js.map": "/static/js/498.50c5a5ef.chunk.js.map",
+    "703.1d2cf27b.chunk.js.map": "/static/js/703.1d2cf27b.chunk.js.map",
+    "513.18f79652.chunk.js.map": "/static/js/513.18f79652.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4c48e3ba.css",
+    "static/js/main.d657d516.js"
+  ]
+}

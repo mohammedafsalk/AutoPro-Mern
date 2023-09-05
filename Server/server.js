@@ -29,7 +29,7 @@ dbConnect();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://autovro.netlify.app"],
     credentials: true,
   })
 );
