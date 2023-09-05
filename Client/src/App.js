@@ -7,7 +7,7 @@ import ServiceCenterRoutes from "./Routes/ServiceCenterRoutes";
 import WorkerRoutes from "./Routes/WorkerRoutes";
 
 export default function App() {
-  axios.defaults.baseURL = "http://localhost:5000/";
+  axios.defaults.baseURL = "https://autopro.afsal.online/";
   axios.defaults.withCredentials = true;
   return (
     <div className="App">
