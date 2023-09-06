@@ -20,6 +20,7 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Pagination,
   Stack,
   TextField,
@@ -36,6 +37,7 @@ export default function ChooseServiceCenter() {
   const [page, setPage] = React.useState(1);
   const [count, setCount] = React.useState(0);
   const [name, setName] = React.useState("");
+  const [category, setCategory] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [latitude, setLatitude] = React.useState("");
   const [longitude, setLongitude] = React.useState("");
@@ -61,7 +63,9 @@ export default function ChooseServiceCenter() {
     (async function () {
       setState({ type: "start" });
       let { data } = await axios.get(
-        `user/service-centers?page=${page - 1}&name=${name}`
+        `user/service-centers?page=${
+          page - 1
+        }&name=${name}&category=${category}`
       );
       if (data.err) {
         setState({ type: "stop" });
@@ -72,36 +76,59 @@ export default function ChooseServiceCenter() {
         setState({ type: "stop" });
       }
     })();
-  }, [page, name]);
-
+  }, [page, name, category]);
   return (
     <>
       <UserNav></UserNav>
       <Toaster />
       <MDBContainer className="my-5 ">
         <>
-          <MDBRow className="justify-content-center">
-            <MDBCol md={3}>
-              <MDBInputGroup className=" d-flex justify-content-center align-items-center ">
-                <TextField
-                  size="lg"
-                  label="Search"
-                  placeholder="Search Centers"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="start">
-                        <IconButton onClick={handleOpen}>
-                          <MyLocation color="primary" />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </MDBInputGroup>
+          <MDBRow className="align-items-center">
+            <MDBCol
+              xs={12}
+              sm={8}
+              md={8}
+              lg={8}
+              className="d-flex justify-content-center mb-2 mb-md-0"
+            >
+              <TextField
+                size="small"
+                label="Search"
+                placeholder="Search Centers"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton onClick={handleOpen}>
+                        <MyLocation color="primary" />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </MDBCol>
+            <MDBCol xs={12} sm={4} md={4} lg={4}>
+              <TextField
+                select
+                onChange={(e) =>
+                  setCategory(e.target.value === "All" ? [] : [e.target.value])
+                }
+                defaultValue="All"
+                variant="outlined"
+                fullWidth
+                size="small"
+                label="Category"
+              >
+                <MenuItem value="All">All</MenuItem>
+                <MenuItem value="Four Wheeler">Four Wheeler</MenuItem>
+                <MenuItem value="Heavy Vehicles">Heavy Vehicles</MenuItem>
+                <MenuItem value="Two Wheeler">Two Wheeler</MenuItem>
+                <MenuItem value="Three Wheeler">Three Wheeler</MenuItem>
+              </TextField>
             </MDBCol>
           </MDBRow>
+
           {data[0] ? (
             <>
               <MDBRow className="my-5">

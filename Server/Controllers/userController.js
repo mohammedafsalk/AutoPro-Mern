@@ -32,7 +32,6 @@ export async function userSignup(req, res) {
   } catch (error) {
     console.log(error);
     res.json({ error: error, err: true, message: "Something bad happend!" });
-
   }
 }
 
@@ -205,7 +204,7 @@ export const checkUserLoggedIn = async (req, res) => {
       });
     }
     const verifiedJWT = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await UserModel.findById(verifiedJWT.id, { password: 0 })
+    const user = await UserModel.findById(verifiedJWT.id, { password: 0 });
     if (!user) {
       return res.json({ loggedIn: false });
     }
@@ -305,8 +304,15 @@ export async function chooseServiceCenter(req, res) {
   try {
     const page = parseInt(req.query.page) ?? 0;
     const name = req.query.name ?? "";
+    let categories = req.query.category || [];
+
+    if (categories.includes("All")) {
+      categories = [];
+    }
+
     const count = await ServiceCenterModel.find({ permission: true }).count();
-    let center = await ServiceCenterModel.find({
+
+    let centerQuery = {
       permission: true,
       $or: [
         {
@@ -319,10 +325,18 @@ export async function chooseServiceCenter(req, res) {
           location: new RegExp(name, "i"),
         },
       ],
-    })
+    };
+
+    // Filter by selected categories if any categories are selected
+    if (categories.length > 0) {
+      centerQuery["categories"] = { $in: categories };
+    }
+
+    const center = await ServiceCenterModel.find(centerQuery)
       .skip(page * 3)
       .limit(3)
       .lean();
+
     res.json({ center, err: false, totalPage: Math.ceil(count / 3) });
   } catch (error) {
     res.json({ err: true, message: error.message });
