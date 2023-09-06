@@ -37,7 +37,7 @@ export default function Settings() {
           <Tab icon={<Apps />} label="BRANDS" />
         </Tabs>
         {value === 0 && <Categories details={serviceCenter}  />}
-        {value === 1 && <Brands />}
+        {value === 1 && <Brands  details={serviceCenter} />}
       </Container>
     </>
   );

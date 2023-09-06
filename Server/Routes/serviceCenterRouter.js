@@ -7,6 +7,7 @@ import {
   getPriceRange,
   getSchedule,
   getWorkers,
+  manageBrands,
   manageCategories,
   profileUpdate,
   setPriceRange,
@@ -29,6 +30,7 @@ router.patch("/bookings/invoice", updateInvoice);
 router.patch("/profile", profileUpdate);
 router.route("/priceRanges").patch(setPriceRange).get(getPriceRange);
 router.route("/schedule").post(setSchedule).get(getSchedule);
-router.route("/categories").patch(manageCategories).get(getSchedule);
+router.route("/categories").patch(manageCategories)
+router.route("/brands").patch(manageBrands)
 
 export default router;

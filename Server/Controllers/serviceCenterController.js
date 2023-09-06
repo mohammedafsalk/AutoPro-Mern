@@ -470,3 +470,16 @@ export async function manageCategories(req, res) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
 }
+export async function manageBrands(req, res) {
+  try {
+    const { values } = req.body;
+    await ServiceCenterModel.findByIdAndUpdate(req.serviceCenter._id, {
+      $set: {
+        brands: values,
+      },
+    });
+    res.json({ err: false, message: "Brands Updated!" });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}

@@ -11,9 +11,7 @@ import {
 } from "@mui/material";
 
 import axios from "axios";
-import dayjs from "dayjs";
-import { RiDeleteBin2Fill } from "react-icons/ri";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 const style = {
   position: "absolute",
@@ -33,7 +31,7 @@ const style = {
 
 export default function CategoryModal({ handleClose, open, details }) {
   const dispatch = useDispatch();
-  const items = details.categories; // Categories that exist in the details
+  const items = details.categories;
 
   const categories = [
     "Two Wheeler",
@@ -42,7 +40,6 @@ export default function CategoryModal({ handleClose, open, details }) {
     "Heavy Vehicles",
   ];
   const [selectedCategories, setSelectedCategories] = useState(() => {
-    // Initialize the selectedCategories based on items
     return categories.filter((category) => items.includes(category));
   });
 
