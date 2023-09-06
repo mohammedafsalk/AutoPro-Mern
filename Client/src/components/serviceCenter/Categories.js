@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Chip, Typography } from "@mui/material";
 import React from "react";
 import CategoryModal from "../../modal/CategoryModal";
 
@@ -23,12 +23,12 @@ export default function Categories({ details }) {
           Manage Categories
         </Button>
         {details.categories.length === 0 ? (
-          <Typography fontWeight={500}>No Categories Added! </Typography>
+          <Typography fontWeight={500}>No Categories Added!</Typography>
         ) : (
-          <Typography>Categories Added</Typography>
+          details.categories.map((item) => <Chip key={item} label={item} />)
         )}
       </Box>
-      <CategoryModal handleClose={handleClose} open={open} />
+      <CategoryModal handleClose={handleClose} open={open} details={details} />
     </>
   );
 }

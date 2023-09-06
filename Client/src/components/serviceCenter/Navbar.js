@@ -164,7 +164,7 @@ export default function NavBar() {
                   sx={{ color: "inherit" }}
                   fontSize={18}
                   component={NavLink}
-                  to="/service-center/dashboard"
+                  to="/service-center/"
                 >
                   DashBoard
                 </Typography>

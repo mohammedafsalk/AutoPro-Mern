@@ -14,6 +14,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { Toaster, toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
 const style = {
   position: "absolute",
   display: "flex",
@@ -30,20 +31,44 @@ const style = {
   p: 3,
 };
 
-export default function CategoryModal({ handleClose, open, item }) {
-  const [values, setValues] = React.useState({
-    twowheeler: false,
-    fourwheeler: false,
-    heavyvehicles: false,
-    threewheeler: false,
+export default function CategoryModal({ handleClose, open, details }) {
+  const dispatch = useDispatch();
+  const items = details.categories; // Categories that exist in the details
+
+  const categories = [
+    "Two Wheeler",
+    "Four Wheeler",
+    "Three Wheeler",
+    "Heavy Vehicles",
+  ];
+  const [selectedCategories, setSelectedCategories] = useState(() => {
+    // Initialize the selectedCategories based on items
+    return categories.filter((category) => items.includes(category));
   });
-  const handleChange = (e) => {
-    const { name, checked } = e.target;
-    setValues((prev) => ({ ...prev, [name]: checked }));
+
+  const handleCategoryChange = (category) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories((prevSelected) =>
+        prevSelected.filter((c) => c !== category)
+      );
+    } else {
+      setSelectedCategories((prevSelected) => [...prevSelected, category]);
+    }
   };
+
   const handleSave = async () => {
-    await axios.patch("service-center/categories", { values });
+    const { data } = await axios.patch("service-center/categories", {
+      values: selectedCategories,
+    });
+    if (data.err) {
+      toast.error(data.message);
+    } else {
+      dispatch({ type: "refresh" });
+      handleClose();
+      toast.success(data.message);
+    }
   };
+
   return (
     <Modal
       open={open}
@@ -58,50 +83,19 @@ export default function CategoryModal({ handleClose, open, item }) {
           </Typography>
         </Box>
         <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
-          <FormControlLabel
-            sx={{ width: 200 }}
-            control={
-              <Checkbox
-                name="twowheeler"
-                checked={values.twowheeler}
-                onChange={handleChange}
-              />
-            }
-            label="Two Wheeler"
-          />
-          <FormControlLabel
-            sx={{ width: 200 }}
-            control={
-              <Checkbox
-                name="threewheeler"
-                checked={values.threewheeler}
-                onChange={handleChange}
-              />
-            }
-            label="Three Wheeler"
-          />
-          <FormControlLabel
-            sx={{ width: 200 }}
-            control={
-              <Checkbox
-                name="fourwheeler"
-                checked={values.fourwheeler}
-                onChange={handleChange}
-              />
-            }
-            label="Four Wheeler"
-          />
-          <FormControlLabel
-            sx={{ width: 200 }}
-            control={
-              <Checkbox
-                name="heavyvehicles"
-                checked={values.heavyvehicles}
-                onChange={handleChange}
-              />
-            }
-            label="Heavy Vehicles"
-          />
+          {categories.map((category) => (
+            <FormControlLabel
+              sx={{ width: 200 }}
+              key={category}
+              control={
+                <Checkbox
+                  checked={selectedCategories.includes(category)}
+                  onChange={() => handleCategoryChange(category)}
+                />
+              }
+              label={category}
+            />
+          ))}
         </Box>
         <Box display={"flex"} justifyContent={"center"}>
           <Button variant="contained" onClick={handleSave} color="success">

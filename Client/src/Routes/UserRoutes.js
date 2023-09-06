@@ -20,7 +20,7 @@ export default function UserRoutes() {
   const dispatch = useDispatch();
   useEffect(() => {
     (async function () {
-      let { data } = await axios.get("user/auth/check");
+      let { data } = await axios.get("/user/auth/check");
 
       dispatch({
         type: "user",

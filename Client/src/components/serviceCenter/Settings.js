@@ -16,6 +16,7 @@ export default function Settings() {
   return (
     <>
       <NavBar />
+      <Toaster/>
       <Container
         sx={{
           mt: 5,

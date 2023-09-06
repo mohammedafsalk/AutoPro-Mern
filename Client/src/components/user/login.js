@@ -97,7 +97,7 @@ export default function Login() {
 
   const handleModal = async () => {
     setLoading(true);
-    let { data } = await axios.post("http://localhost:5000/user/auth/forgot", {
+    let { data } = await axios.post("/user/auth/forgot", {
       email,
     });
     if (data.error) {
@@ -111,7 +111,7 @@ export default function Login() {
 
   const handleOtp = async () => {
     let { data } = await axios.post(
-      "http://localhost:5000/user/auth/forgot/verify",
+      "user/auth/forgot/verify",
       { otp }
     );
     if (data.err) {
@@ -130,7 +130,7 @@ export default function Login() {
     e.preventDefault();
     let newPassword = NewPasswordData.password;
     let { data } = await axios.post(
-      "http://localhost:5000/user/auth/forgot/resetPassword",
+      "user/auth/forgot/resetPassword",
       {
         email,
         password: newPassword,
@@ -147,7 +147,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let { data } = await axios.post("http://localhost:5000/user/auth/login", {
+    let { data } = await axios.post("/user/auth/login", {
       email,
       password,
     });

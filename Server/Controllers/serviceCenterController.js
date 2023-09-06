@@ -453,14 +453,20 @@ export async function setPriceRange(req, res) {
     });
   } catch (err) {
     console.log(err);
-    res.json({ err: true, message: "server error" });
+    res.json({ err: true, message: "Server Error" });
   }
 }
 
 export async function manageCategories(req, res) {
-  await ServiceCenterModel.findByIdAndUpdate(req.serviceCenter._id, {
-    $set: {
-      categories: req.body,
-    }
-  });
+  try {
+    const { values } = req.body;
+    await ServiceCenterModel.findByIdAndUpdate(req.serviceCenter._id, {
+      $set: {
+        categories: values,
+      },
+    });
+    res.json({ err: false, message: "Category Updated!" });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
 }

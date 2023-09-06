@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Home from "../components/serviceCenter/Home";
 import Login from "../components/serviceCenter/Login";
 import Signup from "../components/serviceCenter/Signup";
 import { useDispatch, useSelector } from "react-redux";
@@ -67,11 +66,10 @@ export default function ServiceCenterRoutes() {
 
       {serviceCenter.login && (
         <>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/workers" element={<Workers />} />
           <Route path="/schedule" element={<Schedules />} />
           <Route path="/bookings" element={<Bookings />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/login" element={<Navigate to="/service-center/" />} />
@@ -94,10 +92,6 @@ export default function ServiceCenterRoutes() {
           />
           <Route
             path="/bookings"
-            element={<Navigate to="/service-center/login" />}
-          />
-          <Route
-            path="/dashboard"
             element={<Navigate to="/service-center/login" />}
           />
           <Route
