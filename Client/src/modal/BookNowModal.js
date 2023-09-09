@@ -142,7 +142,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
           place,
           address,
           centerId: id,
-          userId,
+          userId,z
         });
         if (data.err) {
           toast.error(data.message);

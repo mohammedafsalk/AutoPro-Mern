@@ -305,13 +305,10 @@ export async function chooseServiceCenter(req, res) {
     const page = parseInt(req.query.page) ?? 0;
     const name = req.query.name ?? "";
     let categories = req.query.category || [];
-
     if (categories.includes("All")) {
       categories = [];
     }
-
     const count = await ServiceCenterModel.find({ permission: true }).count();
-
     let centerQuery = {
       permission: true,
       $or: [
@@ -326,17 +323,13 @@ export async function chooseServiceCenter(req, res) {
         },
       ],
     };
-
-    // Filter by selected categories if any categories are selected
     if (categories.length > 0) {
       centerQuery["categories"] = { $in: categories };
     }
-
     const center = await ServiceCenterModel.find(centerQuery)
       .skip(page * 3)
       .limit(3)
       .lean();
-
     res.json({ center, err: false, totalPage: Math.ceil(count / 3) });
   } catch (error) {
     res.json({ err: true, message: error.message });

@@ -13,7 +13,7 @@ import {
   MDBTextArea,
 } from "mdb-react-ui-kit";
 import UserNav from "./UserNav";
-import { Rating } from "@mui/material";
+import { Rating, Typography } from "@mui/material";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import BookNowModal from "../../modal/BookNowModal";
@@ -21,7 +21,7 @@ import BookNowModal from "../../modal/BookNowModal";
 export default function UserServicePage() {
   const { id } = useParams();
   const location = useLocation();
-  const serviceCenter = location.state.itemData
+  const serviceCenter = location.state.itemData;
   const [center, setCenter] = React.useState({});
   const [reviews, setReviews] = React.useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -43,6 +43,7 @@ export default function UserServicePage() {
     })();
   }, []);
 
+  let brands = center?.brands?.join(", ");
   return (
     <>
       <UserNav></UserNav>
@@ -94,20 +95,18 @@ export default function UserServicePage() {
                 </div>
               </MDBCardBody>
               <hr class="my-0" />
-              <MDBCardBody className="pb-0">
-                <div className="d-flex justify-content-between">
-                  <p>
-                    Welcome to our Auto PRO, where exceptional care meets
-                    automotive expertise! Our mission is to provide you with
-                    top-notch vehicle maintenance and repair services that keep
-                    your wheels running smoothly and your journeys worry-free.
-                  </p>
+              <MDBCardBody className="">
+                <div className="d-flex justify-content-between  ">
+                  {center?.brands?.length === 0 ? (
+                    <Typography fontWeight={500}>No Brands</Typography>
+                  ) : (
+                    <Typography fontWeight={500}>{brands}</Typography>
+                  )}
                 </div>
               </MDBCardBody>
               <hr class="my-0" />
               <MDBCardBody className="pb-0">
-                <div className="d-flex justify-content-between align-items-center pb-2 mb-4">
-                  <span></span>
+                <div className="d-flex justify-content-center align-items-center pb-2 mb-4">
                   <MDBBtn color="dark" onClick={handleBooking}>
                     Book now
                   </MDBBtn>

@@ -97,7 +97,7 @@ export default function Login() {
 
   const handleModal = async () => {
     setLoading(true);
-    let { data } = await axios.post("/user/auth/forgot", {
+    let { data } = await axios.post("user/auth/forgot", {
       email,
     });
     if (data.error) {
@@ -147,7 +147,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let { data } = await axios.post("/user/auth/login", {
+    let { data } = await axios.post("user/auth/login", {
       email,
       password,
     });
