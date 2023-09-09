@@ -9,6 +9,7 @@ import twilio from "twilio";
 import ScheduleModel from "../Models/scheduleModel.js";
 import BookingModel from "../Models/bookingModel.js";
 import reviewModel from "../Models/reviewModel.js";
+import cloudinary from "../config/cloudinary.js";
 
 var salt = bcrypt.genSaltSync(10);
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -376,6 +377,34 @@ export async function addReview(req, res) {
     });
     await review.save();
     res.json({ err: false, message: "Review Added Successfully!" });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function profileUpdate(req, res) {
+  try {
+    const { name, phone, logo } = req.body;
+    if (logo) {
+      const logoUpld = await cloudinary.uploader.upload(logo, {
+        folder: "AutoPro",
+      });
+      await UserModel.findByIdAndUpdate(req.user._id, {
+        $set: {
+          profile: logoUpld.url,
+          name,
+          phone,
+        },
+      });
+    } else {
+      await UserModel.findByIdAndUpdate(req.user._id, {
+        $set: {
+          name,
+          phone,
+        },
+      });
+    }
+    res.json({ err: false });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }
