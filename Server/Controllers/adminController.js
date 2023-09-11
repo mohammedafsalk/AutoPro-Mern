@@ -46,7 +46,11 @@ export async function adminCheckLogin(req, res) {
   try {
     const token = req.cookies.adminToken;
     if (!token) {
-      return res.json({ err: true, message: "No Token Found" });
+      return res.json({
+        loggedIn: false,
+        err: true,
+        message: "Token Not Found",
+      });
     }
     const tokenVerify = jwt.verify(token, process.env.JWT_SECRET);
     const admin = await AdminModel.findById(tokenVerify.id, { password: 0 });

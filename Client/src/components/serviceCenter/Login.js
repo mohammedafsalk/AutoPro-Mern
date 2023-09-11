@@ -131,7 +131,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let { email, password } = formdata;
-    let { data } = await axios.post("/service-center/auth/login", {
+    let { data } = await axios.post("service-center/auth/login", {
       email,
       password,
     });

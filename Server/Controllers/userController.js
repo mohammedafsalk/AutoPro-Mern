@@ -328,11 +328,16 @@ export async function chooseServiceCenter(req, res) {
       centerQuery["categories"] = { $in: categories };
     }
     const center = await ServiceCenterModel.find(centerQuery)
+      .populate({
+        path: "reviews",
+        model: "Reviews",
+      })
       .skip(page * 3)
       .limit(3)
       .lean();
     res.json({ center, err: false, totalPage: Math.ceil(count / 3) });
   } catch (error) {
+    console.log(error.message);
     res.json({ err: true, message: error.message });
   }
 }
@@ -342,6 +347,7 @@ export async function getServiceCenter(req, res) {
     const { id } = req.body;
     const center = await ServiceCenterModel.findById(id);
     const reviews = await reviewModel.find({ centerId: id }).populate("userId");
+    console.log(reviews);
     res.json({ err: false, center, reviews });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });

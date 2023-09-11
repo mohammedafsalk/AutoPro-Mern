@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function Login() {
+export default function Register() {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
@@ -58,7 +58,7 @@ export default function Login() {
       <Toaster />
       <MDBContainer>
         <MDBCol col="12">
-          <h1 className="text-left mb-4">ADMIN Login</h1>
+          <h1 className="text-left mb-4">ADMIN Register</h1>
         </MDBCol>
         <MDBRow>
           <MDBCol col="12" lg="7">

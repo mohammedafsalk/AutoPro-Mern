@@ -19,8 +19,9 @@ export default function AdminRoutes() {
   useEffect(() => {
     (async function () {
       let { data: adminData } = await axios.get(
-        "http://localhost:5000/admin/auth/checkLogin"
+        "/admin/auth/checkLogin"
       );
+      console.log(adminData);
       dispatch({
         type: "admin",
         payload: { login: adminData.loggedIn },
@@ -52,7 +53,7 @@ export default function AdminRoutes() {
           />
         </>
       )}
-      {admin.login !== null && <Route path="/*" element={<NotFoundPage />} />}
+      {/* {admin.login !== null && <Route path="/*" element={<NotFoundPage />} />} */}
     </Routes>
   );
 }

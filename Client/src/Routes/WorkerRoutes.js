@@ -9,17 +9,18 @@ export default function WorkerRoutes() {
   const { worker, refresh } = useSelector((state) => {
     return state;
   });
+  console.log(worker);
   const dispatch = useDispatch();
   React.useEffect(() => {
     (async function () {
       let { data: workerData } = await axios.get("/worker/auth/checkLogin");
+      console.log(workerData);
       dispatch({
         type: "worker",
         payload: { login: workerData.loggedIn, details: workerData.worker },
       });
     })();
   }, [refresh]);
-
   return (
     <Routes>
       {worker.login && (

@@ -146,7 +146,7 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setOpenLoader(true);
-    let { data } = await axios.post("/service-center/auth/signup", {
+    let { data } = await axios.post("service-center/auth/signup", {
       ...formData,
       proof: uploadImg.proofUpload,
       logo: uploadImg.logoUpload,
