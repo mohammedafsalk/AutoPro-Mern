@@ -52,7 +52,7 @@ export default function AdminRoutes() {
           />
         </>
       )}
-      <Route path="/*" element={<NotFoundPage />} />
+      {admin.login !== null && <Route path="/*" element={<NotFoundPage />} />}
     </Routes>
   );
 }

@@ -62,12 +62,11 @@ export default function UserProfileEdit({ handleClose, open, user }) {
       logo: finalImg,
     });
     if (data.err) {
-      toast.error(data.message);
       setState({ type: "stop" });
     } else {
       setState({ type: "stop" });
-      dispatch({ type: "refresh" });
       handleClose();
+      toast.error(data.message);
     }
   };
 

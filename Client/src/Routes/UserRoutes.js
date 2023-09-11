@@ -57,7 +57,7 @@ export default function UserRoutes() {
             <Route path="/booking-details" element={<Navigate to="/login" />} />
           </>
         )}
-        <Route path="/*" element={<NotFoundPage />} />
+        {user.login !== null && <Route path="/*" element={<NotFoundPage />} />}
       </Routes>
       {user.login === null && (
         <Backdropspinner openLoader={true}></Backdropspinner>
