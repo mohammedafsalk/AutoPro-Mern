@@ -7,14 +7,12 @@ import {
   MDBCardBody,
   MDBCardImage,
   MDBIcon,
-  MDBInputGroup,
-  MDBInput,
-  MDBBtn,
 } from "mdb-react-ui-kit";
 import axios from "axios";
 import UserNav from "./UserNav";
 import { Link } from "react-router-dom";
 import img from "../../assets/images/No service centers.jpeg";
+import predefinedBrands from "../../utils/brands";
 import {
   Box,
   Grid,
@@ -38,7 +36,8 @@ export default function ChooseServiceCenter() {
   const [page, setPage] = React.useState(1);
   const [count, setCount] = React.useState(0);
   const [name, setName] = React.useState("");
-  const [category, setCategory] = React.useState("");
+  const [category, setCategory] = React.useState("All");
+  const [brand, setBrand] = React.useState("All");
   const [open, setOpen] = React.useState(false);
   const [latitude, setLatitude] = React.useState("");
   const [longitude, setLongitude] = React.useState("");
@@ -73,7 +72,7 @@ export default function ChooseServiceCenter() {
       let { data } = await axios.get(
         `user/service-centers?page=${
           page - 1
-        }&name=${name}&category=${category}`
+        }&name=${name}&category=${category}&brand=${brand}`
       );
       if (data.err) {
         setState({ type: "stop" });
@@ -84,7 +83,8 @@ export default function ChooseServiceCenter() {
         setState({ type: "stop" });
       }
     })();
-  }, [page, name, category]);
+  }, [page, name, category,brand]);
+
   return (
     <>
       <UserNav></UserNav>
@@ -93,15 +93,15 @@ export default function ChooseServiceCenter() {
         <>
           <MDBRow className="align-items-center">
             <MDBCol
-              xs={12}
+              xs={4}
               sm={8}
-              md={8}
-              lg={8}
+              md={4}
               className="d-flex justify-content-center mb-2 mb-md-0"
             >
               <TextField
                 size="small"
                 label="Search"
+                fullWidth
                 placeholder="Search Centers"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -116,7 +116,7 @@ export default function ChooseServiceCenter() {
                 }}
               />
             </MDBCol>
-            <MDBCol xs={12} sm={4} md={4} lg={4}>
+            <MDBCol xs={4} sm={4} md={4}>
               <TextField
                 select
                 onChange={(e) =>
@@ -135,14 +135,34 @@ export default function ChooseServiceCenter() {
                 <MenuItem value="Three Wheeler">Three Wheeler</MenuItem>
               </TextField>
             </MDBCol>
+            <MDBCol xs={4} sm={4} md={4}>
+              <TextField
+                select
+                onChange={(e) =>
+                  setBrand(e.target.value === "All" ? [] : [e.target.value])
+                }
+                defaultValue="All"
+                variant="outlined"
+                fullWidth
+                size="small"
+                label="Brands"
+              >
+                <MenuItem value="All">All</MenuItem>
+                {predefinedBrands.map((item, i) => (
+                  <MenuItem key={i} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </MDBCol>
           </MDBRow>
 
           {data[0] ? (
             <>
-              <MDBRow className="my-5">
+              <MDBRow className="mt-5 mb-3  ">
                 {data &&
                   data.map((item) => (
-                    <MDBCol md="12" lg="4" className="mb-4 mb-lg-0">
+                    <MDBCol md="12" lg="4" className="mb-4">
                       <Link
                         className="text-dark"
                         to={`/select-package/${item._id}`}
@@ -197,7 +217,7 @@ export default function ChooseServiceCenter() {
                     </MDBCol>
                   ))}
               </MDBRow>
-              <MDBRow className="justify-content-center">
+              <MDBRow className="justify-content-center ">
                 <MDBCol sm={2}>
                   <Stack spacing={2}>
                     <Pagination

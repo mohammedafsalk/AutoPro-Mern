@@ -28,7 +28,6 @@ export default function UserServicePage() {
 
   const handleBooking = () => {
     setOpenModal(true);
-    console.log(openModal);
   };
 
   React.useEffect(() => {

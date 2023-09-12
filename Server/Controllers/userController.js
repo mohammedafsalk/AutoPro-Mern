@@ -315,11 +315,17 @@ export async function getMapList(req, res) {
 
 export async function chooseServiceCenter(req, res) {
   try {
+    console.log(req.query);
     const page = parseInt(req.query.page) ?? 0;
     const name = req.query.name ?? "";
-    let categories = req.query.category || [];
-    if (categories.includes("All")) {
+    let categories = req.query.category;
+    let brand = req.query.brand;
+
+    if (categories === "All") {
       categories = [];
+    }
+    if (brand === "All") {
+      brand = [];
     }
     const count = await ServiceCenterModel.find({ permission: true }).count();
     let centerQuery = {
@@ -339,15 +345,18 @@ export async function chooseServiceCenter(req, res) {
     if (categories.length > 0) {
       centerQuery["categories"] = { $in: categories };
     }
+    if (brand.length > 0) {
+      centerQuery["brands"] = { $in: brand };
+    }
     const center = await ServiceCenterModel.find(centerQuery)
       .populate({
         path: "reviews",
         model: "Reviews",
       })
-      .skip(page * 3)
-      .limit(3)
+      .skip(page * 6)
+      .limit(6)
       .lean();
-    res.json({ center, err: false, totalPage: Math.ceil(count / 3) });
+    res.json({ center, err: false, totalPage: Math.ceil(count / 6) });
   } catch (error) {
     console.log(error.message);
     res.json({ err: true, message: error.message });
