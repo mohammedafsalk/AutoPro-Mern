@@ -23,6 +23,8 @@ import { priceChecker } from "../helpers/priceSetter";
 import { Toaster, toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import MapSearchBox from "../components/MapBox/MapSearchBox";
+import MapSearchBoxBookingModal from "../components/MapBox/MapBoxSearchBookingModal";
 
 export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
   const serviceCenterLatitude = serviceCenter.latitude;
@@ -294,15 +296,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
                   </FormControl>
                 </MDBCol>
                 <MDBCol className="mt-2" md={6}>
-                  <MDBInput
-                    onChange={handleFormData}
-                    value={formData.place}
-                    name="place"
-                    label="Place"
-                    id="formControlDefault"
-                    size="lg"
-                    type="text"
-                  />
+                  <MapSearchBoxBookingModal setFormData={setFormData} />
                 </MDBCol>
               </MDBRow>
               <MDBRow>

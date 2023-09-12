@@ -3,7 +3,7 @@ import mapboxAPI from "./MapBoxApi";
 import { MDBInput } from "mdb-react-ui-kit";
 import { Button } from "@mui/material";
 
-function MapSearchBox({ setFormData, handleFormData }) {
+function MapSearchBox({ setFormData}) {
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [items, seItems] = useState([]);
