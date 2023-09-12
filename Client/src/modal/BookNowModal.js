@@ -113,14 +113,21 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
         serviceCenterLatitude,
         serviceCenterLongitude
       );
+      console.log(distance);
       const amount = priceChecker(distance, priceRanges);
-      const { data } = await axios.post("/user/payment", { amount });
-      if (!data.err) {
-        handleRazorPay(data.order);
+
+      if (typeof amount === "undefined") {
+        toast.error("Enter A Place which Is Inside Our PickUp Range");
+        return;
       }
-    } else {
-      toggleShow();
-      toast.error("Enter a Valid Place And Address");
+
+      //   const { data } = await axios.post("/user/payment", { amount });
+      //   if (!data.err) {
+      //     handleRazorPay(data.order);
+      //   }
+      // } else {
+      //   toggleShow();
+      //   toast.error("Enter a Valid Place And Address");
     }
   };
   const handleRazorPay = (order) => {
