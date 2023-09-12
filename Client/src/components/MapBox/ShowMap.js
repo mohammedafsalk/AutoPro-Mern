@@ -5,8 +5,10 @@ import {
   MDBModalContent,
   MDBModalBody,
 } from "mdb-react-ui-kit";
+import { useNavigate } from "react-router-dom";
 
-export default function ShowMap({ open, latitude, longitude, data }) {
+export default function ShowMap({ open, setOpen, latitude, longitude, data }) {
+  const navigate = useNavigate();
   const [basicModal, setBasicModal] = useState(false);
   const mapContainer = useRef(null);
   let map = null;
@@ -26,13 +28,15 @@ export default function ShowMap({ open, latitude, longitude, data }) {
         const { latitude, longitude, name, location, _id } = item;
 
         if (latitude && longitude) {
-          const marker = new mapboxgl.Marker({ color: "blue"})
+          const marker = new mapboxgl.Marker({ color: "blue" })
             .setLngLat([longitude, latitude])
             .addTo(map);
 
-            marker.getElement().addEventListener("click", () => {
-              window.location.href = `/select-package/${_id}`;
-            });
+          const handleMarkerClick = () => {
+            navigate(`/select-package/${_id}`, { state: { itemData: item } });
+          };
+
+          marker.getElement().addEventListener("click", handleMarkerClick);
 
           const popup = new mapboxgl.Popup({
             closeButton: false,
@@ -61,7 +65,7 @@ export default function ShowMap({ open, latitude, longitude, data }) {
 
   return (
     <>
-      <MDBModal show={open} setShow={setBasicModal} tabIndex="-1">
+      <MDBModal show={open} setShow={setOpen} tabIndex="-1">
         <MDBModalDialog centered>
           <MDBModalContent>
             <MDBModalBody>

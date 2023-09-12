@@ -34,6 +34,7 @@ import { Toaster, toast } from "react-hot-toast";
 
 export default function ChooseServiceCenter() {
   const [data, setData] = React.useState([]);
+  const [mapData, setMapData] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [count, setCount] = React.useState(0);
   const [name, setName] = React.useState("");
@@ -58,6 +59,13 @@ export default function ChooseServiceCenter() {
 
   const handleClose = () => setOpen(false);
   const [state, setState] = React.useReducer(loadingReducer, false);
+
+  React.useEffect(() => {
+    (async function () {
+      let { data } = await axios.get("user/loadmap");
+      setMapData(data.centers);
+    })();
+  }, []);
 
   React.useEffect(() => {
     (async function () {
@@ -220,8 +228,9 @@ export default function ChooseServiceCenter() {
       {longitude && latitude && (
         <ShowMap
           open={open}
+          setOpen={setOpen}
           handleClose={handleClose}
-          data={data}
+          data={mapData}
           latitude={latitude}
           longitude={longitude}
         />

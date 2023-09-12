@@ -301,6 +301,18 @@ export async function userPassReset(req, res) {
   }
 }
 
+export async function getMapList(req, res) {
+  try {
+    const centers = await ServiceCenterModel.find().lean();
+    if (!centers) {
+      return res.json({ err: true, message: "No Center Found" });
+    }
+    res.json({ err: false, centers });
+  } catch (error) {
+    res.json({ error: error, err: true, message: "Something went wrong" });
+  }
+}
+
 export async function chooseServiceCenter(req, res) {
   try {
     const page = parseInt(req.query.page) ?? 0;

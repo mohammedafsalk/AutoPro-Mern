@@ -15,9 +15,17 @@ function MapSearchBox({ setFormData, handleFormData }) {
   };
   const fetchSuggestions = async (value) => {
     try {
+      const region = "Kerala";
+      const radius = 100000;
+      const proximity = " 76.2711,10.8505"; 
+      const query = `places ${value} in ${region}`;
+
       const url = `/geocoding/v5/mapbox.places/${encodeURIComponent(
-        value
-      )}.json`;
+        query
+      )}.json?region=${encodeURIComponent(
+        region
+      )}&proximity=${encodeURIComponent(proximity)}&radius=${radius}`;
+
       const response = await mapboxAPI.get(url);
       seItems(response.data.features);
       const suggestions = response.data.features.map(

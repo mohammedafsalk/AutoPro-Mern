@@ -3,6 +3,7 @@ import express from "express";
 import {
   addReview,
   chooseServiceCenter,
+  getMapList,
   getServiceCenter,
   getServiceCenterSchedule,
   getUserBookings,
@@ -20,10 +21,11 @@ router
   .get(chooseServiceCenter)
   .post(getServiceCenter);
 
+router.get("/loadmap", getMapList);
 router.get("/schedule/:id", getServiceCenterSchedule);
 router.post("/payment", paymentOrder);
 router.post("/payment/verify", verifyPayment);
 router.post("/payment/bill/verify", verifyBillPayment);
-router.route("/bookings").get(getUserBookings).patch(addReview)
-router.route("/profile").patch(profileUpdate)
+router.route("/bookings").get(getUserBookings).patch(addReview);
+router.route("/profile").patch(profileUpdate);
 export default router;
