@@ -85,7 +85,23 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
     }
   };
 
+  function validateEmail(email) {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+  }
+
+  function validateVehicleNumber(vehicleNumber) {
+    const vehicleNumberPattern = /^[A-Z]{2}-\d{2}-[A-Z]{2}-\d{4}$/;
+    return vehicleNumberPattern.test(vehicleNumber);
+  }
+
   const handleBooking = async () => {
+    const isEmailValid = validateEmail(formData.email);
+    const isVehicleNumberValid = validateVehicleNumber(formData.vehicleNumber);
+    if (!isEmailValid || !isVehicleNumberValid) {
+      toast.error("Enter valid email and vehicle number");
+      return;
+    }
     const data = await validatePlace(formData.place);
     const { latitude, longitude } = data;
     if (data.isValid) {
@@ -228,7 +244,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
               </MDBRow>
               <MDBRow>
                 <MDBCol className="mt-2" md={6}>
-                  <FormControl fullWidth size="small" >
+                  <FormControl fullWidth size="small">
                     <InputLabel>Brands</InputLabel>
                     <Select
                       name="brand"
