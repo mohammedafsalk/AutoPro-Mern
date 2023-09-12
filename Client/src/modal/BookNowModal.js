@@ -14,12 +14,7 @@ import {
   MDBCheckbox,
   MDBTextArea,
 } from "mdb-react-ui-kit";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import axios from "axios";
 import getDayName from "../utils/getDayName";
 import { validatePlace } from "../helpers/placeValidator";
@@ -142,7 +137,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
           place,
           address,
           centerId: id,
-          userId,z
+          userId,
         });
         if (data.err) {
           toast.error(data.message);
@@ -159,10 +154,13 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
       setRefresh(!refresh);
     });
   };
-
   const handleFormData = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "brand") {
+      setFormData((prev) => ({ ...prev, brand: value }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   return (
@@ -230,15 +228,18 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
               </MDBRow>
               <MDBRow>
                 <MDBCol className="mt-2" md={6}>
-                  <MDBInput
-                    onChange={handleFormData}
-                    value={formData.brand}
-                    name="brand"
-                    label="Brand"
-                    id="formControlDefault"
-                    size="lg"
-                    type="text"
-                  />
+                  <FormControl fullWidth size="small" >
+                    <InputLabel>Brands</InputLabel>
+                    <Select
+                      name="brand"
+                      value={formData.brand}
+                      onChange={handleFormData}
+                    >
+                      {serviceCenter.brands.map((item) => (
+                        <MenuItem value={item}>{item}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </MDBCol>
                 <MDBCol className="mt-2" md={6}>
                   <MDBInput
