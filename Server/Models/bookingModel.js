@@ -45,6 +45,10 @@ const BookingSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    deliverchargePaymentId: {
+      type: Object,
+      default: null,
+    },
     billPayment: {
       type: Object,
       default: null,
@@ -81,7 +85,7 @@ const BookingSchema = new mongoose.Schema(
 BookingSchema.pre("save", function (next) {
   if (this.status === "Paid") {
     const sumRs = this.invoice.reduce((sum, item) => sum + item.price, 0);
-    this.amountPaid = sumRs + 100;
+    this.amountPaid = sumRs + this.deliveryCharge;
   }
   next();
 });

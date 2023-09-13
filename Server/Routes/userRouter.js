@@ -10,6 +10,7 @@ import {
   profileUpdate,
 } from "../Controllers/userController.js";
 import {
+  cancelPayment,
   paymentOrder,
   verifyBillPayment,
   verifyPayment,
@@ -24,6 +25,7 @@ router
 router.get("/loadmap", getMapList);
 router.get("/schedule/:id", getServiceCenterSchedule);
 router.post("/payment", paymentOrder);
+router.post("/payment/cancel", cancelPayment);
 router.post("/payment/verify", verifyPayment);
 router.post("/payment/bill/verify", verifyBillPayment);
 router.route("/bookings").get(getUserBookings).patch(addReview);

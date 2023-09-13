@@ -117,20 +117,21 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
       const amount = priceChecker(distance, priceRanges);
 
       if (typeof amount === "undefined") {
-        toast.error("Enter A Place which Is Inside Our PickUp Range");
+        toast.error("Enter a place which is inside our pickUp range");
         return;
       }
 
-      //   const { data } = await axios.post("/user/payment", { amount });
-      //   if (!data.err) {
-      //     handleRazorPay(data.order);
-      //   }
-      // } else {
-      //   toggleShow();
-      //   toast.error("Enter a Valid Place And Address");
+      const { data } = await axios.post("/user/payment", { amount });
+      if (!data.err) {
+        handleRazorPay(data.order);
+      }
+    } else {
+      toggleShow();
+      toast.error(data.message);
     }
   };
   const handleRazorPay = (order) => {
+    let deliveryCharge = order.amount / 100;
     const options = {
       key: "rzp_test_0ksLH8MhxszVRr",
       amount: order.amount,
@@ -163,6 +164,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
           address,
           centerId: id,
           userId,
+          deliveryCharge
         });
         if (data.err) {
           toast.error(data.message);

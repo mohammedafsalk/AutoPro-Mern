@@ -2,6 +2,7 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import BookingModel from "../Models/bookingModel.js";
 import dayjs from "dayjs";
+import { json } from "express";
 
 let instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -24,7 +25,7 @@ export async function paymentOrder(req, res) {
       }
     });
   } catch (error) {
-    res.json({ err: true, message: "server error", error });
+    res.json({ err: true, message: "Server error", error });
   }
 }
 
@@ -43,6 +44,7 @@ export async function verifyPayment(req, res) {
       address,
       centerId,
       userId,
+      deliveryCharge,
     } = req.body;
     let item = await BookingModel.findOne({
       vehicleNumber: vehicleNumber,
@@ -72,6 +74,8 @@ export async function verifyPayment(req, res) {
         address,
         centerId,
         userId,
+        deliveryCharge,
+        deliverchargePaymentId: response,
       });
       return res.json({
         err: false,
@@ -120,6 +124,44 @@ export async function verifyBillPayment(req, res) {
     }
   } catch (error) {
     console.log(error);
+    res.json({ error, err: true, message: "Something went wrong" });
+  }
+}
+
+export async function cancelPayment(req, res) {
+  try {
+    const { id } = req.body;
+    const booking = await BookingModel.findById(id);
+    const paymentId = booking.deliverchargePaymentId.razorpay_payment_id;
+    const amount = booking.deliveryCharge;
+    const receiptNumber = Math.random().toString(36).substring(7);
+
+    var instance = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+
+    let status = await instance.payments.refund(paymentId, {
+      amount: amount,
+      speed: "optimum",
+      receipt: receiptNumber,
+    });
+    if (status.status === "processed") {
+      await BookingModel.findByIdAndUpdate(id, {
+        $set: { status: "Cancelled" },
+      });
+      return (
+        res.
+        json({
+          err: false,
+          message: "Your booking has cancelled.Your Amount will be refunded!",
+        })
+      );
+    } else {
+      return res.json({ err: false, message: "Server error,try again later" });
+    }
+  } catch (error) {
+    console.log("error", error);
     res.json({ error, err: true, message: "Something went wrong" });
   }
 }
