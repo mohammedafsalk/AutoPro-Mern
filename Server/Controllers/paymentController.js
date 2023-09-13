@@ -74,7 +74,7 @@ export async function verifyPayment(req, res) {
         address,
         centerId,
         userId,
-        deliveryCharge,
+        amountPaid: deliveryCharge,
         deliverchargePaymentId: response,
       });
       return res.json({
@@ -97,9 +97,12 @@ export async function verifyBillPayment(req, res) {
   try {
     const { response, bookingId } = req.body;
     const booking = await BookingModel.findById(bookingId);
+    console.log(booking);
     if (!booking) {
       return res.json({ err: true, message: "Booking Not Found" });
     }
+    const price = booking.invoice.reduce((sum, item) => sum + item.price, 0);
+    const updatedAmountPaid = parseInt(booking.amountPaid) + parseInt(price);
     let body = response.razorpay_order_id + "|" + response.razorpay_payment_id;
     var expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -111,6 +114,7 @@ export async function verifyBillPayment(req, res) {
         $set: {
           billPayment: response,
           status: "Paid",
+          amountPaid: updatedAmountPaid,
         },
       });
       return res.json({
@@ -148,15 +152,12 @@ export async function cancelPayment(req, res) {
     });
     if (status.status === "processed") {
       await BookingModel.findByIdAndUpdate(id, {
-        $set: { status: "Cancelled" },
+        $set: { status: "Cancelled", amountPaid: 0 },
       });
-      return (
-        res.
-        json({
-          err: false,
-          message: "Your booking has cancelled.Your Amount will be refunded!",
-        })
-      );
+      return res.json({
+        err: false,
+        message: "Your booking has cancelled.Your Amount will be refunded!",
+      });
     } else {
       return res.json({ err: false, message: "Server error,try again later" });
     }

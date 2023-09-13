@@ -66,7 +66,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-export default function ServiceCenterBookings({ bookings, rowheads, setRefresh }) {
+export default function ServiceCenterBookings({
+  bookings,
+  rowheads,
+  setRefresh,
+}) {
   const [item, setItem] = React.useState([]);
   const [modalActions, setModalActions] = React.useState({
     openDetails: false,
@@ -96,17 +100,16 @@ export default function ServiceCenterBookings({ bookings, rowheads, setRefresh }
       ...prev,
       openAssign: true,
     }));
-    setRefresh(prev=>!prev)
+    setRefresh((prev) => !prev);
   };
 
-  const handleCloseAssign = () =>
-    {
-      setModalActions((prev) => ({
-        ...prev,
-        openAssign: false,
-      }));
-      setRefresh(prev=>!prev)
-    }
+  const handleCloseAssign = () => {
+    setModalActions((prev) => ({
+      ...prev,
+      openAssign: false,
+    }));
+    setRefresh((prev) => !prev);
+  };
 
   const handleOpenInvoice = (item) => {
     setItem(item);
@@ -114,17 +117,16 @@ export default function ServiceCenterBookings({ bookings, rowheads, setRefresh }
       ...prev,
       openInvoice: true,
     }));
-    setRefresh(prev=>!prev)
+    setRefresh((prev) => !prev);
   };
 
-  const handleCloseInvoice = () =>
-    {
-      setModalActions((prev) => ({
-        ...prev,
-        openInvoice: false,
-      }));
-    setRefresh(prev=>!prev)
-    }
+  const handleCloseInvoice = () => {
+    setModalActions((prev) => ({
+      ...prev,
+      openInvoice: false,
+    }));
+    setRefresh((prev) => !prev);
+  };
   return (
     <>
       <Toaster />
@@ -186,8 +188,9 @@ export default function ServiceCenterBookings({ bookings, rowheads, setRefresh }
                         <Button
                           onClick={() => handleOpenAssign(item._id)}
                           color="info"
+                          disabled={item?.status === "Cancelled"}
                         >
-                          Assign
+                          {item.status === "Cancelled" ? "Cancelled" : "Assign"}
                         </Button>
                       )}
                     </Box>
@@ -199,7 +202,9 @@ export default function ServiceCenterBookings({ bookings, rowheads, setRefresh }
                         variant="outlined"
                         onClick={() => handleOpenInvoice(item)}
                       />
-                    ) : "N/A"}
+                    ) : (
+                      "N/A"
+                    )}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}

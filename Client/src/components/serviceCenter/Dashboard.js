@@ -11,9 +11,11 @@ import { toast } from "react-hot-toast";
 import AdminNav from "../admin/AdminNav";
 import NavBar from "./Navbar";
 import WalletModal from "../../modal/WalletModal";
+import PieChart from "./Piechart";
 
 export default function DashBoard() {
   const [open, setOpen] = React.useState(false);
+  const [names, setNames] = React.useState([]);
   const [bookingCount, setBookingCount] = React.useState(null);
   const [monthlyData, setMonthlyData] = React.useState([]);
   const [revenue, setRevenue] = React.useState(null);
@@ -31,6 +33,7 @@ export default function DashBoard() {
       if (data.err) {
         toast.error(data.message);
       } else {
+        setNames(data.final);
         setBookingCount(data.bookingCount);
         setMonthlyData(data.monthlyData);
         setRevenue(data.totalRevenue);
@@ -179,6 +182,9 @@ export default function DashBoard() {
             className={"w-100 dashboard-chart"}
             height={300}
           />
+        </Box>
+        <Box display={"flex"} justifyContent={"center"} mt={2}>
+          <PieChart names={names} />
         </Box>
       </Container>
       <WalletModal handlClose={handlClose} open={open} />

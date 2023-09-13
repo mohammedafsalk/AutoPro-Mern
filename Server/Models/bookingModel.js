@@ -71,24 +71,15 @@ const BookingSchema = new mongoose.Schema(
       required: true,
       default: "Waiting For Pickup",
     },
-    deliveryCharge: {
-      type: Number,
-      default: 0,
-    },
     amountPaid: {
       type: Number,
+      default: 0,
     },
   },
   { timestamps: true }
 );
 
-BookingSchema.pre("save", function (next) {
-  if (this.status === "Paid") {
-    const sumRs = this.invoice.reduce((sum, item) => sum + item.price, 0);
-    this.amountPaid = sumRs + this.deliveryCharge;
-  }
-  next();
-});
+
 
 const BookingModel = mongoose.model("Booking", BookingSchema);
 export default BookingModel;

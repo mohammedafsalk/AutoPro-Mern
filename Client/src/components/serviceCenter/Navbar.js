@@ -26,12 +26,15 @@ import {
   AccessTime,
   AccountCircle,
 } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import profileImageUrl from "../../assets/images/avatar.png";
 import { grey } from "@mui/material/colors";
 
 export default function NavBar() {
+  const serviceCenter = useSelector((state) => {
+    return state?.serviceCenter?.details;
+  });
   const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleDrawer = (open) => (event) => {
@@ -98,7 +101,7 @@ export default function NavBar() {
             <Link
               component={link}
               to="/service-center/profile"
-              sx={{ textDecoration: "none",color:"inherit" }}
+              sx={{ textDecoration: "none", color: "inherit" }}
             >
               Profile
             </Link>
@@ -135,14 +138,14 @@ export default function NavBar() {
           >
             <Avatar
               alt="Profile Image"
-              src={profileImageUrl}
+              src={serviceCenter?.logo?.url}
               sx={{
                 width: 80,
                 height: 80,
               }}
             />
             <Typography variant="h5" fontWeight={500}>
-              Service Center
+              {serviceCenter.name}
             </Typography>
           </Toolbar>
           <Box
