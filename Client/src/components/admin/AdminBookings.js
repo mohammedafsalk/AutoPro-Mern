@@ -2,6 +2,7 @@ import React from "react";
 import AdminBookingsTable from "../tables/AdminBookingTable";
 import axios from "axios";
 import AdminNav from "./AdminNav";
+import dayjs from "dayjs";
 import img from "../../assets/images/No User.jpg";
 import {
   Box,
@@ -21,23 +22,30 @@ const options = [
 export default function AdminBookings() {
   const rowHeads = ["No", "UserName", "CenterName", "Date", "Amount", "Status"];
   const [bookings, setBookings] = React.useState([]);
+  const [date, setDate] = React.useState("");
   const [refresh, setRefresh] = React.useState(false);
   const [status, setStatus] = React.useState("");
   React.useEffect(() => {
     (async function () {
-      let { data } = await axios.get(`admin/bookings?status=${status}`);
+      let { data } = await axios.get(
+        `admin/bookings?status=${status}&date=${date}`
+      );
       if (data.err) {
         toast.error(data.message);
       } else {
         setBookings(data.bookings);
       }
     })();
-  }, [refresh, status]);
+  }, [refresh, status, date]);
 
   const handleValue = (e) => {
     setStatus(e.target.value);
   };
-  console.log(status);
+
+  const handleDate = (e) => {
+    setDate(e.target.value);
+  };
+
   return (
     <>
       <AdminNav />
@@ -60,7 +68,14 @@ export default function AdminBookings() {
               </TextField>
             </Grid>
             <Grid item minWidth={100}>
-              <TextField type="date" fullWidth size="small" />
+              <TextField
+                type="text"
+                label="Search By date"
+                placeholder="DD-MM-YYYY"
+                fullWidth
+                size="small"
+                onChange={handleDate}
+              />
             </Grid>
           </Grid>
         </Box>

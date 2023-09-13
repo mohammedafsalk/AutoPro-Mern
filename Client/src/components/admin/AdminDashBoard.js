@@ -9,10 +9,12 @@ import {
 } from "@mui/icons-material";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import PieChart from "./Piechart";
 
 export default function AdminDashBoard() {
   const [users, setUsers] = React.useState(null);
   const [monthlyData, setMonthlyData] = React.useState([]);
+  const [names, setNames] = React.useState([]);
   const [revenue, setRevenue] = React.useState(null);
   const [centers, setCenters] = React.useState(null);
   React.useEffect(() => {
@@ -21,6 +23,7 @@ export default function AdminDashBoard() {
       if (data.err) {
         toast.error(data.message);
       } else {
+        setNames(data.final);
         setUsers(data.usersCount);
         setCenters(data.centerCount);
         setMonthlyData(data.monthlyData);
@@ -53,7 +56,7 @@ export default function AdminDashBoard() {
     series: [
       {
         name: "series-1",
-        data:monthlyData,
+        data: monthlyData,
       },
     ],
   };
@@ -148,7 +151,7 @@ export default function AdminDashBoard() {
             </Paper>
           </Grid>
         </Grid>
-        <Box display={"flex"} justifyContent={"center"} mt={2} >
+        <Box display={"flex"} justifyContent={"center"} mt={2}>
           <Chart
             options={state.options}
             series={state.series}
@@ -156,6 +159,9 @@ export default function AdminDashBoard() {
             className={"w-100 dashboard-chart"}
             height={300}
           />
+        </Box>
+        <Box display={"flex"} justifyContent={"center"} mt={2}>
+          <PieChart names={names} />
         </Box>
       </Container>
     </>

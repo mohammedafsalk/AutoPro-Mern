@@ -80,6 +80,51 @@ export async function adminLogout(req, res) {
 
 export async function adminDashboard(req, res) {
   try {
+    let centers = await serviceCenterModel.find({ permission: true });
+    let names = centers.map((item) => item.name);
+
+    const result = await BookingModel.aggregate([
+      {
+        $lookup: {
+          from: "servicecenters",
+          localField: "centerId",
+          foreignField: "_id",
+          as: "matchingCenters",
+        },
+      },
+      {
+        $unwind: "$matchingCenters",
+      },
+      {
+        $group: {
+          _id: {
+            id: "$matchingCenters._id",
+            name: "$matchingCenters.name",
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$_id.name",
+          count: 1,
+        },
+      },
+    ]);
+
+    const final = {};
+
+    for (const item of result) {
+      final[item.name] = item.count;
+    }
+
+    for (const name of names) {
+      if (final[name] === undefined) {
+        final[name] = 0;
+      }
+    }
+
     let usersCount = await UserModel.countDocuments();
     let centerCount = await serviceCenterModel
       .find({ permission: true })
@@ -117,6 +162,7 @@ export async function adminDashboard(req, res) {
       centerCount,
       monthlyData,
       totalRevenue,
+      final,
       err: false,
     });
   } catch (error) {
@@ -191,17 +237,23 @@ export async function bookings(req, res) {
   try {
     let bookings;
     let status = req.query.status ?? "";
-    if (req.query.status) {
-      let statusRegex = new RegExp(status, "i");
-      bookings = await BookingModel.find({ status: statusRegex })
+    let date = req.query.date ?? "";
+    if (date === "") {
+      bookings = await BookingModel.find({
+        status: new RegExp(status, "i"),
+      })
         .populate("centerId")
         .lean();
-      res.json({ err: false, bookings });
+    } else {
+      bookings = await BookingModel.find({
+        status: new RegExp(status, "i"),
+        date: new RegExp(date,"\d"),
+      })
+        .populate("centerId")
+        .lean();
     }
-    if (req.query.status === "") {
-      bookings = await BookingModel.find().populate("centerId").lean();
-      res.json({ err: false, bookings });
-    }
+
+    res.json({ err: false, bookings });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

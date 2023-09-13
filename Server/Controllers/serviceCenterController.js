@@ -344,51 +344,6 @@ export async function updateInvoice(req, res) {
 
 export async function centerDashboard(req, res) {
   try {
-    let centers = await ServiceCenterModel.find({ permission: true });
-    let names = centers.map((item) => item.name);
-
-    const result = await BookingModel.aggregate([
-      {
-        $lookup: {
-          from: "servicecenters",
-          localField: "centerId",
-          foreignField: "_id",
-          as: "matchingCenters",
-        },
-      },
-      {
-        $unwind: "$matchingCenters",
-      },
-      {
-        $group: {
-          _id: {
-            id: "$matchingCenters._id",
-            name: "$matchingCenters.name",
-          },
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          name: "$_id.name",
-          count: 1,
-        },
-      },
-    ]);
-
-    const final = {};
-
-    for (const item of result) {
-      final[item.name] = item.count;
-    }
-
-    for (const name of names) {
-      if (final[name] === undefined) {
-        final[name] = 0;
-      }
-    }
-
     let bookingCount = await BookingModel.find({
       centerId: req.serviceCenter._id,
     }).countDocuments();
@@ -425,7 +380,7 @@ export async function centerDashboard(req, res) {
     for (let i = 1; i <= 12; i++) {
       monthlyData[i - 1] = monthlyDataObject[i] ?? 0;
     }
-    res.json({ err: false, bookingCount, totalRevenue, monthlyData, final });
+    res.json({ err: false, bookingCount, totalRevenue, monthlyData });
   } catch (err) {
     res.json({ err: true, message: "server error" });
   }
