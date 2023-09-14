@@ -9,6 +9,10 @@ const Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  amount: {
+    type: Number,
+    default: 0,
+  },
   branch: {
     type: String,
     required: true,
@@ -19,7 +23,7 @@ const Schema = new mongoose.Schema({
   },
   reqStatus: {
     type: Boolean,
-    default:true
+    default: false,
   },
   status: {
     type: Boolean,

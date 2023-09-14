@@ -7,13 +7,13 @@ import {
   PeopleAltOutlined,
 } from "@mui/icons-material";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import NavBar from "./Navbar";
 import WalletModal from "../../modal/WalletModal";
 
-
 export default function DashBoard() {
   const [open, setOpen] = React.useState(false);
+  const [wallet, setWallet] = React.useState("");
   const [bookingCount, setBookingCount] = React.useState(null);
   const [monthlyData, setMonthlyData] = React.useState([]);
   const [revenue, setRevenue] = React.useState(null);
@@ -31,6 +31,7 @@ export default function DashBoard() {
       if (data.err) {
         toast.error(data.message);
       } else {
+        setWallet(data?.center?.wallet);
         setBookingCount(data.bookingCount);
         setMonthlyData(data.monthlyData);
         setRevenue(data.totalRevenue);
@@ -69,6 +70,7 @@ export default function DashBoard() {
   return (
     <>
       <NavBar />
+      <Toaster />
       <Container sx={{ marginTop: 5 }}>
         <Grid
           container
@@ -165,7 +167,7 @@ export default function DashBoard() {
                   Wallet
                 </Typography>
                 <Typography variant="h6" fontWeight={300}>
-                  {revenue}
+                  {wallet}
                 </Typography>
               </Box>
             </Paper>
@@ -181,7 +183,7 @@ export default function DashBoard() {
           />
         </Box>
       </Container>
-      <WalletModal handlClose={handlClose} open={open} />
+      <WalletModal handlClose={handlClose} open={open} wallet={wallet} />
     </>
   );
 }

@@ -344,6 +344,7 @@ export async function updateInvoice(req, res) {
 
 export async function centerDashboard(req, res) {
   try {
+    let center = await ServiceCenterModel.findById(req.serviceCenter._id);
     let bookingCount = await BookingModel.find({
       centerId: req.serviceCenter._id,
     }).countDocuments();
@@ -380,21 +381,10 @@ export async function centerDashboard(req, res) {
     for (let i = 1; i <= 12; i++) {
       monthlyData[i - 1] = monthlyDataObject[i] ?? 0;
     }
-    res.json({ err: false, bookingCount, totalRevenue, monthlyData });
+    res.json({ err: false, bookingCount, totalRevenue, monthlyData, center });
   } catch (err) {
     res.json({ err: true, message: "server error" });
   }
-}
-
-export async function withdrawWallet(req, res) {
-  const { ifsc, accno, branch } = req.body;
-  await WithdrawModel.create({
-    ifsc: ifsc,
-    accountNo: accno,
-    branch: branch,
-    centerId: req.serviceCenter._id,
-  });
-  return res.json({ err: false });
 }
 
 export async function profileUpdate(req, res) {
@@ -479,6 +469,25 @@ export async function manageBrands(req, res) {
       },
     });
     res.json({ err: false, message: "Brands Updated!" });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function wallet(req, res) {
+  try {
+    const { accno, ifsc, branch, wallet } = req.body;
+    await WithdrawModel.create({
+      centerId: req.serviceCenter._id,
+      accountNo: accno,
+      ifsc,
+      branch,
+      amount: wallet,
+    });
+    res.json({
+      err: false,
+      message: "Your withdraw submission is successfull",
+    });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });
   }

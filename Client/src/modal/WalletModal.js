@@ -28,7 +28,7 @@ const style = {
   p: 3,
 };
 
-export default function WalletModal({ handlClose, open }) {
+export default function WalletModal({ handlClose, open, wallet }) {
   const [data, setData] = React.useState({
     accno: "",
     ifsc: "",
@@ -40,9 +40,21 @@ export default function WalletModal({ handlClose, open }) {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = ()=>{
-    console.log(data);
-  }
+  const handleSubmit = async () => {
+    const { accno, ifsc, branch } = data;
+    let { data: walletData } = await axios.post("service-center/withdraw", {
+      accno,
+      ifsc,
+      branch,
+      wallet,
+    });
+    if (!walletData.err) {
+      handlClose();
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
+  };
 
   return (
     <Modal

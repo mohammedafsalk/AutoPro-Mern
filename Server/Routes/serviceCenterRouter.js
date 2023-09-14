@@ -13,6 +13,7 @@ import {
   setPriceRange,
   setSchedule,
   updateInvoice,
+  wallet,
   workerAccessSetting,
 } from "../Controllers/serviceCenterController.js";
 const router = express.Router();
@@ -30,7 +31,8 @@ router.patch("/bookings/invoice", updateInvoice);
 router.patch("/profile", profileUpdate);
 router.route("/priceRanges").patch(setPriceRange).get(getPriceRange);
 router.route("/schedule").post(setSchedule).get(getSchedule);
-router.route("/categories").patch(manageCategories)
-router.route("/brands").patch(manageBrands)
+router.route("/categories").patch(manageCategories);
+router.route("/brands").patch(manageBrands);
+router.route("/withdraw").post(wallet);
 
 export default router;

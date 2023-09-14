@@ -3,6 +3,7 @@ import crypto from "crypto";
 import BookingModel from "../Models/bookingModel.js";
 import dayjs from "dayjs";
 import { json } from "express";
+import ServiceCenterModel from "../Models/serviceCenterModel.js";
 
 let instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -97,6 +98,7 @@ export async function verifyBillPayment(req, res) {
   try {
     const { response, bookingId } = req.body;
     const booking = await BookingModel.findById(bookingId);
+    const centerId = booking.centerId;
     console.log(booking);
     if (!booking) {
       return res.json({ err: true, message: "Booking Not Found" });
@@ -110,6 +112,11 @@ export async function verifyBillPayment(req, res) {
       .digest("hex");
 
     if (expectedSignature === response.razorpay_signature) {
+      await ServiceCenterModel.findByIdAndUpdate(centerId, {
+        $set: {
+          wallet: updatedAmountPaid,
+        },
+      });
       await BookingModel.findByIdAndUpdate(bookingId, {
         $set: {
           billPayment: response,
