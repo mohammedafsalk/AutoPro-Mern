@@ -10,6 +10,7 @@ import AdminDashBoard from "../components/admin/AdminDashBoard";
 import AdminUsers from "../components/admin/AdminUsers";
 import AdminBookings from "../components/admin/AdminBookings";
 import NotFoundPage from "../components/pageNotFound/PageNotFound";
+import AdminWithdraws from "../components/admin/AdminWithdraws";
 
 export default function AdminRoutes() {
   const { admin, refresh } = useSelector((state) => {
@@ -18,10 +19,7 @@ export default function AdminRoutes() {
   const dispatch = useDispatch();
   useEffect(() => {
     (async function () {
-      let { data: adminData } = await axios.get(
-        "/admin/auth/checkLogin"
-      );
-      console.log(adminData);
+      let { data: adminData } = await axios.get("/admin/auth/checkLogin");
       dispatch({
         type: "admin",
         payload: { login: adminData.loggedIn },
@@ -37,6 +35,7 @@ export default function AdminRoutes() {
           <Route path="/service-centers" element={<ServiceCenters />} />
           <Route path="/users" element={<AdminUsers />} />
           <Route path="/bookings" element={<AdminBookings />} />
+          <Route path="/withdraws" element={<AdminWithdraws />} />
           <Route path="/login" element={<Navigate to="/admin/" />} />
         </>
       )}
@@ -47,6 +46,7 @@ export default function AdminRoutes() {
           <Route path="/users" element={<Navigate to="/admin/login" />} />
           <Route path="/requests" element={<Navigate to="/admin/login" />} />
           <Route path="/bookings" element={<Navigate to="/admin/login" />} />
+          <Route path="/withdraws" element={<Navigate to="/admin/login" />} />
           <Route
             path="/service-centers"
             element={<Navigate to="/admin/login" />}

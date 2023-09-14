@@ -19,7 +19,7 @@ const Schema = new mongoose.Schema({
   },
   centerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "serviceCenter",
+    ref: "ServiceCenter",
   },
   reqStatus: {
     type: Boolean,

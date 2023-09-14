@@ -2,6 +2,7 @@ import AdminModel from "../Models/adminModel.js";
 import serviceCenterModel from "../Models/serviceCenterModel.js";
 import UserModel from "../Models/userModel.js";
 import BookingModel from "../Models/bookingModel.js";
+import WithdrawModel from "../Models/withdrawModel.js";
 import bcrypt from "bcryptjs";
 import sentMail from "../helpers/sentMail.js";
 import jwt from "jsonwebtoken";
@@ -247,7 +248,7 @@ export async function bookings(req, res) {
     } else {
       bookings = await BookingModel.find({
         status: new RegExp(status, "i"),
-        date: new RegExp(date,"\d"),
+        date: new RegExp(date, "d"),
       })
         .populate("centerId")
         .lean();
@@ -290,6 +291,34 @@ export async function userAccessSetting(req, res) {
       });
     }
   } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+
+export async function getWithdrawRequests(req, res) {
+  try {
+    const requests = await WithdrawModel.find().populate("centerId");
+    res.json({ err: false, requests });
+  } catch (error) {
+    res.json({ err: true, message: "Something Went Wrong" });
+  }
+}
+export async function acceptWithdrawRequests(req, res) {
+  try {
+    const { id } = req.body;
+    const center = await WithdrawModel.findById(id).populate("centerId");
+    const centerid = center.centerId._id;
+
+    await serviceCenterModel.findByIdAndUpdate(centerid, { $set: { wallet: 0 } });
+
+    await WithdrawModel.findByIdAndUpdate(id, {
+      $set: {
+        status: true,
+      },
+    });
+    res.json({ err: false, message: "Success" });
+  } catch (error) {
+    console.log(error);
     res.json({ err: true, message: "Something Went Wrong" });
   }
 }

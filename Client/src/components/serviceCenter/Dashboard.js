@@ -160,7 +160,9 @@ export default function DashBoard() {
                   sx={{ color: "#6BAF76" }}
                   fontSize="large"
                 />
-                <Button onClick={handlOpen}>WithDraw</Button>
+                <Button disabled={wallet === 0} onClick={handlOpen}>
+                  WithDraw
+                </Button>
               </Box>
               <Box textAlign="center">
                 <Typography variant="h5" fontWeight={500}>

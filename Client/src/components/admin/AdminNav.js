@@ -18,6 +18,7 @@ import {
   Menu,
   NewReleases,
   PeopleAlt,
+  Wallet,
   Warehouse,
   Window,
 } from "@mui/icons-material";
@@ -185,6 +186,22 @@ export default function AdminNav() {
                   to="/admin/service-centers"
                 >
                   Service Centers
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Wallet sx={{ fontSize: "30px", color: "black" }} />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  sx={{ color: "inherit" }}
+                  variant="h6"
+                  fontSize={18}
+                  component={NavLink}
+                  to="/admin/withdraws"
+                >
+                  Withdraws
                 </Typography>
               </ListItemText>
             </ListItem>
