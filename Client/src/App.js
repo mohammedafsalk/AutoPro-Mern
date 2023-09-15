@@ -1,10 +1,18 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import axios from "axios";
-import UserRoutes from "./Routes/UserRoutes";
-import AdminRoutes from "./Routes/AdminRoutes";
-import ServiceCenterRoutes from "./Routes/ServiceCenterRoutes";
-import WorkerRoutes from "./Routes/WorkerRoutes";
+import Backdropspinner from "./components/Loader/BackdropSpinner";
+
+const LazyUserRoutes = lazy(() => import("./Routes/UserRoutes"));
+const LazyServiceCenterRoutes = lazy(() =>
+  import("./Routes/ServiceCenterRoutes")
+);
+const LazyWorkerRoutes = lazy(() => import("./Routes/WorkerRoutes"));
+const LazyAdminRoutes = lazy(() => import("./Routes/AdminRoutes.js"));
+// import UserRoutes from "./Routes/UserRoutes";
+// import AdminRoutes from "./Routes/AdminRoutes";
+// import ServiceCenterRoutes from "./Routes/ServiceCenterRoutes";
+// import WorkerRoutes from "./Routes/WorkerRoutes";
 
 export default function App() {
   axios.defaults.baseURL = "http://localhost:5000/";
@@ -12,12 +20,17 @@ export default function App() {
   axios.defaults.withCredentials = true;
   return (
     <div className="App">
-      <Routes>
-        <Route path="/*" element={<UserRoutes />} />
-        <Route path="/admin/*" element={<AdminRoutes />} />
-        <Route path="/service-center/*" element={<ServiceCenterRoutes />} />
-        <Route path="/worker/*" element={<WorkerRoutes />} />
-      </Routes>
+      <Suspense fallback={<Backdropspinner openLoader={true} />}>
+        <Routes>
+          <Route path="/*" element={<LazyUserRoutes />} />
+          <Route path="/admin/*" element={<LazyAdminRoutes />} />
+          <Route
+            path="/service-center/*"
+            element={<LazyServiceCenterRoutes />}
+          />
+          <Route path="/worker/*" element={<LazyWorkerRoutes />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }

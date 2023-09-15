@@ -83,7 +83,7 @@ export default function ChooseServiceCenter() {
         setState({ type: "stop" });
       }
     })();
-  }, [page, name, category,brand]);
+  }, [page, name, category, brand]);
 
   return (
     <>
@@ -96,7 +96,7 @@ export default function ChooseServiceCenter() {
               xs={4}
               sm={8}
               md={4}
-              className="d-flex justify-content-center mb-2 mb-md-0"
+              className="d-flex justify-content-center mb-2"
             >
               <TextField
                 size="small"
@@ -116,7 +116,7 @@ export default function ChooseServiceCenter() {
                 }}
               />
             </MDBCol>
-            <MDBCol xs={4} sm={4} md={4}>
+            <MDBCol xs={4} sm={4} md={4} className="mb-2">
               <TextField
                 select
                 onChange={(e) =>
@@ -135,7 +135,7 @@ export default function ChooseServiceCenter() {
                 <MenuItem value="Three Wheeler">Three Wheeler</MenuItem>
               </TextField>
             </MDBCol>
-            <MDBCol xs={4} sm={4} md={4}>
+            <MDBCol xs={4} sm={4} md={4} className="mb-2">
               <TextField
                 select
                 onChange={(e) =>
@@ -217,8 +217,8 @@ export default function ChooseServiceCenter() {
                     </MDBCol>
                   ))}
               </MDBRow>
-              <MDBRow className="justify-content-center ">
-                <MDBCol sm={2}>
+              <MDBRow className="justify-content-center">
+                <MDBCol sm={2} className="d-flex justify-content-center">
                   <Stack spacing={2}>
                     <Pagination
                       color="standard"

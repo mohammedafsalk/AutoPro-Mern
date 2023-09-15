@@ -44,6 +44,8 @@ export default function UserHome() {
               className="mask"
               style={{
                 boxShadow: "inset 58px -20px 300px 33px rgba(0,0,0,0.9)",
+                backdropFilter: "blur(2px)", // Apply blur to the background
+                backgroundColor: "rgba(0, 0, 0, 0.1)", // Adjust the background opacity if needed
               }}
             >
               <div className="d-flex justify-content-start align-items-center h-100">
@@ -55,7 +57,9 @@ export default function UserHome() {
                     Effortless Vehicle Care: Schedule Your Pickup Today at Our
                     Service Center!
                   </b>
-                  <MDBBtn color="light">Book Now</MDBBtn>
+                  <MDBBtn color="light" onClick={handleBookNow}>
+                    Book Now
+                  </MDBBtn>
                 </div>
               </div>
             </div>
@@ -161,7 +165,7 @@ export default function UserHome() {
               <MDBRow className="mb-3 d-flex flex-column justify-content-center align-items-center">
                 <MDBCol col="6">
                   <h5 className="text-info d-flex justify-content-center align-items-center flex-column">
-                     Order Process
+                    Order Process
                   </h5>
                 </MDBCol>
                 <MDBCol col="6" className="text-end"></MDBCol>
@@ -192,7 +196,7 @@ export default function UserHome() {
               <MDBRow className="mb-3  d-flex flex-column justify-content-center align-items-center">
                 <MDBCol col="6">
                   <h5 className="text-danger d-flex justify-content-center align-items-center flex-column">
-                     Schedule Service
+                    Schedule Service
                   </h5>
                 </MDBCol>
                 <MDBCol col="6" className="text-end"></MDBCol>

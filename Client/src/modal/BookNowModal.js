@@ -23,7 +23,6 @@ import { priceChecker } from "../helpers/priceSetter";
 import { Toaster, toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import MapSearchBox from "../components/MapBox/MapSearchBox";
 import MapSearchBoxBookingModal from "../components/MapBox/MapBoxSearchBookingModal";
 
 export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
@@ -97,11 +96,24 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
     return vehicleNumberPattern.test(vehicleNumber);
   }
 
+  function validateMobileNumber(mobileNumber) {
+    return /^\d{1,10}$/.test(mobileNumber);
+  }
+
   const handleBooking = async () => {
     const isEmailValid = validateEmail(formData.email);
     const isVehicleNumberValid = validateVehicleNumber(formData.vehicleNumber);
-    if (!isEmailValid || !isVehicleNumberValid) {
-      toast.error("Enter valid email and vehicle number");
+    const isMobileNumberValid = validateMobileNumber(formData.mobile);
+    if (!isEmailValid) {
+      toast.error("Ensure email is properly entered");
+      return;
+    }
+    if (!isVehicleNumberValid) {
+      toast.error("Enter vehicle number is in correct format KL-XX-XX-XXXX ");
+      return;
+    }
+    if (!isMobileNumberValid) {
+      toast.error("Ensure mobile number is properly entered");
       return;
     }
     const data = await validatePlace(formData.place);
@@ -164,7 +176,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
           address,
           centerId: id,
           userId,
-          deliveryCharge
+          deliveryCharge,
         });
         if (data.err) {
           toast.error(data.message);
@@ -246,6 +258,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
                     onChange={handleFormData}
                     value={formData.vehicleNumber}
                     name="vehicleNumber"
+                    placeholder="KL-XX-XX-XXXX"
                     label="Vehicle Number"
                     id="formControlDefault"
                     size="lg"
@@ -276,7 +289,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
                     label="Mobile"
                     id="formControlDefault"
                     size="lg"
-                    type="number"
+                    type="text"
                   />
                 </MDBCol>
               </MDBRow>
