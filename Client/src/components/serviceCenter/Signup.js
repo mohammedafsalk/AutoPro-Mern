@@ -16,7 +16,6 @@ import validatePassword from "../../helpers/passwordValidate";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Backdropspinner from "../Loader/BackdropSpinner";
-import { Button } from "@mui/material";
 import MapSearchBox from "../MapBox/MapSearchBox";
 
 export default function Signup() {

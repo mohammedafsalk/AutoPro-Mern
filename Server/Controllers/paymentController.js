@@ -19,7 +19,6 @@ export async function paymentOrder(req, res) {
     };
     instance.orders.create(options, function (err, order) {
       if (err) {
-        console.log(err);
         res.json({ err: true, message: "server error" });
       } else {
         res.json({ err: false, order });
