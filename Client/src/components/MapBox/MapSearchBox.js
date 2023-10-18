@@ -7,6 +7,7 @@ function MapSearchBox({ setFormData}) {
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [items, seItems] = useState([]);
+ 
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
@@ -27,12 +28,14 @@ function MapSearchBox({ setFormData}) {
       )}&proximity=${encodeURIComponent(proximity)}&radius=${radius}`;
 
       const response = await mapboxAPI.get(url);
+    
       seItems(response.data.features);
       const suggestions = response.data.features.map(
         (feature) => feature.place_name
       );
       setSuggestions(suggestions);
     } catch (error) {
+      console.log(error);
       console.error("Error fetching suggestions:", error);
     }
   };

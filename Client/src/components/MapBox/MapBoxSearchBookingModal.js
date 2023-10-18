@@ -34,6 +34,7 @@ function MapSearchBoxBookingModal({ setFormData, handleFormData }) {
     }
   };
 
+
   const handleSuggestionClick = (suggestion) => {
     let value = items.find((item) => item.place_name === suggestion);
     const placeName = value.text;

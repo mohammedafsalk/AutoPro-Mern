@@ -24,9 +24,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import loadingReducer from "../../reducers/loadingReducer";
 import Backdropspinner from "../Loader/BackdropSpinner";
-import { LocationCity, MyLocation } from "@mui/icons-material";
+import { MyLocation } from "@mui/icons-material";
 import ShowMap from "../MapBox/ShowMap";
 import { Toaster, toast } from "react-hot-toast";
 
@@ -49,41 +48,51 @@ export default function ChooseServiceCenter() {
         setOpen(true);
       },
       (error) => {
-        toast.error("Error Fetching Location,Try Again");
-        console.log("Error getting geolocation:", error);
+        toast.error("Error Fetching Location, Try Again");
       },
       { enableHighAccuracy: true }
     );
   };
 
   const handleClose = () => setOpen(false);
-  const [state, setState] = React.useReducer(loadingReducer, false);
+  const [state, setState] = React.useState({ loading: false });
 
   React.useEffect(() => {
-    (async function () {
-      let { data } = await axios.get("user/loadmap");
-      setMapData(data.centers);
-    })();
-  }, []);
-
-  React.useEffect(() => {
-    (async function () {
-      setState({ type: "start" });
-      let { data } = await axios.get(
-        `user/service-centers?page=${
-          page - 1
-        }&name=${name}&category=${category}&brand=${brand}`
-      );
-      if (data.err) {
-        setState({ type: "stop" });
-        toast.error(data.message);
-      } else {
-        setData([...data.center]);
-        setCount(data.totalPage);
-        setState({ type: "stop" });
+    const fetchData = async () => {
+      setState({ loading: true });
+      try {
+        const response = await axios.get(
+          `/user/service-centers?page=${page}&name=${name}&category=${category}&brand=${brand}`
+        );
+        if (response.data.err) {
+          toast.error(response.data.message);
+        } else {
+          setData(response.data.center);
+          setCount(response.data.totalPage);
+        }
+      } catch (error) {
+        toast.error("Error Fetching Service Centers");
+      } finally {
+        setState({ loading: false });
       }
-    })();
+    };
+
+    fetchData();
   }, [page, name, category, brand]);
+
+  React.useEffect(() => {
+    const fetchMapData = async () => {
+      try {
+        const response = await axios.get("/user/loadmap");
+        setMapData(response.data.centers);
+      } catch (error) {
+        console.error("Error fetching map data:", error);
+        toast.error("Error Fetching Map Data");
+      }
+    };
+
+    fetchMapData();
+  }, []);
 
   return (
     <>

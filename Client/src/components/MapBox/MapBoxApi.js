@@ -4,8 +4,9 @@ const mapboxAPI = axios.create({
   baseURL: "https://api.mapbox.com",
   params: {
     access_token:
-      "pk.eyJ1IjoiYWZzYWw0NTYiLCJhIjoiY2xraHU0N3NoMDZmcjNxbzZpN3k3bThpYyJ9.-sQCN_GaOvYY-3Ho92UpOg",
+      "pk.eyJ1IjoiYWZzYWw0NTYiLCJhIjoiY2xteWRtd2MzMWpsMzJpcGV2aHAybm1xaCJ9.o_CpCUnw2iXwQ2IlW_ZEjQ",
   },
 });
 
 export default mapboxAPI;
+
