@@ -31,7 +31,6 @@ export async function userSignup(req, res) {
       });
     res.json({ err: false, message: "Success" });
   } catch (error) {
-    console.log(error);
     res.json({ error: error, err: true, message: "Something bad happend!" });
   }
 }
@@ -74,7 +73,6 @@ export async function signUpVerify(req, res) {
         }
       });
   } catch (error) {
-    console.log(error.message);
     res.json({ error: error, err: true, message: "Something bad happend!" });
   }
 }
@@ -165,6 +163,28 @@ export async function verifyGAuth(req, res) {
   }
 }
 
+export async function demoLogin(req, res) {
+  try {
+    const email = process.env.DEMOEMAIL;
+    const user = await UserModel.findOne({ email });
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SECRET
+    );
+    return res
+      .cookie("userToken", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        sameSite: "none",
+      })
+      .json({ error: false });
+  } catch (error) {
+    res.json({ error: error, err: true, message: "Something bad happend!" });
+  }
+}
 export async function userLogin(req, res) {
   try {
     const { email, password } = req.body;
@@ -234,7 +254,6 @@ export async function forgotOtp(req, res) {
       return res.json({ error: true, message: "No User Found" });
     }
     let otp = Math.ceil(Math.random() * 1000000);
-    console.log(otp);
     await sentOTP(email, otp);
     let otpHash = crypto
       .createHmac("sha256", process.env.OTP_SECRET)
@@ -278,7 +297,6 @@ export async function verifyForgetOtp(req, res) {
     }
     return res.json({ err: false });
   } catch (error) {
-    console.log(error);
     res.json({ error: error, err: true, message: "Something went wrong" });
   }
 }
@@ -315,20 +333,22 @@ export async function getMapList(req, res) {
 
 export async function chooseServiceCenter(req, res) {
   try {
-    console.log(req.query);
-    const page = parseInt(req.query.page) ?? 0;
-    const name = req.query.name ?? "";
-    let categories = req.query.category;
-    let brand = req.query.brand;
+    const reviews = await reviewModel.find().lean();
+    const page = parseInt(req.query.page) || 1;
+    const name = req.query.name || "";
+    let categories = req.query.category || [];
+    let brand = req.query.brand || [];
 
-    if (categories === "All") {
+    // Convert "All" to an empty array to handle filtering
+    if (categories.includes("All")) {
       categories = [];
     }
-    if (brand === "All") {
+    if (brand.includes("All")) {
       brand = [];
     }
-    const count = await ServiceCenterModel.find({ permission: true }).count();
-    let centerQuery = {
+
+    // Build the query object for filtering
+    const centerQuery = {
       permission: true,
       $or: [
         {
@@ -342,24 +362,32 @@ export async function chooseServiceCenter(req, res) {
         },
       ],
     };
+
     if (categories.length > 0) {
       centerQuery["categories"] = { $in: categories };
     }
     if (brand.length > 0) {
       centerQuery["brands"] = { $in: brand };
     }
-    const center = await ServiceCenterModel.find(centerQuery)
-      .populate({
-        path: "reviews",
-        model: "Reviews",
-      })
-      .skip(page * 6)
-      .limit(6)
-      .lean();
-    res.json({ center, err: false, totalPage: Math.ceil(count / 6) });
+
+    // Calculate skip and limit for pagination
+    const itemsPerPage = 6;
+    const skip = (page - 1) * itemsPerPage;
+
+    // Query the database with filtering and pagination
+    const [centers, count] = await Promise.all([
+      ServiceCenterModel.find(centerQuery)
+        .populate("reviews")
+        .skip(skip)
+        .limit(itemsPerPage)
+        .lean(),
+      ServiceCenterModel.find(centerQuery).countDocuments(),
+    ]);
+
+    const totalPage = Math.ceil(count / itemsPerPage);
+    res.json({ center: centers, err: false, totalPage });
   } catch (error) {
-    console.log(error.message);
-    res.json({ err: true, message: error.message });
+    res.json({ err: true, message: "Server Error" });
   }
 }
 
@@ -368,7 +396,6 @@ export async function getServiceCenter(req, res) {
     const { id } = req.body;
     const center = await ServiceCenterModel.findById(id);
     const reviews = await reviewModel.find({ centerId: id }).populate("userId");
-    console.log(reviews);
     res.json({ err: false, center, reviews });
   } catch (error) {
     res.json({ err: true, message: "Something Went Wrong" });

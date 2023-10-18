@@ -54,12 +54,10 @@ const ServiceCenterSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    reviews: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Review",
-      },
-    ],
+    reviews: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Reviews",
+    },
     rejectMessage: {
       type: String,
       default: "",

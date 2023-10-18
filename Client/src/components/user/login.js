@@ -13,7 +13,6 @@ import loginImg from "../../assets/images/login.jpg";
 import validatePassword from "../../helpers/passwordValidate";
 import ForgetOtpModal from "./forgetOtpModal";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/images/AutoPro-logos_black.png";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
@@ -110,10 +109,7 @@ export default function Login() {
   };
 
   const handleOtp = async () => {
-    let { data } = await axios.post(
-      "user/auth/forgot/verify",
-      { otp }
-    );
+    let { data } = await axios.post("user/auth/forgot/verify", { otp });
     if (data.err) {
       setErrMsgOtp(data.message);
     } else {
@@ -129,19 +125,25 @@ export default function Login() {
   const handlesave = async (e) => {
     e.preventDefault();
     let newPassword = NewPasswordData.password;
-    let { data } = await axios.post(
-      "user/auth/forgot/resetPassword",
-      {
-        email,
-        password: newPassword,
-      }
-    );
+    let { data } = await axios.post("user/auth/forgot/resetPassword", {
+      email,
+      password: newPassword,
+    });
     if (data.err) {
       toast.error(data.message);
     } else {
       setShowResetPassPage(false);
       navigate("/login");
       toast.success("Password Changed Succesfully");
+    }
+  };
+
+  const handleDemo = async () => {
+    let { data } = await axios.get("user/auth/login");
+    if (data.err) {
+      toast.error(data.message);
+    } else {
+      dispatch({ type: "refresh" });
     }
   };
 
@@ -218,6 +220,14 @@ export default function Login() {
                   >
                     <MDBIcon fab icon="google" size="lg" className="me-2" />
                     Login with Google
+                  </MDBBtn>
+                  <MDBBtn
+                    type="button"
+                    className="mb-4 w-100 bg-dark"
+                    size="lg"
+                    onClick={handleDemo}
+                  >
+                    Demo Login
                   </MDBBtn>
                 </form>
                 <div className="d-flex justify-content-between mb-4">

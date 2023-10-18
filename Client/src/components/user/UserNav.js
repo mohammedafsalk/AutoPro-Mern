@@ -15,11 +15,12 @@ import {
 import {} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import userimage from "../../assets/images/AutoPro-logos_black.png";
+import logo from "../../assets/images/AutoPro-logos_black.png";
 import { grey } from "@mui/material/colors";
 import { MDBContainer } from "mdb-react-ui-kit";
 
 export default function UserNav() {
+  const user = useSelector((state) => state.user.details);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
@@ -65,14 +66,7 @@ export default function UserNav() {
               AUTO PRO
             </Typography>
           </IconButton>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={userimage}
-              alt="User"
-              style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-            />
-          </Box>
-          <Avatar onClick={(e) => setShow(true)}></Avatar>
+          <Avatar onClick={(e) => setShow(true)} src={user.profile}></Avatar>
         </Toolbar>
         <Menu
           id="demo-positioned-menu"
