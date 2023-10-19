@@ -3,11 +3,10 @@ import mapboxAPI from "./MapBoxApi";
 import { MDBInput } from "mdb-react-ui-kit";
 import { Button } from "@mui/material";
 
-function MapSearchBox({ setFormData}) {
+function MapSearchBox({ setFormData }) {
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [items, seItems] = useState([]);
- 
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
@@ -18,21 +17,28 @@ function MapSearchBox({ setFormData}) {
     try {
       const region = "Kerala";
       const radius = 100000;
-      const proximity = " 76.2711,10.8505"; 
+      const proximity = " 76.2711,10.8505";
       const query = `places ${value} in ${region}`;
+      const access_token =
+        "pk.eyJ1IjoiYWZzYWw0NTYiLCJhIjoiY2xteWRtd2MzMWpsMzJpcGV2aHAybm1xaCJ9.o_CpCUnw2iXwQ2IlW_ZEjQ";
 
-      const url = `/geocoding/v5/mapbox.places/${encodeURIComponent(
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
         query
       )}.json?region=${encodeURIComponent(
         region
-      )}&proximity=${encodeURIComponent(proximity)}&radius=${radius}`;
+      )}&proximity=${encodeURIComponent(
+        proximity
+      )}&radius=${radius}&access_token=${access_token}`;
 
-      const response = await mapboxAPI.get(url);
-    
-      seItems(response.data.features);
-      const suggestions = response.data.features.map(
-        (feature) => feature.place_name
-      );
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Network Error");
+      }
+
+      let data = await response.json();
+
+      seItems(data.features);
+      const suggestions = data.features.map((feature) => feature.place_name);
       setSuggestions(suggestions);
     } catch (error) {
       console.log(error);
@@ -53,7 +59,7 @@ function MapSearchBox({ setFormData}) {
     const longitude = position.coords.longitude;
 
     const accessToken =
-      "pk.eyJ1IjoiYWZzYWw0NTYiLCJhIjoiY2xraHU0N3NoMDZmcjNxbzZpN3k3bThpYyJ9.-sQCN_GaOvYY-3Ho92UpOg";
+      "pk.eyJ1IjoiYWZzYWw0NTYiLCJhIjoiY2xteWRtd2MzMWpsMzJpcGV2aHAybm1xaCJ9.o_CpCUnw2iXwQ2IlW_ZEjQ";
     const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${accessToken}`;
 
     fetch(geocodingUrl)
