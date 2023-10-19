@@ -10,6 +10,7 @@ import ScheduleModel from "../Models/scheduleModel.js";
 import BookingModel from "../Models/bookingModel.js";
 import reviewModel from "../Models/reviewModel.js";
 import cloudinary from "../config/cloudinary.js";
+import { log } from "console";
 
 var salt = bcrypt.genSaltSync(10);
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -333,13 +334,11 @@ export async function getMapList(req, res) {
 
 export async function chooseServiceCenter(req, res) {
   try {
-    const reviews = await reviewModel.find().lean();
     const page = parseInt(req.query.page) || 1;
     const name = req.query.name || "";
     let categories = req.query.category || [];
     let brand = req.query.brand || [];
 
-    // Convert "All" to an empty array to handle filtering
     if (categories.includes("All")) {
       categories = [];
     }
@@ -347,7 +346,6 @@ export async function chooseServiceCenter(req, res) {
       brand = [];
     }
 
-    // Build the query object for filtering
     const centerQuery = {
       permission: true,
       $or: [
@@ -370,20 +368,43 @@ export async function chooseServiceCenter(req, res) {
       centerQuery["brands"] = { $in: brand };
     }
 
-    // Calculate skip and limit for pagination
     const itemsPerPage = 6;
     const skip = (page - 1) * itemsPerPage;
 
-    // Query the database with filtering and pagination
     const [centers, count] = await Promise.all([
-      ServiceCenterModel.find(centerQuery)
-        .populate("reviews")
-        .skip(skip)
-        .limit(itemsPerPage)
-        .lean(),
+      ServiceCenterModel.find(centerQuery).skip(skip).limit(itemsPerPage),
       ServiceCenterModel.find(centerQuery).countDocuments(),
     ]);
 
+    const reviews = await reviewModel.aggregate([
+      {
+        $group: {
+          _id: "$centerId",
+          totalRatings: { $sum: "$rating" },
+        },
+      },
+    ]);
+
+    centers.forEach((center) => {
+      const matchingReview = reviews.find(
+        (review) => review._id.toString() === center._id.toString()
+      );
+      if (matchingReview) {
+        const totalRatings = matchingReview.totalRatings;
+        let rating = 0;
+
+        if (totalRatings >= 0 && totalRatings <= 5) {
+          rating = 2;
+        } else if (totalRatings > 5 && totalRatings <= 10) {
+          rating = 4;
+        } else {
+          rating = 5;
+        }
+
+        center.reviews.push(rating);
+      }
+    });
+    console.log(centers);
     const totalPage = Math.ceil(count / itemsPerPage);
     res.json({ center: centers, err: false, totalPage });
   } catch (error) {

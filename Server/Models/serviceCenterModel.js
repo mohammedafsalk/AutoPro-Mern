@@ -55,8 +55,8 @@ const ServiceCenterSchema = new mongoose.Schema(
       default: [],
     },
     reviews: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Reviews",
+      type: Array,
+      default: [],
     },
     rejectMessage: {
       type: String,

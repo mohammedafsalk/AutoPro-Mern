@@ -212,13 +212,39 @@ export default function ChooseServiceCenter() {
                                   {item.location}.{item.district}
                                 </span>
                               </div>
-                              <div class="text-warning text-center">
-                                <MDBIcon fas icon="star" />
-                                <MDBIcon fas icon="star" />
-                                <MDBIcon fas icon="star" />
-                                <MDBIcon fas icon="star" />
-                                <MDBIcon fas icon="star" />
-                              </div>
+                              {item.reviews.length > 0 ? (
+                                <div className="text-warning text-center">
+                                  {item.reviews >= 5 ? (
+                                    <>
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                    </>
+                                  ) : item.reviews >= 4 ? (
+                                    <>
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                    </>
+                                  ) : item.reviews >= 2 ? (
+                                    <>
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <MDBIcon fas icon="star" />
+                                      <MDBIcon fas icon="star" />
+                                    </>
+                                  )}
+                                </div>
+                              ) : (
+                                "No Reviews"
+                              )}
                             </div>
                           </MDBCardBody>
                         </MDBCard>

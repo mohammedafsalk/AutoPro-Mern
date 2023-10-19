@@ -1,13 +1,8 @@
 import React from "react";
 import {
   MDBBtn,
-  MDBCard,
   MDBContainer,
   MDBCol,
-  MDBIcon,
-  MDBPagination,
-  MDBPaginationItem,
-  MDBPaginationLink,
   MDBRipple,
   MDBRow,
 } from "mdb-react-ui-kit";
