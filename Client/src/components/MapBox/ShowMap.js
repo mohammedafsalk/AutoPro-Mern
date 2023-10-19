@@ -15,12 +15,12 @@ export default function ShowMap({ open, setOpen, latitude, longitude, data }) {
   const initializeMap = () => {
     if (!mapContainer.current) return;
     mapboxgl.accessToken =
-      "pk.eyJ1IjoiYWZzYWw0NTYiLCJhIjoiY2xraHU0N3NoMDZmcjNxbzZpN3k3bThpYyJ9.-sQCN_GaOvYY-3Ho92UpOg";
+      "pk.eyJ1IjoiYWZzYWw0NTYiLCJhIjoiY2xteWRtd2MzMWpsMzJpcGV2aHAybm1xaCJ9.o_CpCUnw2iXwQ2IlW_ZEjQ";
 
     map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [longitude, latitude],
+      center: [longitude,latitude],
       zoom: 9,
     });
     map.on("load", () => {

@@ -254,16 +254,14 @@ export default function ChooseServiceCenter() {
         </>
       </MDBContainer>
 
-      {longitude && latitude && (
-        <ShowMap
-          open={open}
-          setOpen={setOpen}
-          handleClose={handleClose}
-          data={mapData}
-          latitude={latitude}
-          longitude={longitude}
-        />
-      )}
+      <ShowMap
+        open={open}
+        setOpen={setOpen}
+        handleClose={handleClose}
+        data={mapData}
+        latitude={latitude}
+        longitude={longitude}
+      />
 
       <Backdropspinner openLoader={state.loading} />
     </>

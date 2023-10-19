@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import mapboxAPI from "./MapBoxApi";
 import { MDBInput } from "mdb-react-ui-kit";
-
+import axios from "axios";
 
 function MapSearchBoxBookingModal({ setFormData, handleFormData }) {
   const [searchValue, setSearchValue] = useState("");
@@ -18,22 +17,28 @@ function MapSearchBoxBookingModal({ setFormData, handleFormData }) {
       const bbox = "74.3734,8.1901,77.0369,12.9896";
       const proximity = "76.2711,10.8505";
       const query = `places ${value}`;
-
-      const url = `/geocoding/v5/mapbox.places/${encodeURIComponent(
+      const access_token =
+        "pk.eyJ1IjoiYWZzYWw0NTYiLCJhIjoiY2xteWRtd2MzMWpsMzJpcGV2aHAybm1xaCJ9.o_CpCUnw2iXwQ2IlW_ZEjQ";
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
         query
-      )}.json?bbox=${bbox}&proximity=${encodeURIComponent(proximity)}`;
+      )}.json?bbox=${bbox}&proximity=${encodeURIComponent(
+        proximity
+      )}&access_token=${access_token}`;
 
-      const response = await mapboxAPI.get(url);
-      seItems(response.data.features);
-      const suggestions = response.data.features.map(
-        (feature) => feature.place_name
-      );
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      seItems(data.features);
+      const suggestions = data.features.map((feature) => feature.place_name);
       setSuggestions(suggestions);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }
   };
-
 
   const handleSuggestionClick = (suggestion) => {
     let value = items.find((item) => item.place_name === suggestion);
