@@ -39,8 +39,8 @@ export default function UserHome() {
               className="mask"
               style={{
                 boxShadow: "inset 58px -20px 300px 33px rgba(0,0,0,0.9)",
-                backdropFilter: "blur(2px)", // Apply blur to the background
-                backgroundColor: "rgba(0, 0, 0, 0.1)", // Adjust the background opacity if needed
+                backdropFilter: "blur(2px)", 
+                backgroundColor: "rgba(0, 0, 0, 0.1)", 
               }}
             >
               <div className="d-flex justify-content-start align-items-center h-100">

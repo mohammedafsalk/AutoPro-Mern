@@ -404,7 +404,6 @@ export async function chooseServiceCenter(req, res) {
         center.reviews.push(rating);
       }
     });
-    console.log(centers);
     const totalPage = Math.ceil(count / itemsPerPage);
     res.json({ center: centers, err: false, totalPage });
   } catch (error) {

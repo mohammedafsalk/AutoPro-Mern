@@ -31,9 +31,9 @@ export default function UserRoutes() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<UserHome />} />
         {user.login && (
           <>
-            <Route path="/" element={<UserHome />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/serviceCenter" element={<ChooseServiceCenter />} />
             <Route path="/select-package/:id" element={<UserServicePage />} />

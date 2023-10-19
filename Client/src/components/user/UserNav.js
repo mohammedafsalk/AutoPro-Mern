@@ -8,14 +8,14 @@ import {
   MenuItem,
   Toolbar,
   Menu,
+  Button,
   Typography,
   Link,
   IconButton,
 } from "@mui/material";
-import {} from "@mui/icons-material";
+import { Login } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import logo from "../../assets/images/AutoPro-logos_black.png";
 import { grey } from "@mui/material/colors";
 import { MDBContainer } from "mdb-react-ui-kit";
 
@@ -66,35 +66,43 @@ export default function UserNav() {
               AUTO PRO
             </Typography>
           </IconButton>
-          <Avatar onClick={(e) => setShow(true)} src={user.profile}></Avatar>
+          {user ? (
+            <Avatar onClick={(e) => setShow(true)} src={user.profile}></Avatar>
+          ) : (
+            <Button variant="outlined" endIcon={<Login />}>
+              Login
+            </Button>
+          )}
         </Toolbar>
-        <Menu
-          id="demo-positioned-menu"
-          aria-labelledby="demo-positioned-button"
-          open={show}
-          onClose={(e) => setShow(false)}
-          anchorReference="anchorPosition"
-          anchorPosition={{ top: 40, left: 1450 }}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-        >
-          <MenuItem>
-            <Link
-              component={link}
-              to="/profile"
-              sx={{ textDecoration: "none", color: "inherit" }}
-            >
-              Profile
-            </Link>
-          </MenuItem>
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        </Menu>
+        {user && (
+          <Menu
+            id="demo-positioned-menu"
+            aria-labelledby="demo-positioned-button"
+            open={show}
+            onClose={(e) => setShow(false)}
+            anchorReference="anchorPosition"
+            anchorPosition={{ top: 40, left: 1450 }}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+          >
+            <MenuItem>
+              <Link
+                component={link}
+                to="/profile"
+                sx={{ textDecoration: "none", color: "inherit" }}
+              >
+                Profile
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
+        )}
       </MDBContainer>
     </AppBar>
   );
