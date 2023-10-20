@@ -28,12 +28,13 @@ export default function UserRoutes() {
       });
     })();
   }, [refresh]);
+  console.log(user);
   return (
     <>
       <Routes>
-        <Route path="/" element={<UserHome />} />
         {user.login && (
           <>
+            <Route path="/" element={<UserHome />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/serviceCenter" element={<ChooseServiceCenter />} />
             <Route path="/select-package/:id" element={<UserServicePage />} />
@@ -44,10 +45,10 @@ export default function UserRoutes() {
         )}
         {user.login === false && (
           <>
+            <Route path="/" element={<UserHome />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/callback" element={<UserAuth />} />
-            <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/profile" element={<Navigate to="/login" />} />
             <Route path="/serviceCenter" element={<Navigate to="/login" />} />
             <Route
@@ -57,6 +58,7 @@ export default function UserRoutes() {
             <Route path="/booking-details" element={<Navigate to="/login" />} />
           </>
         )}
+        <Route path="/" element={<UserHome />} />
         {user.login !== null && <Route path="/*" element={<NotFoundPage />} />}
       </Routes>
       {user.login === null && (

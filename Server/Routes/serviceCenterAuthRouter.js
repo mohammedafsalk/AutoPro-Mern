@@ -1,6 +1,7 @@
 import express from "express";
 import {
   centerPassReset,
+  demoLogin,
   forgotOtp,
   loginVerify,
   proofUpdate,
@@ -12,7 +13,7 @@ import {
 const router = express.Router();
 
 router.post("/signup", serviceCenterSignup);
-router.post("/login", serviceCenterLogin);
+router.route("/login").post(serviceCenterLogin).get(demoLogin);
 router.get("/logout", serviceCenterLogout);
 router.get("/checkLogin", loginVerify);
 

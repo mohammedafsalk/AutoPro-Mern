@@ -14,15 +14,11 @@ const ServiceCenterSchema = new mongoose.Schema(
     location: {
       type: String,
     },
-    district: {
-      type: String,
-    },
     mobile: {
       type: Number,
     },
     proof: {
       type: Object,
-      required: true,
     },
     latitude: {
       type: Number,
@@ -40,7 +36,6 @@ const ServiceCenterSchema = new mongoose.Schema(
     },
     logo: {
       type: Object,
-      required: true,
     },
     rejected: {
       type: Boolean,

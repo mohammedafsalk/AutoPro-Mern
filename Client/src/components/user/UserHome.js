@@ -17,6 +17,7 @@ export default function UserHome() {
   const handleBookNow = () => {
     navigate("/serviceCenter");
   };
+ 
   return (
     <>
       <UserNav></UserNav>

@@ -88,6 +88,28 @@ export async function serviceCenterLogin(req, res) {
     res.json({ err: true, message: "Something went wrong" });
   }
 }
+export async function demoLogin(req, res) {
+  try {
+    const email = process.env.DEMOEMAILCENTER;
+    const center = await ServiceCenterModel.findOne({ email });
+    const token = jwt.sign(
+      {
+        id: center._id,
+      },
+      process.env.JWT_SECRET
+    );
+    return res
+      .cookie("serviceCenterToken", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        sameSite: "none",
+      })
+      .json({ error: false });
+  } catch (error) {
+    res.json({ error: error, err: true, message: "Something bad happend!" });
+  }
+}
 
 export async function loginVerify(req, res) {
   try {

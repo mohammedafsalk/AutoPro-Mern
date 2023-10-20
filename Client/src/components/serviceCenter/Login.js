@@ -142,6 +142,15 @@ export default function Login() {
     }
   };
 
+  const handleDemo = async () => {
+    let { data } = await axios.get("service-center/auth/login");
+    if (data.err) {
+      toast.error(data.message);
+    } else {
+      dispatch({ type: "refresh" });
+    }
+  };
+
   return (
     <div
       className="d-flex flex-column justify-content-center"
@@ -193,12 +202,20 @@ export default function Login() {
                   </div>
 
                   <MDBBtn
-                    type="submit"
+                    type="button"
                     disabled={!validForm()}
                     className="mb-4 w-100 bg-dark"
                     size="lg"
                   >
                     Log In
+                  </MDBBtn>
+                  <MDBBtn
+                    type="button"
+                    onClick={handleDemo}
+                    className="mb-4 w-100 bg-dark"
+                    size="lg"
+                  >
+                    Demo Log In
                   </MDBBtn>
                 </form>
                 <div className="d-flex justify-content-between mb-4">

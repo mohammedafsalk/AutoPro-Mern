@@ -13,7 +13,7 @@ import {
   Link,
   IconButton,
 } from "@mui/material";
-import { Login } from "@mui/icons-material";
+import { Login as loginicon } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { grey } from "@mui/material/colors";
@@ -26,6 +26,10 @@ export default function UserNav() {
 
   const navigateto = () => {
     navigate("/");
+  };
+
+  const handleLoginPage = () => {
+    navigate("/login");
   };
 
   const dispatch = useDispatch();
@@ -69,7 +73,11 @@ export default function UserNav() {
           {user ? (
             <Avatar onClick={(e) => setShow(true)} src={user.profile}></Avatar>
           ) : (
-            <Button variant="outlined" endIcon={<Login />}>
+            <Button
+              onClick={handleLoginPage}
+              variant="outlined"
+              sx={{ color: 'black' }}
+            >
               Login
             </Button>
           )}
