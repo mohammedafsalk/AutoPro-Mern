@@ -1,9 +1,13 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./pageNotFound.css";
+import { Button } from "@mui/material";
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
+  const handleBck = () => {
+    navigate(-1);
+  };
   return (
     <div className="body">
       <div class="mars"></div>
@@ -15,9 +19,9 @@ export default function NotFoundPage() {
         longer here.
       </p>
       <div align="center">
-        <Link to="/" class="btn-back">
+        <Button onClick={handleBck} className="btn-back">
           Back to previous page
-        </Link>
+        </Button>
       </div>
       <img
         src="https://assets.codepen.io/1538474/astronaut.svg"
