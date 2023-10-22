@@ -14,7 +14,7 @@ import {
 } from "mdb-react-ui-kit";
 import UserNav from "./UserNav";
 import { Button, Rating, Typography } from "@mui/material";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import BookNowModal from "../../modal/BookNowModal";
 import SuccessModal from "../../modal/SuccessModal";
@@ -27,9 +27,19 @@ export default function UserServicePage() {
   const [reviews, setReviews] = React.useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openModalSuccess, setOpenModalSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleBooking = () => {
     setOpenModal(true);
+  };
+
+  const handleSuccess = () => {
+    setOpenModalSuccess(true);
+  };
+
+  const handleClose = () => {
+    setOpenModalSuccess(false);
+    navigate("/profile");
   };
 
   React.useEffect(() => {
@@ -111,9 +121,6 @@ export default function UserServicePage() {
                   <MDBBtn color="dark" onClick={handleBooking}>
                     Book now
                   </MDBBtn>
-                  <Button onClick={() => setOpenModalSuccess(true)}>
-                    Button
-                  </Button>
                 </div>
               </MDBCardBody>
             </MDBCard>
@@ -175,12 +182,12 @@ export default function UserServicePage() {
           open={openModal}
           id={id}
           setOpen={setOpenModal}
-          setOpenModalSuccess={setOpenModalSuccess}
+          handleSuccess={handleSuccess}
           serviceCenter={serviceCenter}
         ></BookNowModal>
         <SuccessModal
           openModalSuccess={openModalSuccess}
-          setOpenModalSuccess={setOpenModalSuccess}
+          handleClose={handleClose}
         />
       </MDBContainer>
     </>

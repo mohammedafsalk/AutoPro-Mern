@@ -26,12 +26,17 @@ import { useNavigate } from "react-router-dom";
 import MapSearchBoxBookingModal from "../components/MapBox/MapBoxSearchBookingModal";
 import CustomDatePicker from "../components/user/CustomDatePicker";
 
-export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
+export default function BookNowModal({
+  open,
+  id,
+  setOpen,
+  serviceCenter,
+  handleSuccess,
+}) {
   const serviceCenterLatitude = serviceCenter.latitude;
   const serviceCenterLongitude = serviceCenter.longitude;
   const priceRanges = serviceCenter.pickUpPrice;
 
-  const navigate = useNavigate();
   const userId = useSelector((state) => {
     return state.user.details._id;
   });
@@ -183,8 +188,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
         if (data.err) {
           toast.error(data.message);
         } else {
-          toast.success("Payment SuccessFull");
-          navigate("/profile");
+          handleSuccess();
         }
       },
     };
