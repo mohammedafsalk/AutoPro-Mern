@@ -13,10 +13,11 @@ import {
   MDBTextArea,
 } from "mdb-react-ui-kit";
 import UserNav from "./UserNav";
-import { Rating, Typography } from "@mui/material";
+import { Button, Rating, Typography } from "@mui/material";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import BookNowModal from "../../modal/BookNowModal";
+import SuccessModal from "../../modal/SuccessModal";
 
 export default function UserServicePage() {
   const { id } = useParams();
@@ -25,6 +26,7 @@ export default function UserServicePage() {
   const [center, setCenter] = React.useState({});
   const [reviews, setReviews] = React.useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalSuccess, setOpenModalSuccess] = useState(false);
 
   const handleBooking = () => {
     setOpenModal(true);
@@ -109,6 +111,9 @@ export default function UserServicePage() {
                   <MDBBtn color="dark" onClick={handleBooking}>
                     Book now
                   </MDBBtn>
+                  <Button onClick={() => setOpenModalSuccess(true)}>
+                    Button
+                  </Button>
                 </div>
               </MDBCardBody>
             </MDBCard>
@@ -126,43 +131,6 @@ export default function UserServicePage() {
                         <h5>Rating And Reviews</h5>
                       </div>
                     </MDBCardFooter>
-                    {/* <MDBCardFooter
-                      className="py-3 border-0"
-                      style={{ backgroundColor: "#f8f9fa" }}
-                    >
-                      <div className="d-flex flex-start w-100 d-none">
-                        <MDBCardImage
-                          className="rounded-circle shadow-1-strong me-3"
-                          src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
-                          alt="avatar"
-                          width="40"
-                          height="40"
-                        />
-                        <div className="w-100">
-                          <Rating
-                            name="read-only"
-                            sx={{ color: "#DC4C64" }}
-                            value={3}
-                          />
-
-                          <MDBTextArea
-                            label="Message"
-                            id="textAreaExample"
-                            rows={4}
-                            style={{ backgroundColor: "#fff" }}
-                            wrapperClass="w-100"
-                          />
-                        </div>
-                      </div>
-                      <div className="float-end mt-2 pt-1 d-none">
-                        <MDBBtn outline color="dark" size="sm">
-                          Cancel
-                        </MDBBtn>
-                        <MDBBtn size="sm" color="dark" className="ms-1">
-                          Post Review
-                        </MDBBtn>
-                      </div>
-                    </MDBCardFooter> */}
                     {reviews[0] ? (
                       reviews.map((item) => (
                         <MDBCardBody className="border-bottom" key={item._id}>
@@ -207,8 +175,13 @@ export default function UserServicePage() {
           open={openModal}
           id={id}
           setOpen={setOpenModal}
+          setOpenModalSuccess={setOpenModalSuccess}
           serviceCenter={serviceCenter}
         ></BookNowModal>
+        <SuccessModal
+          openModalSuccess={openModalSuccess}
+          setOpenModalSuccess={setOpenModalSuccess}
+        />
       </MDBContainer>
     </>
   );

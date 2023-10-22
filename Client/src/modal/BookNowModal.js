@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../../src/assets/css/login.css";
 import {
   MDBBtn,
   MDBModal,
@@ -11,7 +12,6 @@ import {
   MDBRow,
   MDBInput,
   MDBCol,
-  MDBCheckbox,
   MDBTextArea,
 } from "mdb-react-ui-kit";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
@@ -24,6 +24,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MapSearchBoxBookingModal from "../components/MapBox/MapBoxSearchBookingModal";
+import CustomDatePicker from "../components/user/CustomDatePicker";
 
 export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
   const serviceCenterLatitude = serviceCenter.latitude;
@@ -70,8 +71,8 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
     const { data } = await axios.get("/user/schedule/" + id);
     if (!data.err && data.schedule) {
       const scheduleData = data.schedule;
-      let date = new Date(),
-        n = 0;
+      let date = new Date();
+      let n = 0;
       let tempDatesAvailable = [];
       while (n < 9) {
         date = new Date(new Date().setDate(new Date(date).getDate() + 1));
@@ -101,6 +102,7 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
   }
 
   const handleBooking = async () => {
+    setOpen(false);
     const isEmailValid = validateEmail(formData.email);
     const isVehicleNumberValid = validateVehicleNumber(formData.vehicleNumber);
     const isMobileNumberValid = validateMobileNumber(formData.mobile);
@@ -201,7 +203,6 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
-
   return (
     <>
       <Toaster />
@@ -295,27 +296,11 @@ export default function BookNowModal({ open, id, setOpen, serviceCenter }) {
               </MDBRow>
               <MDBRow>
                 <MDBCol className="mt-2" md={6}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Date</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      onChange={handleFormData}
-                      value={formData.date}
-                      name="date"
-                      id="demo-simple-select"
-                      fullWidth
-                      size="small"
-                      label="Date"
-                      variant="outlined"
-                    >
-                      {datesAvailable[0] &&
-                        datesAvailable.map((date, index) => (
-                          <MenuItem value={date}>
-                            {date.toLocaleDateString()}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
+                  <CustomDatePicker
+                    datesAvailable={datesAvailable}
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
                 </MDBCol>
                 <MDBCol className="mt-2" md={6}>
                   <MapSearchBoxBookingModal setFormData={setFormData} />

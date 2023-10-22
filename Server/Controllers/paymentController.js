@@ -25,6 +25,7 @@ export async function paymentOrder(req, res) {
       }
     });
   } catch (error) {
+    console.log(error);
     res.json({ err: true, message: "Server error", error });
   }
 }
@@ -53,7 +54,6 @@ export async function verifyPayment(req, res) {
     if (item) {
       return res.json({ err: true, message: "This Vehicle Is Already Booked" });
     }
-    let formattedDate = dayjs(date).format("DD-MM-YYYY");
     let body = response.razorpay_order_id + "|" + response.razorpay_payment_id;
 
     var expectedSignature = crypto
@@ -69,7 +69,7 @@ export async function verifyPayment(req, res) {
         vehicleNumber,
         vehicleName,
         brand,
-        date: formattedDate,
+        date,
         place,
         address,
         centerId,
