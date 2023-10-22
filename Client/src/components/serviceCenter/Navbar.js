@@ -3,14 +3,12 @@ import { NavLink, Link as link } from "react-router-dom";
 import {
   AppBar,
   Avatar,
-  Container,
   MenuItem,
   Toolbar,
   Menu,
   Typography,
   Link,
   Drawer,
-  List,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -19,7 +17,6 @@ import {
 import {
   Settings,
   Menu as MenuIcon,
-  ViewCarousel,
   Engineering,
   SpaceDashboard,
   CalendarMonth,
@@ -28,7 +25,6 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import profileImageUrl from "../../assets/images/avatar.png";
 import { grey } from "@mui/material/colors";
 
 export default function NavBar() {

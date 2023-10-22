@@ -23,11 +23,19 @@ import {
   Window,
 } from "@mui/icons-material";
 import profileImageUrl from "../../assets/images/avatar.png";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 
 export default function AdminNav() {
   const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  
+  const handleLogout = async () => {
+    await axios.get("admin/auth/logout");
+    dispatch({ type: "refresh" });
+  };
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -62,7 +70,7 @@ export default function AdminNav() {
           open={show}
           onClose={(e) => setShow(false)}
           anchorReference="anchorPosition"
-          anchorPosition={{ top: 50, left: 900 }}
+          anchorPosition={{ top: 50, left: 2000 }}
           anchorOrigin={{
             vertical: "top",
             horizontal: "left",
@@ -73,7 +81,7 @@ export default function AdminNav() {
           }}
         >
           <MenuItem>Profile</MenuItem>
-          <MenuItem>Logout</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </MuiMenu>
       </AppBar>
 
