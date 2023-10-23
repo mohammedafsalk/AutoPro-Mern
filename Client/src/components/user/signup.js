@@ -125,7 +125,7 @@ export default function SignUp() {
       setLoading(true);
       try {
         let { data } = await axios.post(
-          "http://localhost:5000/user/auth/signup",
+          "user/auth/signup",
           { phone }
         );
         if (data.err) {
