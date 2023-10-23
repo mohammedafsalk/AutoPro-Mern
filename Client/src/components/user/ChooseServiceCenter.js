@@ -65,12 +65,15 @@ export default function ChooseServiceCenter() {
           `/user/service-centers?page=${page}&name=${name}&category=${category}&brand=${brand}`
         );
         if (response.data.err) {
+          console.log(response.data.err);
           toast.error(response.data.message);
         } else {
+          console.log(response.data.center);
           setData(response.data.center);
           setCount(response.data.totalPage);
         }
       } catch (error) {
+        console.log(error);
         toast.error("Error Fetching Service Centers");
       } finally {
         setState({ loading: false });

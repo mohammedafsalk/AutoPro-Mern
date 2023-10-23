@@ -12,8 +12,8 @@ const LazyAdminRoutes = lazy(() => import("./Routes/AdminRoutes.js"));
 
 
 export default function App() {
-  // axios.defaults.baseURL = "http://localhost:5000/";
-  axios.defaults.baseURL = "https://autopro.afsal.online/";
+  axios.defaults.baseURL = "http://localhost:5000/";
+  // axios.defaults.baseURL = "https://autopro.afsal.online/";
   axios.defaults.withCredentials = true;
   return (
     <div className="App">
