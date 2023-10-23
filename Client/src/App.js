@@ -9,14 +9,11 @@ const LazyServiceCenterRoutes = lazy(() =>
 );
 const LazyWorkerRoutes = lazy(() => import("./Routes/WorkerRoutes"));
 const LazyAdminRoutes = lazy(() => import("./Routes/AdminRoutes.js"));
-// import UserRoutes from "./Routes/UserRoutes";
-// import AdminRoutes from "./Routes/AdminRoutes";
-// import ServiceCenterRoutes from "./Routes/ServiceCenterRoutes";
-// import WorkerRoutes from "./Routes/WorkerRoutes";
+
 
 export default function App() {
-  axios.defaults.baseURL = "http://localhost:5000/";
-  // axios.defaults.baseURL = "https://autopro.afsal.online/";
+  // axios.defaults.baseURL = "http://localhost:5000/";
+  axios.defaults.baseURL = "https://autopro.afsal.online/";
   axios.defaults.withCredentials = true;
   return (
     <div className="App">
